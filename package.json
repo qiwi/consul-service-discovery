@@ -1,0 +1,20 @@
+{
+  "name": "consul-watcher",
+  "version": "0.0.1",
+  "description": "Simple consul util for check endpoint address (demo)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "consul",
+    "wathc",
+    "nodejs"
+  ],
+  "author": "wearebear80@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "@types/consul": "^0.23.32",
+    "consul": "^0.34.0"
+  }
+}
