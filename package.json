@@ -1,6 +1,6 @@
 {
   "name": "consul-watcher",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Simple consul util for check endpoint address (demo)",
   "main": "index.js",
   "scripts": {
