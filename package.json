@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/consul": "^0.23.32",
-    "consul": "^0.34.0"
+    "consul": "^0.34.0",
+    "lodash": "^4.17.11"
   }
 }

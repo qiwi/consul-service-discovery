@@ -1,4 +1,5 @@
 import * as Consul from 'consul'
+import * as _ from 'lodash'
 
 export interface IConnectionParams {
     post: string
@@ -30,6 +31,7 @@ export default class ConsulService implements IConsulService {
     protected _consul: any
     protected _instances: any = {}
     protected _instancesWatcher: any
+    protected _attempts: number = 0
 
     constructor(
         consulConnectionParams: IConnectionParams
@@ -43,6 +45,7 @@ export default class ConsulService implements IConsulService {
     async init(serviceName: string): Promise<void> {
         let resolveInit: (value?: void | PromiseLike<void>) => void
         let rejectInit: (reason?: any) => void
+        const finallize = _.once((handler: any): void => handler())
 
         const promise = new Promise<void>((resolve, reject) => {
             resolveInit = resolve
@@ -66,12 +69,18 @@ export default class ConsulService implements IConsulService {
                 })
             })
             if (this._instances[serviceName]) {
-                resolveInit()
+                finallize(resolveInit)
             }
         })
         .on('error', (err: Error) => {
             console.error('Consul client error:', err)
-            rejectInit()
+            this._attempts += 1
+            // wait for 20 errors and reset watch and instanses
+            if(this._attempts >= 20) {
+                this._instances[serviceName] = {}
+                this._instancesWatcher.end()
+                finallize(rejectInit)
+            }
         })
         return promise
     }
