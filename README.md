@@ -3,7 +3,7 @@ Demo consul client
 
 # Usage
 
-```
+```js
 import ConsulClient from 'consul'
 
 const exampleConfig = {
