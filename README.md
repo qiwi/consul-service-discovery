@@ -15,5 +15,6 @@ const Consul = new ConsulClient(exampleConfig)
 
 // "exampleService" - name of your service in consul
 const ConnectionParams = await Consul.getConnectionParams('exampleService')
+
 console.log(ConnectionParams) // { host: example.service.com, post: 8000 }
 ```
