@@ -77,6 +77,7 @@ export default class ConsulService implements IConsulService {
             this._attempts += 1
             // wait for 20 errors and reset watch and instanses
             if(this._attempts >= 20) {
+                this._attempts = 0
                 this._instances[serviceName] = {}
                 this._instancesWatcher.end()
                 finallize(rejectInit)
