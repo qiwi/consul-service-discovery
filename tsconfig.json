@@ -1,6 +1,7 @@
 {
   "version": "1.0.0",
   "compilerOptions": {
+    "strict": true,
     "target": "es5",
     "lib": [
       "es6",
