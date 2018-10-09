@@ -1,5 +1,5 @@
-# Qiwi consul client
-Consul client for node.js
+# Consul service discovery
+Consul service discovery
 
 # Usage
 

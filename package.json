@@ -1,14 +1,17 @@
 {
-  "name": "qiwi-consul-client",
+  "name": "consul-service-discovery",
   "version": "1.0.0",
-  "description": "Consul client fro node.js",
-  "main": "index.js",
+  "description": "Consul service discovery",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm run clean && tsc",
+    "prepublish": "npm run build",
+    "clean": "rm -rf ./build"
   },
   "keywords": [
+    "qiwi",
     "consul",
-    "wathc",
+    "consul-client",
     "nodejs"
   ],
   "author": "wearebear80@gmail.com",
@@ -17,5 +20,12 @@
     "@types/consul": "^0.23.32",
     "consul": "^0.34.0",
     "lodash": "^4.17.11"
-  }
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3"
+  },
+  "files": [
+    "README.md",
+    "dist/"
+  ]
 }
