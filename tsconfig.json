@@ -19,5 +19,8 @@
     "suppressImplicitAnyIndexErrors": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
-  }
+  },
+  "exclude": [
+    "test"
+  ]
 }

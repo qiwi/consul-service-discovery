@@ -10,7 +10,7 @@
     "test_with_report": "npm test && npm run coveralls_push",
     "coveralls_push": "cat ./coverage/lcov.info | coveralls",
     "build": "npm run clean && tsc",
-    "clean": "rm -rf ./build"
+    "clean": "rm -rf ./dist"
   },
   "keywords": [
     "consul",
@@ -25,10 +25,15 @@
     "lodash": "^4.17.11"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^3.0.0",
+    "@semantic-release/git": "^7.0.4",
+    "@semantic-release/github": "^5.0.6",
+    "@semantic-release/npm": "^5.0.4",
     "@types/jest": "^23.3.4",
     "babel-core": "^6.26.3",
     "coveralls": "^3.0.2",
     "jest": "^23.6.0",
+    "semantic-release": "^15.9.17",
     "ts-jest": "^23.10.4",
     "tslint": "^5.11.0",
     "tslint-config-standard": "^8.0.1",
@@ -36,6 +41,7 @@
   },
   "files": [
     "README.md",
+    "CHANGELOG.md",
     "dist"
   ],
   "jest": {
@@ -58,6 +64,23 @@
     },
     "testMatch": [
       "<rootDir>/test/*.+(ts|tsx|js)"
+    ]
+  },
+  "release": {
+    "branch": "master",
+    "verifyConditions": [
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/git"
+    ],
+    "prepare": [
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/git"
+    ],
+    "publish": [
+      "@semantic-release/npm",
+      "@semantic-release/github"
     ]
   }
 }
