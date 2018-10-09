@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "tslint -p tsconfig.json",
     "jest": "jest",
-    "test": "npm run lint && npm run jest",
+    "test": "npm run build && npm run jest",
+    "pretest": "npm run lint",
     "test_with_report": "npm test && npm run coveralls_push",
     "coveralls_push": "cat ./coverage/lcov.info | coveralls",
     "build": "npm run clean && tsc",
