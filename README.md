@@ -1,5 +1,5 @@
-# consul-watcher
-Demo consul client
+# Qiwi consul client
+Consul client for node.js
 
 # Usage
 
