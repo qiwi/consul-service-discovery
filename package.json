@@ -4,8 +4,11 @@
   "description": "Consul service discovery",
   "main": "dist/index.js",
   "scripts": {
-    "test": "npm run lint",
     "lint": "tslint -p tsconfig.json",
+    "jest": "jest",
+    "test": "npm run lint && npm run jest",
+    "test_with_report": "npm test && npm run coveralls_push",
+    "coveralls_push": "cat ./coverage/lcov.info | coveralls",
     "build": "npm run clean && tsc",
     "clean": "rm -rf ./build"
   },
@@ -22,13 +25,39 @@
     "lodash": "^4.17.11"
   },
   "devDependencies": {
+    "@types/jest": "^23.3.4",
     "babel-core": "^6.26.3",
+    "coveralls": "^3.0.2",
+    "jest": "^23.6.0",
+    "ts-jest": "^23.10.4",
     "tslint": "^5.11.0",
     "tslint-config-standard": "^8.0.1",
     "typescript": "^3.1.1"
   },
   "files": [
     "README.md",
-    "dist/"
-  ]
+    "dist"
+  ],
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "<rootDir>/src/*.ts"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest"
+    },
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "tsconfig.json"
+      }
+    },
+    "testMatch": [
+      "<rootDir>/test/*.+(ts|tsx|js)"
+    ]
+  }
 }

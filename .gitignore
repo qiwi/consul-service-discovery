@@ -2,22 +2,38 @@
 logs
 *.log
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Dist
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage
+flow-coverage
+lib-cov
+coverage
+.nyc_output
+
+# Bundle
+build
 dist
 
-# Dependency directories
-node_modules
+#Docs
+docs
+doc
 
-# Optional npm cache directory
+# Deps
+node_modules/
+jspm_packages/
+flow-typed/npm/
+
 .npm
-
-# Optional REPL history
+.eslintcache
 .node_repl_history
+.env
 
-# idea
-*.iml
 .idea
-
-# Mac os
-.DS_Store
+*.iml
