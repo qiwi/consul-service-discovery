@@ -1,20 +1,22 @@
-# Consul service discovery
-Consul service discovery
+# @qiwi/consul-service-discovery
+Consul service discovery helper.
 
-# Usage
+## Install
+```bash
+  npm i consul-service-discovery
+  yarn add @qiwi/consul-service-discovery
+```
 
-```js
-import ConsulClient from 'consul'
+## Usage
+```javascript
+import ConsulDiscoveryService from '@qiwi/consul-service-discovery'
 
-const exampleConfig = {
-    host: 0.0.0.0,
-    port: 8000
-}
+const discoveryService = new ConsulDiscoveryService({
+  host: '0.0.0.0',  // local consul client host
+  port: 8000        // and port
+})
+const targetServiceName = 'example-api' // registered service
+const serviceConnectionParams = await discoveryService.getConnectionParams(targetServiceName)
 
-const Consul = new ConsulClient(exampleConfig)
-
-// "exampleService" - name of your service in consul
-const ConnectionParams = await Consul.getConnectionParams('exampleService')
-
-console.log(ConnectionParams) // { host: example.service.com, post: 8000 }
+console.log(serviceConnectionParams) // { host: example-api-1234.qiwi.com, post: 8000 }
 ```

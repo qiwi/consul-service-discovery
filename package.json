@@ -19,6 +19,10 @@
     "consul-service-discovery"
   ],
   "author": "Mikhail Dolgikh <wearebear80@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:qiwi/consul-service-discovery.git"
+  },
   "license": "ISC",
   "dependencies": {
     "@types/consul": "^0.23.32",
