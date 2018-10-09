@@ -1,20 +1,20 @@
 {
-  "name": "consul-service-discovery",
+  "name": "@qiwi/consul-service-discovery",
   "version": "1.0.0",
   "description": "Consul service discovery",
   "main": "dist/index.js",
   "scripts": {
+    "test": "npm run lint",
+    "lint": "tslint -p tsconfig.json",
     "build": "npm run clean && tsc",
-    "prepublish": "npm run build",
     "clean": "rm -rf ./build"
   },
   "keywords": [
-    "qiwi",
     "consul",
     "consul-client",
-    "nodejs"
+    "consul-service-discovery"
   ],
-  "author": "wearebear80@gmail.com",
+  "author": "Mikhail Dolgikh <wearebear80@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "@types/consul": "^0.23.32",
@@ -22,7 +22,9 @@
     "lodash": "^4.17.11"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3"
+    "babel-core": "^6.26.3",
+    "tslint": "^5.11.0",
+    "typescript": "^3.1.1"
   },
   "files": [
     "README.md",
