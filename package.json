@@ -1,7 +1,7 @@
 {
-  "name": "consul-watcher",
+  "name": "qiwi-consul-client",
   "version": "0.1.0",
-  "description": "Simple consul util for check endpoint address (demo)",
+  "description": "Consul client fro node.js",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
