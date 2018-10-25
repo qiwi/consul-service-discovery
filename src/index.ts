@@ -2,7 +2,7 @@ import * as Consul from 'consul'
 import * as _ from 'lodash'
 
 export interface IConnectionParams {
-  post: string
+  port: string
   host: string
 }
 
@@ -27,16 +27,17 @@ export interface IEntryPoint {
   }
 }
 
-export default class ConsulService implements IConsulService {
+export default class ConsulDiscoveryService implements IConsulService {
   protected _consul: any
   protected _instances: any = {}
-  protected _instancesWatcher: any
+  public instancesWatcher: any
   protected _attempts: number = 0
 
   constructor (
-    consulConnectionParams: IConnectionParams
+    consulConnectionParams: IConnectionParams,
+    consul: any = Consul
   ) {
-    this._consul = new Consul({
+    this._consul = new consul({
       host: consulConnectionParams.host,
       port: consulConnectionParams.port.toString()
     })
@@ -52,7 +53,7 @@ export default class ConsulService implements IConsulService {
       rejectInit = reject
     })
 
-    this._instancesWatcher = this._consul.watch({
+    this.instancesWatcher = this._consul.watch({
       method: this._consul.health.service,
       options: {
         service: serviceName,
@@ -68,7 +69,7 @@ export default class ConsulService implements IConsulService {
             port: entryPoint.Service.Port
           })
         })
-        if (this._instances[serviceName]) {
+        if (this._instances[serviceName].length) {
           finallize(resolveInit)
         }
       })
@@ -79,10 +80,11 @@ export default class ConsulService implements IConsulService {
         if (this._attempts >= 20) {
           this._attempts = 0
           this._instances[serviceName] = {}
-          this._instancesWatcher.end()
+          this.instancesWatcher.end()
           finallize(rejectInit)
         }
       })
+
     return promise
   }
 
