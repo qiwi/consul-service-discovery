@@ -63,7 +63,7 @@ describe('ConsulServiceDiscovery', () => {
       consulClientMock
     )
     const serviceConnectionParams = discoveryService.getConnectionParams('testService')
-    const instantWathcer = discoveryService.instancesWatcher
+    const instantWathcer = discoveryService.instancesWatcher['testService']
     instantWathcer.on('change', () => {})
     instantWathcer.emit('change', onChangeResponse)
     expect(serviceConnectionParams).resolves.toEqual(testParams)
@@ -76,7 +76,7 @@ describe('ConsulServiceDiscovery', () => {
       consulClientMock
     )
     const serviceConnectionParams = discoveryService.getConnectionParams('testService')
-    const instantWathcer = discoveryService.instancesWatcher
+    const instantWathcer = discoveryService.instancesWatcher['testService']
     instantWathcer.on('error', () => {})
     for (let i = 0; i <= 20; i++) {
       instantWathcer.emit('error', expectedError)
