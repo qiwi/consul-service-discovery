@@ -30,7 +30,7 @@ export interface IEntryPoint {
 export default class ConsulDiscoveryService implements IConsulService {
   protected _consul: any
   protected _instances: any = {}
-  public instancesWatcher: any
+  public instancesWatcher: any = {}
   protected _attempts: number = 0
 
   constructor (
@@ -53,7 +53,7 @@ export default class ConsulDiscoveryService implements IConsulService {
       rejectInit = reject
     })
 
-    this.instancesWatcher = this._consul.watch({
+    this.instancesWatcher[serviceName] = this._consul.watch({
       method: this._consul.health.service,
       options: {
         service: serviceName,
@@ -62,7 +62,6 @@ export default class ConsulDiscoveryService implements IConsulService {
       backoffMax: 10000
     })
       .on('change', (data: IEntryPoint[]) => {
-        this._instances[serviceName] = []
         data.forEach((entryPoint: IEntryPoint) => {
           if (entryPoint.Service.Address) {
             this._instances[serviceName].push({
@@ -83,12 +82,12 @@ export default class ConsulDiscoveryService implements IConsulService {
         // wait for 20 errors and reset watch and instanses
         if (this._attempts >= 20) {
           this._attempts = 0
-          this._instances[serviceName] = {}
-          this.instancesWatcher.end()
+          this._instances[serviceName] = []
+          this.instancesWatcher[serviceName].end()
           finallize(rejectInit)
         }
       })
-
+    this._instances[serviceName] = []
     return promise
   }
 
