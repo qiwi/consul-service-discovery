@@ -64,10 +64,14 @@ export default class ConsulDiscoveryService implements IConsulService {
       .on('change', (data: IEntryPoint[]) => {
         this._instances[serviceName] = []
         data.forEach((entryPoint: IEntryPoint) => {
-          this._instances[serviceName].push({
-            host: entryPoint.Service.Address,
-            port: entryPoint.Service.Port
-          })
+          if(entryPoint.Service.Address) {
+            this._instances[serviceName].push({
+              host: entryPoint.Service.Address,
+              port: entryPoint.Service.Port
+            })
+          } else {
+            console.warn('One of entry point connection param is empty', entryPoint)
+          }
         })
         if (this._instances[serviceName].length) {
           finallize(resolveInit)
