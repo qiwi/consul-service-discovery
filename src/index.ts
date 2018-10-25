@@ -69,7 +69,7 @@ export default class ConsulDiscoveryService implements IConsulService {
               port: entryPoint.Service.Port
             })
           } else {
-            console.warn('One of entry point connection param is empty', entryPoint)
+            console.warn('Entry point connection param is empty', entryPoint)
           }
         })
         if (this._instances[serviceName].length) {
