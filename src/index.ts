@@ -27,6 +27,48 @@ export interface IEntryPoint {
   }
 }
 
+export interface ILibConfig {
+  Promise?: any,
+  logger?: any
+}
+
+export interface ILogger {
+  warn (...args: Array<any>)
+  error (...args: Array<any>)
+  log (...args: Array<any>)
+  info (...args: Array<any>)
+  debug (...args: Array<any>)
+}
+
+export const LOG_PREFIX = '[consul discovery]'
+
+export interface ICxt {
+  Promise: typeof Promise
+  logger: ILogger
+}
+
+const cxt: ICxt = {
+  Promise: Promise,
+  logger: console
+}
+
+const log: ILogger = (() => {
+  const wrap = (level, ...args) => cxt.logger[level](LOG_PREFIX, ...args)
+  const error = wrap.bind(null, 'error')
+  const warn = wrap.bind(null, 'warn')
+  const debug = wrap.bind(null, 'debug')
+  const info = wrap.bind(null, 'info')
+  const log = wrap.bind(null, 'log')
+
+  return {
+    debug,
+    log,
+    info,
+    warn,
+    error
+  }
+})()
+
 export default class ConsulDiscoveryService implements IConsulService {
   protected _consul: any
   protected _instances: any = {}
@@ -53,6 +95,8 @@ export default class ConsulDiscoveryService implements IConsulService {
       rejectInit = reject
     })
 
+    log.debug('initialized')
+
     this.instancesWatcher[serviceName] = this._consul.watch({
       method: this._consul.health.service,
       options: {
@@ -69,7 +113,7 @@ export default class ConsulDiscoveryService implements IConsulService {
               port: entryPoint.Service.Port
             })
           } else {
-            console.warn('Entry point connection param is empty', entryPoint)
+            log.warn('Entry point connection param is empty', entryPoint)
           }
         })
         if (this._instances[serviceName].length) {
@@ -77,7 +121,7 @@ export default class ConsulDiscoveryService implements IConsulService {
         }
       })
       .on('error', (err: Error) => {
-        console.error('Consul client error:', err)
+        log.error('Consul client error:', err)
         this._attempts += 1
         // wait for 20 errors and reset watch and instanses
         if (this._attempts >= 20) {
@@ -97,5 +141,9 @@ export default class ConsulDiscoveryService implements IConsulService {
     }
     const index = Math.floor(Math.random() * this._instances[serviceName].length)
     return this._instances[serviceName][index]
+  }
+
+  static configure (opts: ILibConfig): void {
+    Object.assign(cxt, opts)
   }
 }

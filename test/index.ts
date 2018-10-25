@@ -1,4 +1,4 @@
-import ConsulDiscoveryService, { IConnectionParams } from '../src'
+import ConsulDiscoveryService, { IConnectionParams, ILogger, LOG_PREFIX } from '../src'
 import { EventEmitter } from 'events'
 
 interface IConsulClientMock {
@@ -55,6 +55,14 @@ const testParams: IConnectionParams = {
 
 const expectedError = 'test error'
 
+const fakeLogger: ILogger = {
+  error() {},
+  warn() {},
+  log() {},
+  info() {},
+  debug() {throw new Error()}
+}
+
 describe('ConsulServiceDiscovery', () => {
   test('on change', async () => {
     expect.assertions(1)
@@ -64,6 +72,7 @@ describe('ConsulServiceDiscovery', () => {
     )
     const serviceConnectionParams = discoveryService.getConnectionParams('testService')
     const instantWathcer = discoveryService.instancesWatcher['testService']
+
     instantWathcer.on('change', () => {})
     instantWathcer.emit('change', onChangeResponse)
     expect(serviceConnectionParams).resolves.toEqual(testParams)
@@ -83,4 +92,28 @@ describe('ConsulServiceDiscovery', () => {
     }
     expect(serviceConnectionParams).rejects.toEqual(undefined)
   }, 3000)
+
+  describe('constructor', () => {
+    it('returns proper instance', () => {
+      const service = new ConsulDiscoveryService(
+        testParams,
+        consulClientMock
+      )
+
+      expect(service).toBeInstanceOf(ConsulDiscoveryService)
+      expect(service.getConnectionParams).not.toBeUndefined()
+    })
+
+    it('supports context configuration', () => {
+      const spy = jest.spyOn(fakeLogger, 'debug')
+      ConsulDiscoveryService.configure({logger: fakeLogger})
+
+      new ConsulDiscoveryService(
+        testParams,
+        consulClientMock
+      ).init('foo')
+
+      expect(spy).toHaveBeenCalledWith(LOG_PREFIX, 'initialized');
+    })
+  })
 })
