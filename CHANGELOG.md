@@ -3,6 +3,16 @@
 
 ### Bug Fixes
 
+* add watcher namespaces and late instances init ([32a1303](https://github.com/qiwi/consul-service-discovery/commit/32a1303))
+* del whitespace ([5f8e095](https://github.com/qiwi/consul-service-discovery/commit/5f8e095))
+* empty params checker & logger ([7666b80](https://github.com/qiwi/consul-service-discovery/commit/7666b80))
+* fix tests ([ee240df](https://github.com/qiwi/consul-service-discovery/commit/ee240df))
+
+## [1.0.2](https://github.com/qiwi/consul-service-discovery/compare/v1.0.1...v1.0.2) (2018-10-25)
+
+
+### Bug Fixes
+
 * del whitespace ([5f8e095](https://github.com/qiwi/consul-service-discovery/commit/5f8e095))
 * empty params checker & logger ([7666b80](https://github.com/qiwi/consul-service-discovery/commit/7666b80))
 
