@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/qiwi/consul-service-discovery/compare/v1.1.2...v1.1.3) (2018-11-01)
+
+
+### Bug Fixes
+
+* pull `this._instances[serviceName]` reset out of iterator ([44bdbb5](https://github.com/qiwi/consul-service-discovery/commit/44bdbb5))
+
 ## [1.1.2](https://github.com/qiwi/consul-service-discovery/compare/v1.1.1...v1.1.2) (2018-11-01)
 
 
