@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/qiwi/consul-service-discovery/compare/v1.1.0...v1.1.1) (2018-11-01)
+
+
+### Bug Fixes
+
+* empry instances reject ([c0fa5e3](https://github.com/qiwi/consul-service-discovery/commit/c0fa5e3))
+
 # [1.1.0](https://github.com/qiwi/consul-service-discovery/compare/v1.0.1...v1.1.0) (2018-10-25)
 
 
