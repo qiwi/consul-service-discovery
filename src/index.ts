@@ -88,12 +88,14 @@ export default class ConsulDiscoveryService implements IConsulService {
   public async init (serviceName: string): Promise<void> {
     let resolveInit: (value?: void | PromiseLike<void>) => void
     let rejectInit: (reason?: any) => void
-    const finallize = _.once((handler: any): void => handler())
 
+    const finallize = _.once((handler: any): void => handler())
     const promise = new Promise<void>((resolve, reject) => {
       resolveInit = resolve
       rejectInit = reject
     })
+
+    this._instances[serviceName] = []
 
     log.debug('initialized')
 
@@ -106,8 +108,9 @@ export default class ConsulDiscoveryService implements IConsulService {
       backoffMax: 10000
     })
       .on('change', (data: IEntryPoint[]) => {
+        this._instances[serviceName].length = 0
+
         data.forEach((entryPoint: IEntryPoint) => {
-          this._instances[serviceName] = []
           if (entryPoint.Service.Address) {
             this._instances[serviceName].push({
               host: entryPoint.Service.Address,
@@ -129,12 +132,12 @@ export default class ConsulDiscoveryService implements IConsulService {
         // wait for 20 errors and reset watch and instanses
         if (this._attempts >= 20) {
           this._attempts = 0
-          this._instances[serviceName] = []
+          this._instances[serviceName].length = 0
           this.instancesWatcher[serviceName].end()
           finallize(rejectInit)
         }
       })
-    this._instances[serviceName] = []
+
     return promise
   }
 
