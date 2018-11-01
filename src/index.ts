@@ -118,6 +118,8 @@ export default class ConsulDiscoveryService implements IConsulService {
         })
         if (this._instances[serviceName].length) {
           finallize(resolveInit)
+        } else {
+          finallize(rejectInit)
         }
       })
       .on('error', (err: Error) => {
