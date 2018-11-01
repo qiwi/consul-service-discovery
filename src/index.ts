@@ -107,6 +107,7 @@ export default class ConsulDiscoveryService implements IConsulService {
     })
       .on('change', (data: IEntryPoint[]) => {
         data.forEach((entryPoint: IEntryPoint) => {
+          this._instances[serviceName] = []
           if (entryPoint.Service.Address) {
             this._instances[serviceName].push({
               host: entryPoint.Service.Address,
