@@ -25,6 +25,9 @@ export interface IEntryPoint {
     Address: string
     Port: string
   }
+  Node: {
+    Address: string
+  }
 }
 
 export interface ILibConfig {
@@ -111,15 +114,19 @@ export default class ConsulDiscoveryService implements IConsulService {
         this._instances[serviceName].length = 0
 
         data.forEach((entryPoint: IEntryPoint) => {
-          if (entryPoint.Service.Address) {
+          const address = entryPoint.Service.Address || entryPoint.Node.Address
+          const port = entryPoint.Service.Port
+
+          if (address) {
             this._instances[serviceName].push({
-              host: entryPoint.Service.Address,
-              port: entryPoint.Service.Port
+              host: address,
+              port: port
             })
           } else {
             log.warn('Entry point connection param is empty', entryPoint)
           }
         })
+
         if (this._instances[serviceName].length) {
           finallize(resolveInit)
         } else {
