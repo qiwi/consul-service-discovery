@@ -1,3 +1,10 @@
+## [1.1.4](https://github.com/qiwi/consul-service-discovery/compare/v1.1.3...v1.1.4) (2018-11-28)
+
+
+### Bug Fixes
+
+* obtain service address from Node data ([170d69b](https://github.com/qiwi/consul-service-discovery/commit/170d69b))
+
 ## [1.1.3](https://github.com/qiwi/consul-service-discovery/compare/v1.1.2...v1.1.3) (2018-11-01)
 
 
