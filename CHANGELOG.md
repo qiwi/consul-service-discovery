@@ -1,3 +1,10 @@
+## [1.1.5](https://github.com/qiwi/consul-service-discovery/compare/v1.1.4...v1.1.5) (2019-01-09)
+
+
+### Bug Fixes
+
+* **README:** fix npm install command ([69f28aa](https://github.com/qiwi/consul-service-discovery/commit/69f28aa))
+
 ## [1.1.4](https://github.com/qiwi/consul-service-discovery/compare/v1.1.3...v1.1.4) (2018-11-28)
 
 
