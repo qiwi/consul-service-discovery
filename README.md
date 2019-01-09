@@ -10,7 +10,7 @@ Consul service discovery helper.
 
 ## Install
 ```bash
-  npm i consul-service-discovery
+  npm i @qiwi/consul-service-discovery
   yarn add @qiwi/consul-service-discovery
 ```
 
