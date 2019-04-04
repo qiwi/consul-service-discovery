@@ -25,24 +25,24 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@types/consul": "^0.23.32",
-    "consul": "^0.34.0",
+    "@types/consul": "^0.23.33",
+    "consul": "^0.34.1",
     "lodash": "^4.17.11"
   },
   "devDependencies": {
-    "@semantic-release/changelog": "^3.0.0",
-    "@semantic-release/git": "^7.0.4",
-    "@semantic-release/github": "^5.0.6",
-    "@semantic-release/npm": "^5.0.4",
-    "@types/jest": "^23.3.4",
+    "@semantic-release/changelog": "^3.0.2",
+    "@semantic-release/git": "^7.0.8",
+    "@semantic-release/github": "^5.2.10",
+    "@semantic-release/npm": "^5.1.4",
+    "@types/jest": "^24.0.11",
     "babel-core": "^6.26.3",
-    "coveralls": "^3.0.2",
-    "jest": "^23.6.0",
-    "semantic-release": "^15.9.17",
-    "ts-jest": "^23.10.4",
-    "tslint": "^5.11.0",
+    "coveralls": "^3.0.3",
+    "jest": "^24.7.1",
+    "semantic-release": "^15.13.3",
+    "ts-jest": "^24.0.1",
+    "tslint": "^5.15.0",
     "tslint-config-standard": "^8.0.1",
-    "typescript": "^3.1.1"
+    "typescript": "^3.4.1"
   },
   "files": [
     "README.md",
