@@ -1,4 +1,4 @@
-import ConsulDiscoveryService, { IConnectionParams, ILogger, LOG_PREFIX } from '../src'
+import ConsulDiscoveryService, { IConnectionParams, ILogger, LOG_PREFIX } from '../../main/ts'
 import { EventEmitter } from 'events'
 
 interface IConsulClientMock {

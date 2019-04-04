@@ -2,7 +2,7 @@
   "name": "@qiwi/consul-service-discovery",
   "version": "1.1.5",
   "description": "Consul service discovery",
-  "main": "dist/index.js",
+  "main": "dist/es5/index.js",
   "scripts": {
     "lint": "tslint -p tsconfig.json",
     "jest": "jest",
@@ -10,15 +10,18 @@
     "pretest": "npm run lint",
     "test_with_report": "npm test && npm run coveralls_push",
     "coveralls_push": "cat ./coverage/lcov.info | coveralls",
-    "build": "npm run clean && tsc",
-    "clean": "rm -rf ./dist"
+    "build": "npm run clean && tsc -p tsconfig.json",
+    "clean": "rm -rf ./target"
   },
   "keywords": [
     "consul",
     "consul-client",
     "consul-service-discovery"
   ],
-  "author": "Mikhail Dolgikh <wearebear80@gmail.com>",
+  "authors": [
+    "Anton Golub <golub.anton@gmail.com>",
+    "Mikhail Dolgikh <wearebear80@gmail.com>"
+  ],
   "repository": {
     "type": "git",
     "url": "git@github.com:qiwi/consul-service-discovery.git"
@@ -52,7 +55,7 @@
   "jest": {
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "<rootDir>/src/*.ts"
+      "<rootDir>/src/main/ts"
     ],
     "moduleFileExtensions": [
       "ts",
@@ -68,7 +71,7 @@
       }
     },
     "testMatch": [
-      "<rootDir>/test/*.+(ts|tsx|js)"
+      "<rootDir>src/test/**/*.+(ts|tsx|js)"
     ]
   },
   "release": {

@@ -17,9 +17,10 @@ lib-cov
 coverage
 .nyc_output
 
-# Bundle
+# Bundles
 build
 dist
+target
 
 #Docs
 docs

@@ -1,4 +1,4 @@
-const ConsulService = require('../dist')
+const ConsulService = require('../../../target/es5')
 
 describe('dist', () => {
   it('properly exposes its inners', () => {
