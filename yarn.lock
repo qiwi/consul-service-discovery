@@ -336,6 +336,18 @@
     universal-user-agent "^2.0.0"
     url-template "^2.0.8"
 
+"@qiwi/substrate-types@^1.0.0":
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/@qiwi/substrate-types/-/substrate-types-1.9.1.tgz#c211eb98ae78af94f933d29e3da86b0f3d71fff3"
+  integrity sha512-iak2L1MHEeetAOfK9piigIXSQyJcXiDfl0PiAh+id3lg8FXxbOvxcG2wJi8lwBcw1q9NHbC3U2w/3RAldCHUmQ==
+
+"@qiwi/substrate@^1.9.1":
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/@qiwi/substrate/-/substrate-1.9.1.tgz#a16d58c4cf921bbd73a3138d941cc021093dc5b5"
+  integrity sha512-EsdZo4e27KASOQcHZgxXNjN0SXNpo50O9SM0bJlmMtg3VL0tpOklRsGHSc0bGAu14lsBwitVmg/EEQEuMcG9Yw==
+  dependencies:
+    "@qiwi/substrate-types" "^1.0.0"
+
 "@semantic-release/changelog@^3.0.2":
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/@semantic-release/changelog/-/changelog-3.0.2.tgz#b09a8e0d072ef54d2bc7a5c82f6112dc3c8ae85d"
