@@ -28,6 +28,7 @@
   },
   "license": "ISC",
   "dependencies": {
+    "@qiwi/substrate": "^1.9.1",
     "@types/consul": "^0.23.33",
     "consul": "^0.34.1",
     "lodash": "^4.17.11"

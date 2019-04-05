@@ -1,4 +1,5 @@
-import ConsulDiscoveryService, { IConnectionParams, ILogger, LOG_PREFIX } from '../../main/ts'
+import ConsulDiscoveryService, { IConnectionParams, ILogger } from '../../main/ts/index'
+import {LOG_PREFIX} from '../../main/ts/logger'
 import { EventEmitter } from 'events'
 
 interface IConsulClientMock {
@@ -56,6 +57,7 @@ const testParams: IConnectionParams = {
 const expectedError = 'test error'
 
 const fakeLogger: ILogger = {
+  trace() {},
   error() {},
   warn() {},
   log() {},
@@ -63,19 +65,22 @@ const fakeLogger: ILogger = {
   debug() {throw new Error()}
 }
 
-describe('ConsulServiceDiscovery', () => {
+fdescribe('ConsulServiceDiscovery', () => {
   test('on change', async () => {
+
     expect.assertions(1)
     const discoveryService = new ConsulDiscoveryService(
       testParams,
       consulClientMock
     )
+
     const serviceConnectionParams = discoveryService.getConnectionParams('testService')
     const instantWathcer = discoveryService.instancesWatcher['testService']
 
     instantWathcer.on('change', () => {})
     instantWathcer.emit('change', onChangeResponse)
     expect(serviceConnectionParams).resolves.toEqual(testParams)
+
   }, 3000)
 
   test('on error', async () => {

@@ -1,76 +1,18 @@
 import * as Consul from 'consul'
 import * as _ from 'lodash'
 
-export interface IConnectionParams {
-  port: string
-  host: string
-}
+import {
+  IConnectionParams,
+  IConsulService,
+  IConsulWatchOptions,
+  IEntryPoint,
+  ILibConfig
+} from './interface'
 
-export interface IConsulService {
-  getConnectionParams (serviceName: string): Promise<IConnectionParams>
-}
+export * from './interface'
 
-export interface IConnectionParams {
-  host: string
-  port: string
-}
-
-export interface IConsulWatchOptions {
-  service: string
-  passing: boolean
-}
-
-export interface IEntryPoint {
-  Service: {
-    Address: string
-    Port: string
-  }
-  Node: {
-    Address: string
-  }
-}
-
-export interface ILibConfig {
-  Promise?: any,
-  logger?: any
-}
-
-export interface ILogger {
-  warn (...args: Array<any>)
-  error (...args: Array<any>)
-  log (...args: Array<any>)
-  info (...args: Array<any>)
-  debug (...args: Array<any>)
-}
-
-export const LOG_PREFIX = '[consul discovery]'
-
-export interface ICxt {
-  Promise: typeof Promise
-  logger: ILogger
-}
-
-const cxt: ICxt = {
-  Promise: Promise,
-  logger: console
-}
-
-const log: ILogger = (() => {
-  const wrap = (level, ...args) => cxt.logger[level](LOG_PREFIX, ...args)
-  const error = wrap.bind(null, 'error')
-  const warn = wrap.bind(null, 'warn')
-  const debug = wrap.bind(null, 'debug')
-  const info = wrap.bind(null, 'info')
-  const log = wrap.bind(null, 'log')
-
-  return {
-    debug,
-    log,
-    info,
-    warn,
-    error
-  }
-})()
+import log from './logger'
+import cxt from './ctx'
 
 export default class ConsulDiscoveryService implements IConsulService {
   protected _consul: any
