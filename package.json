@@ -5,6 +5,7 @@
   "main": "dist/es5/index.js",
   "scripts": {
     "lint": "tslint -p tsconfig.json",
+    "lint:fix": "yarn lint --fix",
     "jest": "jest",
     "test": "yarn jest",
     "pretest": "yarn lint",

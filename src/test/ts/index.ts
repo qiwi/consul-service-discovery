@@ -1,25 +1,26 @@
 import ConsulDiscoveryService, { IConnectionParams, ILogger } from '../../main/ts/index'
-import {LOG_PREFIX} from '../../main/ts/logger'
+import { LOG_PREFIX } from '../../main/ts/logger'
 import cxt from '../../main/ts/ctx'
 import { EventEmitter } from 'events'
 import * as Bluebird from 'bluebird'
+import { noop } from 'lodash'
 
 interface IConsulClientMock {
   watch: (method: any, options: any) => void
   health: () => any
 }
 
-class consulClientMockEmmiter extends EventEmitter {
-  end() {
+class ConsulClientMockEmmiter extends EventEmitter {
+  end () {
     return
   }
 }
 
-class consulClientMock implements IConsulClientMock {
+class ConsulClientMock implements IConsulClientMock {
   _host: string
   _port: string
 
-  constructor(
+  constructor (
     host: string,
     port: string
   ) {
@@ -27,16 +28,16 @@ class consulClientMock implements IConsulClientMock {
     this._port = port
   }
 
-  watch(
+  watch (
     method,
     options
   ) {
-    return new consulClientMockEmmiter()
+    return new ConsulClientMockEmmiter()
   }
 
-  health() {
+  health () {
     return {
-      service: () => {}
+      service: noop
     }
   }
 
@@ -58,21 +59,14 @@ const testParams: IConnectionParams = {
 
 const expectedError = 'test error'
 
-const fakeLogger: ILogger = {
-  trace() {},
-  error() {},
-  warn() {},
-  log() {},
-  info() {},
-  debug() {}
-}
+const fakeLogger: ILogger = { ...console }
 
 describe('ConsulServiceDiscovery', () => {
   describe('constructor', () => {
     it('returns proper instance', () => {
       const service = new ConsulDiscoveryService(
         testParams,
-        consulClientMock
+        ConsulClientMock
       )
 
       expect(service).toBeInstanceOf(ConsulDiscoveryService)
@@ -87,15 +81,17 @@ describe('ConsulServiceDiscovery', () => {
         expect.assertions(1)
         const discoveryService = new ConsulDiscoveryService(
           testParams,
-          consulClientMock
+          ConsulClientMock
         )
 
         const serviceConnectionParams = discoveryService.getConnectionParams('testService')
         const instantWathcer = discoveryService.instancesWatcher['testService']
 
-        instantWathcer.on('change', () => {})
+        instantWathcer.on('change', noop)
         instantWathcer.emit('change', onChangeResponse)
-        expect(serviceConnectionParams).resolves.toEqual(testParams)
+
+        // tslint:disable-next-line:no-floating-promises
+        return expect(serviceConnectionParams).resolves.toEqual(testParams)
 
       }, 3000)
 
@@ -103,43 +99,52 @@ describe('ConsulServiceDiscovery', () => {
         expect.assertions(1)
         const discoveryService = new ConsulDiscoveryService(
           testParams,
-          consulClientMock
+          ConsulClientMock
         )
         const serviceConnectionParams = discoveryService.getConnectionParams('testService')
         const instantWathcer = discoveryService.instancesWatcher['testService']
-        instantWathcer.on('error', () => {})
+        instantWathcer.on('error', noop)
         for (let i = 0; i <= 20; i++) {
           instantWathcer.emit('error', expectedError)
         }
-        expect(serviceConnectionParams).rejects.toEqual(undefined)
+
+        // tslint:disable-next-line:no-floating-promises
+        return expect(serviceConnectionParams).rejects.toEqual(undefined)
       }, 3000)
     })
   })
 
   describe('static', () => {
     describe('#configure', () => {
-      it('supports logger customization', () => {
+      it('supports logger customization', async () => {
         const spy = jest.spyOn(fakeLogger, 'debug')
-        ConsulDiscoveryService.configure({logger: fakeLogger})
+        ConsulDiscoveryService.configure({ logger: fakeLogger })
 
-        new ConsulDiscoveryService(
+        const res = new ConsulDiscoveryService(
           testParams,
-          consulClientMock
+          ConsulClientMock
         ).init('foo')
 
+        // tslint:disable-next-line:no-floating-promises
+        expect(res).resolves.toEqual(undefined)
         expect(cxt.logger).toBe(fakeLogger)
-        expect(spy).toHaveBeenCalledWith(LOG_PREFIX, 'initialized');
+        expect(spy).toHaveBeenCalledWith(LOG_PREFIX, 'initialized')
       })
 
-      it('supports custom Promises', () => {
-        ConsulDiscoveryService.configure({Promise: Bluebird})
+      it('supports custom Promises', async () => {
+        ConsulDiscoveryService.configure({ Promise: Bluebird })
 
-        expect(cxt.Promise).toBe(Bluebird)
-        expect(new ConsulDiscoveryService(
+        const res = new ConsulDiscoveryService(
           testParams,
-          consulClientMock
-        ).init('bar')).toBeInstanceOf(Bluebird)
+          ConsulClientMock
+        )
+          .init('bar')
 
+        // tslint:disable-next-line:no-floating-promises
+        expect(res).toBeInstanceOf(Bluebird)
+        expect(cxt.Promise).toBe(Bluebird)
+        // tslint:disable-next-line:no-floating-promises
+        expect(res).resolves.toEqual(undefined)
       })
     })
   })
