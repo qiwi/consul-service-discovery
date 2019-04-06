@@ -10,7 +10,10 @@
     "pretest": "yarn lint",
     "test_with_report": "yarn test && yarn coveralls_push",
     "coveralls_push": "cat ./coverage/lcov.info | coveralls",
-    "build": "yarn clean && tsc -p tsconfig.build.json",
+    "build": "yarn clean && yarn build:es5 && yarn build:es6 && yarn build:ts",
+    "build:es5": "mkdir -p target/es5 && tsc -p tsconfig.build.json --target ES5 --outDir target/es5",
+    "build:es6": "mkdir -p target/es6 && tsc -p tsconfig.build.json --target ES6 --outDir target/es6",
+    "build:ts": "cp -r src/main/ts target/ts",
     "clean": "rm -rf ./target"
   },
   "keywords": [
