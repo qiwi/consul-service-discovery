@@ -3,6 +3,8 @@ node_js:
   - '10'
 
 before_install:
+  - sudo apt-get install moreutils
+  - npm install -g yarn
   - npm install -g greenkeeper-lockfile
 
 before_script:
@@ -17,10 +19,12 @@ after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
 install:
-  - npm install
+  - yarn cache clean
+  - yarn
 
 script:
-  - npm run test_with_report
+  - yarn run build
+  - yarn test_with_report
 
 deploy:
   provider: script
