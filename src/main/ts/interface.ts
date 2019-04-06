@@ -20,11 +20,6 @@ export interface IConnectionParams {
   port: string
 }
 
-export interface IConsulWatchOptions {
-  service: string
-  passing: boolean
-}
-
 export interface IEntryPoint {
   Service: {
     Address: string

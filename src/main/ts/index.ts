@@ -1,10 +1,9 @@
 import * as Consul from 'consul'
-import * as _ from 'lodash'
+import { once } from 'lodash'
 
 import {
   IConnectionParams,
   IConsulService,
-  IConsulWatchOptions,
   IEntryPoint,
   ILibConfig
 } from './interface'
@@ -15,7 +14,7 @@ import log from './logger'
 import cxt from './ctx'
 
 export default class ConsulDiscoveryService implements IConsulService {
-  protected _consul: any
+  protected _consul: Consul.Consul
   protected _instances: any = {}
   public instancesWatcher: any = {}
   protected _attempts: number = 0
@@ -34,7 +33,7 @@ export default class ConsulDiscoveryService implements IConsulService {
     let resolveInit: (value?: void | PromiseLike<void>) => void
     let rejectInit: (reason?: any) => void
 
-    const finallize = _.once((handler: any): void => handler())
+    const finallize = once((handler: any): void => handler())
     const promise = new Promise<void>((resolve, reject) => {
       resolveInit = resolve
       rejectInit = reject
@@ -49,9 +48,9 @@ export default class ConsulDiscoveryService implements IConsulService {
       options: {
         service: serviceName,
         passing: true
-      } as IConsulWatchOptions,
+      } as Consul.Health.ServiceOptions,
       backoffMax: 10000
-    })
+    } as Consul.Watch.Options)
       .on('change', (data: IEntryPoint[]) => {
         this._instances[serviceName].length = 0
 

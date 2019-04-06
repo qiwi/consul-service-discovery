@@ -28,17 +28,18 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@qiwi/substrate": "^1.9.1",
-    "@types/consul": "^0.23.33",
     "consul": "^0.34.1",
     "lodash": "^4.17.11"
   },
   "devDependencies": {
+    "@qiwi/substrate": "^1.9.1",
     "@semantic-release/changelog": "^3.0.2",
     "@semantic-release/git": "^7.0.8",
     "@semantic-release/github": "^5.2.10",
     "@semantic-release/npm": "^5.1.4",
+    "@types/consul": "^0.23.33",
     "@types/jest": "^24.0.11",
+    "@types/lodash": "^4.14.123",
     "babel-core": "^6.26.3",
     "coveralls": "^3.0.3",
     "jest": "^24.7.1",
