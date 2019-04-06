@@ -1,8 +1,8 @@
 import { ILogger, IPromiseConstructor } from '@qiwi/substrate'
-export { ILogger } from '@qiwi/substrate'
+export { ILogger, IPromise, IPromiseConstructor } from '@qiwi/substrate'
 
 export interface ICxt {
-  Promise: IPromiseConstructor
+  Promise: PromiseConstructor
   logger: ILogger
 }
 

@@ -1,6 +1,8 @@
 import ConsulDiscoveryService, { IConnectionParams, ILogger } from '../../main/ts/index'
 import {LOG_PREFIX} from '../../main/ts/logger'
+import cxt from '../../main/ts/ctx'
 import { EventEmitter } from 'events'
+import * as Bluebird from 'bluebird'
 
 interface IConsulClientMock {
   watch: (method: any, options: any) => void
@@ -62,10 +64,10 @@ const fakeLogger: ILogger = {
   warn() {},
   log() {},
   info() {},
-  debug() {throw new Error()}
+  debug() {}
 }
 
-fdescribe('ConsulServiceDiscovery', () => {
+describe('ConsulServiceDiscovery', () => {
   test('on change', async () => {
 
     expect.assertions(1)
@@ -109,16 +111,34 @@ fdescribe('ConsulServiceDiscovery', () => {
       expect(service.getConnectionParams).not.toBeUndefined()
     })
 
-    it('supports context configuration', () => {
-      const spy = jest.spyOn(fakeLogger, 'debug')
-      ConsulDiscoveryService.configure({logger: fakeLogger})
 
-      new ConsulDiscoveryService(
-        testParams,
-        consulClientMock
-      ).init('foo')
+  })
 
-      expect(spy).toHaveBeenCalledWith(LOG_PREFIX, 'initialized');
+  describe('static', () => {
+    describe('#configure', () => {
+      it('supports logger customization', () => {
+        const spy = jest.spyOn(fakeLogger, 'debug')
+        ConsulDiscoveryService.configure({logger: fakeLogger})
+
+        new ConsulDiscoveryService(
+          testParams,
+          consulClientMock
+        ).init('foo')
+
+        expect(cxt.logger).toBe(fakeLogger)
+        expect(spy).toHaveBeenCalledWith(LOG_PREFIX, 'initialized');
+      })
+
+      it('supports custom Promises', () => {
+        ConsulDiscoveryService.configure({Promise: Bluebird})
+
+        expect(cxt.Promise).toBe(Bluebird)
+        expect(new ConsulDiscoveryService(
+          testParams,
+          consulClientMock
+        ).init('bar')).toBeInstanceOf(Bluebird)
+
+      })
     })
   })
 })

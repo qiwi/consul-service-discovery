@@ -1,5 +1,4 @@
 import * as Consul from 'consul'
-import { once } from 'lodash'
 
 import {
   IConnectionParams,
@@ -12,6 +11,10 @@ export * from './interface'
 
 import log from './logger'
 import cxt from './ctx'
+import {
+  once,
+  sample
+} from './util'
 
 export default class ConsulDiscoveryService implements IConsulService {
   protected _consul: Consul.Consul
@@ -29,12 +32,12 @@ export default class ConsulDiscoveryService implements IConsulService {
     })
   }
 
-  public async init (serviceName: string): Promise<void> {
-    let resolveInit: (value?: void | PromiseLike<void>) => void
-    let rejectInit: (reason?: any) => void
+  public init (serviceName: string): Promise<any> {
+    let resolveInit
+    let rejectInit
 
     const finallize = once((handler: any): void => handler())
-    const promise = new Promise<void>((resolve, reject) => {
+    const promise = new cxt.Promise((resolve, reject) => {
       resolveInit = resolve
       rejectInit = reject
     })
@@ -93,8 +96,8 @@ export default class ConsulDiscoveryService implements IConsulService {
     if (!this._instances[serviceName]) {
       await this.init(serviceName)
     }
-    const index = Math.floor(Math.random() * this._instances[serviceName].length)
-    return this._instances[serviceName][index]
+
+    return sample(this._instances[serviceName])
   }
 
   static configure (opts: ILibConfig): void {
