@@ -1,46 +1,32 @@
-import ConsulDiscoveryService, { IConnectionParams, ILogger } from '../../main/ts/index'
+import ConsulDiscoveryService, {
+  IConnectionParams,
+  IConsulClient, IConsulClientFactory,
+  IConsulServiceHealth,
+  ILogger
+} from '../../main/ts/index'
 import { LOG_PREFIX } from '../../main/ts/logger'
 import cxt from '../../main/ts/ctx'
 import { EventEmitter } from 'events'
 import * as Bluebird from 'bluebird'
+import * as Consul from 'consul'
 import { noop } from 'lodash'
 
-interface IConsulClientMock {
-  watch: (method: any, options: any) => void
-  health: () => any
+class FakeEventEmitter extends EventEmitter {
+  end() {}
 }
 
-class ConsulClientMockEmmiter extends EventEmitter {
-  end () {
-    return
+class ConsulClient implements IConsulClient {
+  health: IConsulServiceHealth
+  watch() {
+    return new FakeEventEmitter()
+  }
+  constructor(opts?: Object | undefined) {
+    this.health = {service: null}
   }
 }
 
-class ConsulClientMock implements IConsulClientMock {
-  _host: string
-  _port: string
-
-  constructor (
-    host: string,
-    port: string
-  ) {
-    this._host = host
-    this._port = port
-  }
-
-  watch (
-    method,
-    options
-  ) {
-    return new ConsulClientMockEmmiter()
-  }
-
-  health () {
-    return {
-      service: noop
-    }
-  }
-
+const ConsulClientFactory: IConsulClientFactory = (opts?: Consul.ConsulOptions) => {
+  return new ConsulClient(opts)
 }
 
 const onChangeResponse: any = [
@@ -62,11 +48,12 @@ const expectedError = 'test error'
 const fakeLogger: ILogger = { ...console }
 
 describe('ConsulServiceDiscovery', () => {
+  beforeAll(() => ConsulDiscoveryService.configure({ Consul: ConsulClientFactory }))
+
   describe('constructor', () => {
     it('returns proper instance', () => {
       const service = new ConsulDiscoveryService(
-        testParams,
-        ConsulClientMock
+        testParams
       )
 
       expect(service).toBeInstanceOf(ConsulDiscoveryService)
@@ -80,8 +67,7 @@ describe('ConsulServiceDiscovery', () => {
 
         expect.assertions(1)
         const discoveryService = new ConsulDiscoveryService(
-          testParams,
-          ConsulClientMock
+          testParams
         )
 
         const serviceConnectionParams = discoveryService.getConnectionParams('testService')
@@ -98,8 +84,7 @@ describe('ConsulServiceDiscovery', () => {
       it('rejects the result promise once attempt limit is reached (onError)', async () => {
         expect.assertions(1)
         const discoveryService = new ConsulDiscoveryService(
-          testParams,
-          ConsulClientMock
+          testParams
         )
         const serviceConnectionParams = discoveryService.getConnectionParams('testService')
         const instantWathcer = discoveryService.instancesWatcher['testService']
@@ -121,8 +106,7 @@ describe('ConsulServiceDiscovery', () => {
         ConsulDiscoveryService.configure({ logger: fakeLogger })
 
         const res = new ConsulDiscoveryService(
-          testParams,
-          ConsulClientMock
+          testParams
         ).init('foo')
 
         // tslint:disable-next-line:no-floating-promises
@@ -135,8 +119,7 @@ describe('ConsulServiceDiscovery', () => {
         ConsulDiscoveryService.configure({ Promise: Bluebird })
 
         const res = new ConsulDiscoveryService(
-          testParams,
-          ConsulClientMock
+          testParams
         )
           .init('bar')
 
@@ -145,6 +128,12 @@ describe('ConsulServiceDiscovery', () => {
         expect(cxt.Promise).toBe(Bluebird)
         // tslint:disable-next-line:no-floating-promises
         expect(res).resolves.toEqual(undefined)
+      })
+
+      it('supports custom consul client factory', () => {
+        ConsulDiscoveryService.configure({ Consul: ConsulClientFactory })
+
+        expect(cxt.Consul).toBe(ConsulClientFactory)
       })
     })
   })

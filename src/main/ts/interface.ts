@@ -1,8 +1,27 @@
 import { ILogger, IPromiseConstructor } from '@qiwi/substrate'
 export { ILogger, IPromise, IPromiseConstructor } from '@qiwi/substrate'
+import * as Consul from 'consul'
+
+export interface IConsulClientWatch extends NodeJS.EventEmitter {
+  end(): void
+}
+
+export interface IConsulServiceHealth {
+  service: any
+}
+
+export interface IConsulClient {
+  watch(opts: Consul.Watch.Options): IConsulClientWatch
+  health: IConsulServiceHealth
+}
+
+export interface IConsulClientFactory {
+  (opts?: Consul.ConsulOptions): IConsulClient
+}
 
 export interface ICxt {
-  Promise: PromiseConstructor
+  Consul: IConsulClientFactory
+  Promise: any
   logger: ILogger
 }
 
@@ -32,5 +51,6 @@ export interface IEntryPoint {
 
 export interface ILibConfig {
   Promise?: any,
-  logger?: ILogger
+  logger?: ILogger,
+  Consul?: IConsulClientFactory
 }

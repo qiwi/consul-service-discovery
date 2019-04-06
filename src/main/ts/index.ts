@@ -4,7 +4,8 @@ import {
   IConnectionParams,
   IConsulService,
   IEntryPoint,
-  ILibConfig
+  ILibConfig,
+  IConsulClient
 } from './interface'
 
 export * from './interface'
@@ -17,16 +18,15 @@ import {
 } from './util'
 
 export default class ConsulDiscoveryService implements IConsulService {
-  protected _consul: Consul.Consul
+  protected _consul: IConsulClient
   protected _instances: any = {}
   public instancesWatcher: any = {}
   protected _attempts: number = 0
 
   constructor (
-    consulConnectionParams: IConnectionParams,
-    consul: any = Consul
+    consulConnectionParams: IConnectionParams
   ) {
-    this._consul = new consul({
+    this._consul = cxt.Consul({
       host: consulConnectionParams.host,
       port: consulConnectionParams.port.toString()
     })
