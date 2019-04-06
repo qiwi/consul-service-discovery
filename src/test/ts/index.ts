@@ -68,38 +68,6 @@ const fakeLogger: ILogger = {
 }
 
 describe('ConsulServiceDiscovery', () => {
-  test('on change', async () => {
-
-    expect.assertions(1)
-    const discoveryService = new ConsulDiscoveryService(
-      testParams,
-      consulClientMock
-    )
-
-    const serviceConnectionParams = discoveryService.getConnectionParams('testService')
-    const instantWathcer = discoveryService.instancesWatcher['testService']
-
-    instantWathcer.on('change', () => {})
-    instantWathcer.emit('change', onChangeResponse)
-    expect(serviceConnectionParams).resolves.toEqual(testParams)
-
-  }, 3000)
-
-  test('on error', async () => {
-    expect.assertions(1)
-    const discoveryService = new ConsulDiscoveryService(
-      testParams,
-      consulClientMock
-    )
-    const serviceConnectionParams = discoveryService.getConnectionParams('testService')
-    const instantWathcer = discoveryService.instancesWatcher['testService']
-    instantWathcer.on('error', () => {})
-    for (let i = 0; i <= 20; i++) {
-      instantWathcer.emit('error', expectedError)
-    }
-    expect(serviceConnectionParams).rejects.toEqual(undefined)
-  }, 3000)
-
   describe('constructor', () => {
     it('returns proper instance', () => {
       const service = new ConsulDiscoveryService(
@@ -108,10 +76,44 @@ describe('ConsulServiceDiscovery', () => {
       )
 
       expect(service).toBeInstanceOf(ConsulDiscoveryService)
-      expect(service.getConnectionParams).not.toBeUndefined()
+      expect(service.instancesWatcher).not.toBeUndefined()
     })
+  })
 
+  describe('prototype', () => {
+    describe('#init', () => {
+      it('instancesWatcher updates service conn data through subscription (onChange)', async () => {
 
+        expect.assertions(1)
+        const discoveryService = new ConsulDiscoveryService(
+          testParams,
+          consulClientMock
+        )
+
+        const serviceConnectionParams = discoveryService.getConnectionParams('testService')
+        const instantWathcer = discoveryService.instancesWatcher['testService']
+
+        instantWathcer.on('change', () => {})
+        instantWathcer.emit('change', onChangeResponse)
+        expect(serviceConnectionParams).resolves.toEqual(testParams)
+
+      }, 3000)
+
+      it('rejects the result promise once attempt limit is reached (onError)', async () => {
+        expect.assertions(1)
+        const discoveryService = new ConsulDiscoveryService(
+          testParams,
+          consulClientMock
+        )
+        const serviceConnectionParams = discoveryService.getConnectionParams('testService')
+        const instantWathcer = discoveryService.instancesWatcher['testService']
+        instantWathcer.on('error', () => {})
+        for (let i = 0; i <= 20; i++) {
+          instantWathcer.emit('error', expectedError)
+        }
+        expect(serviceConnectionParams).rejects.toEqual(undefined)
+      }, 3000)
+    })
   })
 
   describe('static', () => {
