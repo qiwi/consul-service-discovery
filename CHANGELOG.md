@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/qiwi/consul-service-discovery/compare/v1.1.5...v1.2.0) (2019-04-07)
+
+
+### Features
+
+* add Promise customization ([0a6426b](https://github.com/qiwi/consul-service-discovery/commit/0a6426b)), closes [#3](https://github.com/qiwi/consul-service-discovery/issues/3)
+* add support for custom consul clients ([ba59f96](https://github.com/qiwi/consul-service-discovery/commit/ba59f96)), closes [#2](https://github.com/qiwi/consul-service-discovery/issues/2)
+* generate es6 bundles ([74391a5](https://github.com/qiwi/consul-service-discovery/commit/74391a5))
+
 ## [1.1.5](https://github.com/qiwi/consul-service-discovery/compare/v1.1.4...v1.1.5) (2019-01-09)
 
 
