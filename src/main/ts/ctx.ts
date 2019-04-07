@@ -1,8 +1,8 @@
-import {IConsulClient, ICxt} from './interface'
+import { IConsulClient, ICxt } from './interface'
 import * as Consul from 'consul'
 
 export const cxt: ICxt = {
-  Consul: Consul as Consul.ConsulStatic,
+  Consul: Consul,
   Promise: Promise,
   logger: console
 }

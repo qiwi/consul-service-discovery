@@ -12,16 +12,16 @@ import * as Consul from 'consul'
 import { noop } from 'lodash'
 
 class FakeEventEmitter extends EventEmitter {
-  end() {}
+  end = noop
 }
 
 class ConsulClient implements IConsulClient {
   health: IConsulServiceHealth
-  watch() {
+  watch () {
     return new FakeEventEmitter()
   }
-  constructor(opts?: Object | undefined) {
-    this.health = {service: null}
+  constructor (opts?: Object | undefined) {
+    this.health = { service: null }
   }
 }
 

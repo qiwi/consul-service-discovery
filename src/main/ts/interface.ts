@@ -3,7 +3,7 @@ export { ILogger, IPromise, IPromiseConstructor } from '@qiwi/substrate'
 import * as Consul from 'consul'
 
 export interface IConsulClientWatch extends NodeJS.EventEmitter {
-  end(): void
+  end (): void
 }
 
 export interface IConsulServiceHealth {
@@ -11,7 +11,7 @@ export interface IConsulServiceHealth {
 }
 
 export interface IConsulClient {
-  watch(opts: Consul.Watch.Options): IConsulClientWatch
+  watch (opts: Consul.Watch.Options): IConsulClientWatch
   health: IConsulServiceHealth
 }
 
