@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/qiwi/consul-service-discovery/compare/v1.2.1...v1.3.0) (2019-04-08)
+
+
+### Features
+
+* use the previous valid conn data if onChange returns empty ([24542f7](https://github.com/qiwi/consul-service-discovery/commit/24542f7)), closes [#10](https://github.com/qiwi/consul-service-discovery/issues/10)
+
 ## [1.2.1](https://github.com/qiwi/consul-service-discovery/compare/v1.2.0...v1.2.1) (2019-04-08)
 
 
