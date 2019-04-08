@@ -17,6 +17,7 @@ import {
   sample
 } from './util'
 
+const BACKOFF_MAX = 10000
 const WATCH_ERROR_LIMIT = 20
 
 export default class ConsulDiscoveryService implements IConsulService {
@@ -43,7 +44,7 @@ export default class ConsulDiscoveryService implements IConsulService {
 
     this._instances[serviceName] = []
 
-    log.debug('initialized')
+    log.debug(`watcher initialized, service=${serviceName}`)
 
     this.instancesWatcher[serviceName] = this._consul.watch({
       method: this._consul.health.service,
@@ -51,7 +52,7 @@ export default class ConsulDiscoveryService implements IConsulService {
         service: serviceName,
         passing: true
       } as Consul.Health.ServiceOptions,
-      backoffMax: 10000
+      backoffMax: BACKOFF_MAX
     } as Consul.Watch.Options)
       .on('change', (data: IEntryPoint[]) => {
         this._instances[serviceName].length = 0
@@ -66,7 +67,7 @@ export default class ConsulDiscoveryService implements IConsulService {
               port: port
             })
           } else {
-            log.warn('Entry point connection param is empty', entryPoint)
+            log.warn(`watcher got empty connection params, service=${serviceName}`, entryPoint)
           }
         })
 
@@ -77,13 +78,17 @@ export default class ConsulDiscoveryService implements IConsulService {
         }
       })
       .on('error', (err: Error) => {
-        log.error('Consul client error:', err)
+        log.error(`watcher error, service=${serviceName}`, 'error=', err)
+        log.info(`attempt=${this._attempts}`)
+
         this._attempts += 1
-        // wait for 20 errors and reset watch and instanses
-        if (this._attempts >= 20) {
+        // Once WATCH_ERROR_LIMIT is reached, reset watcher and instances
+        if (this._attempts >= WATCH_ERROR_LIMIT) {
           this._attempts = 0
           this._instances[serviceName].length = 0
           this.instancesWatcher[serviceName].end()
+
+          log.error(`watcher error limit is reached, service=${serviceName}`)
           reject()
         }
       })

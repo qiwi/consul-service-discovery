@@ -112,7 +112,7 @@ describe('ConsulServiceDiscovery', () => {
         // tslint:disable-next-line:no-floating-promises
         expect(res).resolves.toEqual(undefined)
         expect(cxt.logger).toBe(fakeLogger)
-        expect(spy).toHaveBeenCalledWith(LOG_PREFIX, 'initialized')
+        expect(spy).toHaveBeenCalledWith(LOG_PREFIX, 'watcher initialized, service=foo')
       })
 
       it('supports custom Promises', async () => {
