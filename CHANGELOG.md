@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/qiwi/consul-service-discovery/compare/v1.3.0...v1.3.1) (2019-04-08)
+
+
+### Bug Fixes
+
+* **package:** broken main ref ([5c5217a](https://github.com/qiwi/consul-service-discovery/commit/5c5217a)), closes [#4](https://github.com/qiwi/consul-service-discovery/issues/4)
+
 # [1.3.0](https://github.com/qiwi/consul-service-discovery/compare/v1.2.1...v1.3.0) (2019-04-08)
 
 
