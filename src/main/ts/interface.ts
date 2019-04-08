@@ -34,7 +34,7 @@ export interface IConsulDiscoveryService {
   services: {
     [key: string]: IServiceEntry
   }
-  getConnectionParams (serviceName: string): Promise<IConnectionParams>
+  getConnectionParams (serviceName: string): Promise<IConnectionParams | undefined>
 }
 
 export interface IConnectionParams {
@@ -58,11 +58,12 @@ export interface ILibConfig {
   Consul?: IConsulClientFactory
 }
 
-export type ISeviceName = string
+export type IServiceName = string
 
 export type IServiceEntry = {
-  name: ISeviceName,
-  watcher: NodeJS.EventEmitter,
+  name: IServiceName,
+  watcher: IConsulClientWatch,
   connections: Array<IConnectionParams>,
-  sequentialErrorCount: number
+  sequentialErrorCount: number,
+  promise?: Promise<IServiceEntry>
 }

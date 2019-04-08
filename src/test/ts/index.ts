@@ -56,7 +56,6 @@ describe('ConsulServiceDiscovery', () => {
       const service = new ConsulDiscoveryService(testParams)
 
       expect(service).toBeInstanceOf(ConsulDiscoveryService)
-      expect(service.instancesWatcher).not.toBeUndefined()
     })
   })
 
@@ -73,12 +72,12 @@ describe('ConsulServiceDiscovery', () => {
     describe('#getService', () => {
       const discoveryService = new ConsulDiscoveryService(testParams)
 
-      it('inits new service entry', async () => {
+      it('creates new service entry', () => {
         const service = discoveryService.getService('foobar')
 
         discoveryService.services['foobar'].watcher.emit('change', onChangeResponse)
 
-        return expect(service).resolves.toEqual({
+        expect(service).toEqual({
           name: 'foobar',
           watcher: expect.any(FakeWatcher),
           connections: [],
@@ -86,26 +85,25 @@ describe('ConsulServiceDiscovery', () => {
         })
       })
 
-      it('returns cached service if exists', async () => {
+      it('returns cached service entry if exists', () => {
         const service = discoveryService.services['foobar']
 
         expect(service).not.toBeUndefined()
 
-        return expect(discoveryService.getService('foobar')).resolves.toBe(service)
+        expect(discoveryService.getService('foobar')).toBe(service)
       })
     })
 
-    describe('#init', () => {
-      it('instancesWatcher updates service conn data through subscription (onChange)', async () => {
+    describe('#getConnectionParams', () => {
+      it('resolves service conn params through watcher subscription (onChange)', async () => {
 
         expect.assertions(1)
         const discoveryService = new ConsulDiscoveryService(testParams)
 
         const serviceConnectionParams = discoveryService.getConnectionParams('testService')
-        const instantWathcer = discoveryService.instancesWatcher['testService']
+        const watcher = discoveryService.services['testService'].watcher
 
-        instantWathcer.on('change', noop)
-        instantWathcer.emit('change', onChangeResponse)
+        watcher.emit('change', onChangeResponse)
 
         // tslint:disable-next-line:no-floating-promises
         return expect(serviceConnectionParams).resolves.toEqual(testParams)
@@ -118,14 +116,14 @@ describe('ConsulServiceDiscovery', () => {
           testParams
         )
         const serviceConnectionParams = discoveryService.getConnectionParams('testService')
-        const instantWathcer = discoveryService.instancesWatcher['testService']
-        instantWathcer.on('error', noop)
+        const watcher = discoveryService.services['testService'].watcher
+
         for (let i = 0; i <= 20; i++) {
-          instantWathcer.emit('error', expectedError)
+          watcher.emit('error', expectedError)
         }
 
         // tslint:disable-next-line:no-floating-promises
-        return expect(serviceConnectionParams).rejects.toEqual(undefined)
+        return expect(serviceConnectionParams).rejects.toEqual(expectedError)
       }, 1000)
     })
   })
@@ -136,7 +134,7 @@ describe('ConsulServiceDiscovery', () => {
         const spy = jest.spyOn(fakeLogger, 'debug')
         ConsulDiscoveryService.configure({ logger: fakeLogger })
 
-        const res = new ConsulDiscoveryService(testParams).init('foo')
+        const res = new ConsulDiscoveryService(testParams).ready('foo')
 
         // tslint:disable-next-line:no-floating-promises
         expect(res).resolves.toEqual(undefined)
@@ -147,7 +145,7 @@ describe('ConsulServiceDiscovery', () => {
       it('supports custom Promises', async () => {
         ConsulDiscoveryService.configure({ Promise: Bluebird })
 
-        const res = new ConsulDiscoveryService(testParams).init('bar')
+        const res = new ConsulDiscoveryService(testParams).ready('bar')
 
         // tslint:disable-next-line:no-floating-promises
         expect(res).toBeInstanceOf(Bluebird)

@@ -6,7 +6,7 @@ import {
   IEntryPoint,
   ILibConfig,
   IConsulClient,
-  ISeviceName,
+  IServiceName,
   IServiceEntry,
   IConsulClientWatch
 } from './interface'
@@ -26,9 +26,6 @@ const WATCH_ERROR_LIMIT = 20
 export default class ConsulDiscoveryService implements IConsulDiscoveryService {
   public services = {}
   protected _consul: IConsulClient
-  protected _instances: any = {}
-  public instancesWatcher: any = {}
-  protected _attempts: number = 0
 
   constructor ({ host, port }: IConnectionParams) {
     this._consul = cxt.Consul({
@@ -37,83 +34,53 @@ export default class ConsulDiscoveryService implements IConsulDiscoveryService {
     })
   }
 
-  public init (serviceName: string): Promise<any> {
-    const watcher = this.getWatcher(serviceName)
-    const connections = []
-    const service: IServiceEntry = {
-      name: serviceName,
-      watcher,
-      connections,
-      sequentialErrorCount: 0
+  public ready (serviceName: string): Promise<IServiceEntry> {
+    const service = this.getService(serviceName)
+
+    if (service.promise) {
+      return service.promise
     }
+
     const {
       resolve,
       reject,
       promise
     } = getDecomposedPromise()
 
+    service.promise = promise
+
     log.debug(`watcher initialized, service=${serviceName}`)
 
-    this.services[serviceName] = service
-
-    this._instances[serviceName] = []
-
-    this.instancesWatcher[serviceName] = watcher
-      .on('change', (data: IEntryPoint[]) => {
-        this._instances[serviceName].length = 0
-
-        data.forEach((entryPoint: IEntryPoint) => {
-          const address = entryPoint.Service.Address || entryPoint.Node.Address
-          const port = entryPoint.Service.Port
-
-          if (address) {
-            this._instances[serviceName].push({
-              host: address,
-              port: port
-            })
-          } else {
-            log.warn(`watcher got empty connection params, service=${serviceName}`, entryPoint)
-          }
-        })
-
-        if (this._instances[serviceName].length) {
-          resolve(service)
-        } else {
-          reject()
-        }
-      })
-      .on('error', (err: Error) => {
-        log.error(`watcher error, service=${serviceName}`, 'error=', err)
-        log.info(`attempt=${this._attempts}`)
-
-        this._attempts += 1
-        // Once WATCH_ERROR_LIMIT is reached, reset watcher and instances
-        if (this._attempts >= WATCH_ERROR_LIMIT) {
-          this._attempts = 0
-          this._instances[serviceName].length = 0
-          this.instancesWatcher[serviceName].end()
-
-          log.error(`watcher error limit is reached, service=${serviceName}`)
-          reject()
-        }
-      })
+    ConsulDiscoveryService.watchOnChange(service, resolve, reject)
+    ConsulDiscoveryService.watchOnError(service, reject)
 
     return promise
   }
 
-  public getService (serviceName: ISeviceName) {
-    return cxt.Promise.resolve(this.services[serviceName] || this.init(serviceName))
+  public getService (serviceName: IServiceName): IServiceEntry {
+    return this.services[serviceName] || this.createService(serviceName)
   }
 
-  public async getConnectionParams (serviceName: string): Promise<IConnectionParams> {
-    if (!this._instances[serviceName]) {
-      await this.init(serviceName)
+  public createService (serviceName: IServiceName): IServiceEntry {
+    const watcher = this.getWatcher(serviceName)
+    const connections = []
+    const service = {
+      name: serviceName,
+      watcher,
+      connections,
+      sequentialErrorCount: 0
     }
+    this.services[serviceName] = service
 
-    return sample(this._instances[serviceName])
+    return service
   }
 
-  public getWatcher (serviceName: ISeviceName): IConsulClientWatch {
+  public getConnectionParams (serviceName: string): Promise<IConnectionParams | undefined> {
+    return this.ready(serviceName)
+      .then(service => sample(service.connections))
+  }
+
+  public getWatcher (serviceName: IServiceName): IConsulClientWatch {
     return this._consul.watch({
       method: this._consul.health.service,
       options: {
@@ -126,5 +93,52 @@ export default class ConsulDiscoveryService implements IConsulDiscoveryService {
 
   static configure (opts: ILibConfig): void {
     Object.assign(cxt, opts)
+  }
+
+  static watchOnChange (service: IServiceEntry, resolve: Function, reject: Function): void {
+    service.watcher
+      .on('change', (data: IEntryPoint[]) => {
+        service.connections.length = 0
+        service.sequentialErrorCount = 0
+
+        data.forEach((entryPoint: IEntryPoint) => {
+          const address = entryPoint.Service.Address || entryPoint.Node.Address
+          const port = entryPoint.Service.Port
+
+          if (address) {
+            service.connections.push({
+              host: address,
+              port: port
+            })
+          } else {
+            log.warn(`watcher got empty connection params, service=${service.name}`, entryPoint)
+          }
+        })
+
+        if (service.connections.length) {
+          resolve(service)
+        } else {
+          reject()
+        }
+      })
+  }
+
+  static watchOnError (service: IServiceEntry, reject: Function): void {
+    service.watcher
+      .on('error', (err: Error) => {
+        service.sequentialErrorCount += 1
+
+        log.error(`watcher error, service=${service.name}`, 'error=', err)
+        log.info(`sequentialErrorCount=${service.sequentialErrorCount}`)
+
+        // Once WATCH_ERROR_LIMIT is reached, reset watcher and instances
+        if (service.sequentialErrorCount >= WATCH_ERROR_LIMIT) {
+          service.watcher.end()
+          delete service.promise
+
+          log.error(`watcher error limit is reached, service=${service.name}`)
+          reject(err)
+        }
+      })
   }
 }
