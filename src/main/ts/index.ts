@@ -20,8 +20,8 @@ import {
   sample
 } from './util'
 
-const BACKOFF_MAX = 10000
-const WATCH_ERROR_LIMIT = 20
+export const BACKOFF_MAX = 20000
+export const WATCH_ERROR_LIMIT = 20
 
 export default class ConsulDiscoveryService implements IConsulDiscoveryService {
   public services = {}
@@ -98,47 +98,54 @@ export default class ConsulDiscoveryService implements IConsulDiscoveryService {
   static watchOnChange (service: IServiceEntry, resolve: Function, reject: Function): void {
     service.watcher
       .on('change', (data: IEntryPoint[]) => {
-        service.connections.length = 0
-        service.sequentialErrorCount = 0
-
-        data.forEach((entryPoint: IEntryPoint) => {
+        const connections: IConnectionParams[] = data.reduce((memo: IConnectionParams[], entryPoint: IEntryPoint) => {
           const address = entryPoint.Service.Address || entryPoint.Node.Address
           const port = entryPoint.Service.Port
 
           if (address) {
-            service.connections.push({
+            memo.push({
               host: address,
               port: port
             })
-          } else {
-            log.warn(`watcher got empty connection params, service=${service.name}`, entryPoint)
           }
-        })
+
+          return memo
+        }, [])
+
+        if (connections.length > 0) {
+          service.sequentialErrorCount = 0
+          service.connections.length = 0
+          service.connections.push(...connections)
+        } else {
+          log.warn(`watcher got empty or invalid connection params, service=${service.name}`, 'data=', data)
+        }
 
         if (service.connections.length) {
           resolve(service)
         } else {
-          reject()
+          this.handleError(service, reject, new Error('got empty or invalid connection params'))
         }
       })
   }
 
   static watchOnError (service: IServiceEntry, reject: Function): void {
     service.watcher
-      .on('error', (err: Error) => {
-        service.sequentialErrorCount += 1
+      .on('error', (err: Error) => this.handleError(service, reject, err))
+  }
 
-        log.error(`watcher error, service=${service.name}`, 'error=', err)
-        log.info(`sequentialErrorCount=${service.sequentialErrorCount}`)
+  static handleError (service: IServiceEntry, reject: Function, err: any): void {
+    service.sequentialErrorCount += 1
 
-        // Once WATCH_ERROR_LIMIT is reached, reset watcher and instances
-        if (service.sequentialErrorCount >= WATCH_ERROR_LIMIT) {
-          service.watcher.end()
-          delete service.promise
+    log.error(`watcher error, service=${service.name}`, 'error=', err)
+    log.info(`sequentialErrorCount=${service.sequentialErrorCount}`)
 
-          log.error(`watcher error limit is reached, service=${service.name}`)
-          reject(err)
-        }
-      })
+    // Once WATCH_ERROR_LIMIT is reached, reset watcher and instances
+    if (service.sequentialErrorCount >= WATCH_ERROR_LIMIT) {
+      service.watcher.end()
+      delete service.promise
+
+      log.error(`watcher error limit is reached, service=${service.name}`)
+      reject(err)
+    }
   }
 }

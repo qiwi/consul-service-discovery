@@ -3,7 +3,8 @@ import ConsulDiscoveryService, {
   IConsulClient,
   IConsulClientFactory,
   IConsulServiceHealth,
-  ILogger
+  ILogger,
+  WATCH_ERROR_LIMIT
 } from '../../main/ts/index'
 import { LOG_PREFIX } from '../../main/ts/logger'
 import cxt from '../../main/ts/ctx'
@@ -94,9 +95,17 @@ describe('ConsulServiceDiscovery', () => {
       })
     })
 
+    describe('#ready', () => {
+      it('reuses service entry\'s promise', () => {
+        const discoveryService = new ConsulDiscoveryService(testParams)
+
+        // tslint:disable-next-line:no-floating-promises
+        expect(discoveryService.ready('foo')).toBe(discoveryService.ready('foo'))
+      })
+    })
+
     describe('#getConnectionParams', () => {
       it('resolves service conn params through watcher subscription (onChange)', async () => {
-
         expect.assertions(1)
         const discoveryService = new ConsulDiscoveryService(testParams)
 
@@ -112,18 +121,50 @@ describe('ConsulServiceDiscovery', () => {
 
       it('rejects the result promise once attempt limit is reached (onError)', async () => {
         expect.assertions(1)
-        const discoveryService = new ConsulDiscoveryService(
-          testParams
-        )
+        const discoveryService = new ConsulDiscoveryService(testParams)
         const serviceConnectionParams = discoveryService.getConnectionParams('testService')
         const watcher = discoveryService.services['testService'].watcher
 
-        for (let i = 0; i <= 20; i++) {
+        for (let i = 0; i <= WATCH_ERROR_LIMIT; i++) {
           watcher.emit('error', expectedError)
         }
 
         // tslint:disable-next-line:no-floating-promises
         return expect(serviceConnectionParams).rejects.toEqual(expectedError)
+      }, 1000)
+
+      it('rejects the result promise once attempt limit is reached (onChange)', async () => {
+        const discoveryService = new ConsulDiscoveryService(testParams)
+        const serviceConnectionParams = discoveryService.getConnectionParams('testService')
+        const watcher = discoveryService.services['testService'].watcher
+
+        for (let i = 0; i <= WATCH_ERROR_LIMIT; i++) {
+          watcher.emit('change', [])
+        }
+
+        // tslint:disable-next-line:no-floating-promises
+        return expect(serviceConnectionParams).rejects.toEqual(new Error('got empty or invalid connection params'))
+      }, 1000)
+
+      it('resolves promise with the previous valid response', async () => {
+        const discoveryService = new ConsulDiscoveryService(testParams)
+        const serviceConnectionParams = discoveryService.getConnectionParams('testService')
+        const watcher = discoveryService.services['testService'].watcher
+
+        watcher.emit('change', [
+          {
+            Service: {
+              Port: '8888'
+            },
+            Node: {
+              Address: '0.0.0.0'
+            }
+          }
+        ])
+        watcher.emit('change', [])
+
+        // tslint:disable-next-line:no-floating-promises
+        return expect(serviceConnectionParams).resolves.toEqual(testParams)
       }, 1000)
     })
   })
