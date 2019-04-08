@@ -2,7 +2,7 @@
   "name": "@qiwi/consul-service-discovery",
   "version": "1.3.0",
   "description": "Consul service discovery",
-  "main": "dist/es5/index.js",
+  "main": "target/es5/index.js",
   "scripts": {
     "lint": "tslint -p tsconfig.json",
     "lint:fix": "yarn lint --fix",
@@ -58,7 +58,7 @@
   "files": [
     "README.md",
     "CHANGELOG.md",
-    "dist"
+    "target"
   ],
   "jest": {
     "collectCoverage": true,
