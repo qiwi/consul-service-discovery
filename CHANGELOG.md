@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/qiwi/consul-service-discovery/compare/v1.2.0...v1.2.1) (2019-04-08)
+
+
+### Bug Fixes
+
+* fix sequential error counting ([b2b9af8](https://github.com/qiwi/consul-service-discovery/commit/b2b9af8)), closes [#8](https://github.com/qiwi/consul-service-discovery/issues/8) [#9](https://github.com/qiwi/consul-service-discovery/issues/9)
+
 # [1.2.0](https://github.com/qiwi/consul-service-discovery/compare/v1.1.5...v1.2.0) (2019-04-07)
 
 
