@@ -7,6 +7,7 @@ import {
   ILibConfig,
   IConsulClient,
   ISeviceName,
+  IServiceEntry,
   IConsulClientWatch
 } from './interface'
 
@@ -38,15 +39,24 @@ export default class ConsulDiscoveryService implements IConsulDiscoveryService {
 
   public init (serviceName: string): Promise<any> {
     const watcher = this.getWatcher(serviceName)
+    const connections = []
+    const service: IServiceEntry = {
+      name: serviceName,
+      watcher,
+      connections,
+      sequentialErrorCount: 0
+    }
     const {
       resolve,
       reject,
       promise
     } = getDecomposedPromise()
 
-    this._instances[serviceName] = []
-
     log.debug(`watcher initialized, service=${serviceName}`)
+
+    this.services[serviceName] = service
+
+    this._instances[serviceName] = []
 
     this.instancesWatcher[serviceName] = watcher
       .on('change', (data: IEntryPoint[]) => {
@@ -67,7 +77,7 @@ export default class ConsulDiscoveryService implements IConsulDiscoveryService {
         })
 
         if (this._instances[serviceName].length) {
-          resolve()
+          resolve(service)
         } else {
           reject()
         }
@@ -89,6 +99,10 @@ export default class ConsulDiscoveryService implements IConsulDiscoveryService {
       })
 
     return promise
+  }
+
+  public getService (serviceName: ISeviceName) {
+    return cxt.Promise.resolve(this.services[serviceName] || this.init(serviceName))
   }
 
   public async getConnectionParams (serviceName: string): Promise<IConnectionParams> {

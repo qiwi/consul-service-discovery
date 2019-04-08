@@ -1,6 +1,7 @@
 import ConsulDiscoveryService, {
   IConnectionParams,
-  IConsulClient, IConsulClientFactory,
+  IConsulClient,
+  IConsulClientFactory,
   IConsulServiceHealth,
   ILogger
 } from '../../main/ts/index'
@@ -48,7 +49,7 @@ const expectedError = 'test error'
 const fakeLogger: ILogger = { ...console }
 
 describe('ConsulServiceDiscovery', () => {
-  beforeAll(() => ConsulDiscoveryService.configure({ Consul: ConsulClientFactory }))
+  ConsulDiscoveryService.configure({ Consul: ConsulClientFactory })
 
   describe('constructor', () => {
     it('returns proper instance', () => {
@@ -69,6 +70,31 @@ describe('ConsulServiceDiscovery', () => {
       })
     })
 
+    describe('#getService', () => {
+      const discoveryService = new ConsulDiscoveryService(testParams)
+
+      it('inits new service entry', async () => {
+        const service = discoveryService.getService('foobar')
+
+        discoveryService.services['foobar'].watcher.emit('change', onChangeResponse)
+
+        return expect(service).resolves.toEqual({
+          name: 'foobar',
+          watcher: expect.any(FakeWatcher),
+          connections: [],
+          sequentialErrorCount: 0
+        })
+      })
+
+      it('returns cached service if exists', async () => {
+        const service = discoveryService.services['foobar']
+
+        expect(service).not.toBeUndefined()
+
+        return expect(discoveryService.getService('foobar')).resolves.toBe(service)
+      })
+    })
+
     describe('#init', () => {
       it('instancesWatcher updates service conn data through subscription (onChange)', async () => {
 
@@ -84,7 +110,7 @@ describe('ConsulServiceDiscovery', () => {
         // tslint:disable-next-line:no-floating-promises
         return expect(serviceConnectionParams).resolves.toEqual(testParams)
 
-      }, 3000)
+      }, 1000)
 
       it('rejects the result promise once attempt limit is reached (onError)', async () => {
         expect.assertions(1)
@@ -100,7 +126,7 @@ describe('ConsulServiceDiscovery', () => {
 
         // tslint:disable-next-line:no-floating-promises
         return expect(serviceConnectionParams).rejects.toEqual(undefined)
-      }, 3000)
+      }, 1000)
     })
   })
 

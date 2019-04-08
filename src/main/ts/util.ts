@@ -12,15 +12,15 @@ export const getDecomposedPromise = () => {
     _reject = reject
   })
 
-  const finalize = (handler) => () => {
+  const finalize = (handler) => (data?: any) => {
     if (!done) {
       done = true
-      return handler()
+      return handler(data)
     }
   }
 
-  const resolve = finalize(() => _resolve())
-  const reject = finalize(() => _reject())
+  const resolve = finalize((data?: any) => _resolve(data))
+  const reject = finalize((err?: any) => _reject(err))
 
   return {
     promise,
