@@ -11,14 +11,14 @@ import * as Bluebird from 'bluebird'
 import * as Consul from 'consul'
 import { noop } from 'lodash'
 
-class FakeEventEmitter extends EventEmitter {
+class FakeWatcher extends EventEmitter {
   end = noop
 }
 
 class ConsulClient implements IConsulClient {
   health: IConsulServiceHealth
   watch () {
-    return new FakeEventEmitter()
+    return new FakeWatcher()
   }
   constructor (opts?: Object | undefined) {
     this.health = { service: null }
@@ -52,9 +52,7 @@ describe('ConsulServiceDiscovery', () => {
 
   describe('constructor', () => {
     it('returns proper instance', () => {
-      const service = new ConsulDiscoveryService(
-        testParams
-      )
+      const service = new ConsulDiscoveryService(testParams)
 
       expect(service).toBeInstanceOf(ConsulDiscoveryService)
       expect(service.instancesWatcher).not.toBeUndefined()
@@ -62,13 +60,20 @@ describe('ConsulServiceDiscovery', () => {
   })
 
   describe('prototype', () => {
+    describe('#getWatcher', () => {
+      it('returns a new one Consul.Watcher instance', () => {
+        const discoveryService = new ConsulDiscoveryService(testParams)
+        const watcher = discoveryService.getWatcher('foo')
+
+        expect(watcher).toBeInstanceOf(EventEmitter)
+      })
+    })
+
     describe('#init', () => {
       it('instancesWatcher updates service conn data through subscription (onChange)', async () => {
 
         expect.assertions(1)
-        const discoveryService = new ConsulDiscoveryService(
-          testParams
-        )
+        const discoveryService = new ConsulDiscoveryService(testParams)
 
         const serviceConnectionParams = discoveryService.getConnectionParams('testService')
         const instantWathcer = discoveryService.instancesWatcher['testService']
@@ -105,9 +110,7 @@ describe('ConsulServiceDiscovery', () => {
         const spy = jest.spyOn(fakeLogger, 'debug')
         ConsulDiscoveryService.configure({ logger: fakeLogger })
 
-        const res = new ConsulDiscoveryService(
-          testParams
-        ).init('foo')
+        const res = new ConsulDiscoveryService(testParams).init('foo')
 
         // tslint:disable-next-line:no-floating-promises
         expect(res).resolves.toEqual(undefined)
@@ -118,10 +121,7 @@ describe('ConsulServiceDiscovery', () => {
       it('supports custom Promises', async () => {
         ConsulDiscoveryService.configure({ Promise: Bluebird })
 
-        const res = new ConsulDiscoveryService(
-          testParams
-        )
-          .init('bar')
+        const res = new ConsulDiscoveryService(testParams).init('bar')
 
         // tslint:disable-next-line:no-floating-promises
         expect(res).toBeInstanceOf(Bluebird)
