@@ -13,9 +13,11 @@ export * from './interface'
 import log from './logger'
 import cxt from './ctx'
 import {
-  once,
+  getDecomposedPromise,
   sample
 } from './util'
+
+const WATCH_ERROR_LIMIT = 20
 
 export default class ConsulDiscoveryService implements IConsulService {
   protected _consul: IConsulClient
@@ -33,14 +35,11 @@ export default class ConsulDiscoveryService implements IConsulService {
   }
 
   public init (serviceName: string): Promise<any> {
-    let resolveInit
-    let rejectInit
-
-    const finallize = once((handler: any): void => handler())
-    const promise = new cxt.Promise((resolve, reject) => {
-      resolveInit = resolve
-      rejectInit = reject
-    })
+    const {
+      resolve,
+      reject,
+      promise
+    } = getDecomposedPromise()
 
     this._instances[serviceName] = []
 
@@ -72,9 +71,9 @@ export default class ConsulDiscoveryService implements IConsulService {
         })
 
         if (this._instances[serviceName].length) {
-          finallize(resolveInit)
+          resolve()
         } else {
-          finallize(rejectInit)
+          reject()
         }
       })
       .on('error', (err: Error) => {
@@ -85,7 +84,7 @@ export default class ConsulDiscoveryService implements IConsulService {
           this._attempts = 0
           this._instances[serviceName].length = 0
           this.instancesWatcher[serviceName].end()
-          finallize(rejectInit)
+          reject()
         }
       })
 
