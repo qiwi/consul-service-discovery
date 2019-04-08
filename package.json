@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "tslint -p tsconfig.json",
     "lint:fix": "yarn lint --fix",
-    "jest": "jest",
+    "jest": "jest -w 2",
     "test": "yarn jest",
     "pretest": "yarn lint",
     "test_with_report": "yarn test && yarn coveralls_push",
