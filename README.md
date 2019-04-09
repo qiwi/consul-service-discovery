@@ -28,3 +28,13 @@ const serviceConnectionParams = await discoveryService.getConnectionParams(targe
 
 console.log(serviceConnectionParams) // { host: example-api-1234.qiwi.com, post: 8000 }
 ```
+
+## Configure
+You may override some inner lib deps like logger (console by default) or Promise implementations:
+```javascript
+ConsulDiscoveryService.configure({
+  Promise,  // Bluebird
+  logger,   // log4js
+  Consul    // consul client factory
+})
+```
