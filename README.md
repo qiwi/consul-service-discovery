@@ -1,5 +1,6 @@
 # Consul service discovery
 [![buildStatus](https://api.travis-ci.com/qiwi/consul-service-discovery.svg?branch=master)](https://travis-ci.com/qiwi/consul-service-discovery)
+[![npm (tag)](https://img.shields.io/npm/v/@qiwi/consul-service-discovery/latest.svg)](https://www.npmjs.com/package/@qiwi/consul-service-discovery)
 [![dependencyStatus](https://img.shields.io/david/qiwi/consul-service-discovery.svg?maxAge=3600)](https://david-dm.org/qiwi/consul-service-discovery)
 [![devDependencyStatus](https://img.shields.io/david/dev/qiwi/consul-service-discovery.svg?maxAge=3600)](https://david-dm.org/qiwi/consul-service-discovery)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
