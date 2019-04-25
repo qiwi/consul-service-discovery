@@ -47,7 +47,6 @@
     "@types/consul": "^0.23.33",
     "@types/jest": "^24.0.11",
     "@types/lodash": "^4.14.123",
-    "babel-core": "^6.26.3",
     "bluebird": "^3.5.4",
     "coveralls": "^3.0.3",
     "jest": "^24.7.1",
