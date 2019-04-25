@@ -1,7 +1,12 @@
+/** @module @qiwi/consul-service-discovery */
+
 import { cxt } from './ctx'
 
 export { sample } from 'lodash'
 
+/**
+ * @ignore
+ */
 export const getDecomposedPromise = () => {
   let _resolve
   let _reject

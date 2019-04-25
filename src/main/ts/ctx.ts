@@ -1,4 +1,6 @@
-import { IConsulClient, ICxt } from './interface'
+/** @module @qiwi/consul-service-discovery */
+
+import { ICxt } from './interface'
 import * as Consul from 'consul'
 
 export const cxt: ICxt = {

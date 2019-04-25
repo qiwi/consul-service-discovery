@@ -11,11 +11,12 @@
     "pretest": "yarn lint",
     "test_with_report": "yarn test && yarn coveralls_push",
     "coveralls_push": "cat ./coverage/lcov.info | coveralls",
-    "build": "yarn clean && yarn build:es5 && yarn build:es6 && yarn build:ts",
+    "build": "yarn clean && yarn build:es5 && yarn build:es6 && yarn build:ts && yarn docs",
     "build:es5": "mkdir -p target/es5 && tsc -p tsconfig.build.json --target ES5 --outDir target/es5",
     "build:es6": "mkdir -p target/es6 && tsc -p tsconfig.build.json --target ES6 --outDir target/es6",
     "build:ts": "cp -r src/main/ts target/ts",
-    "clean": "rm -rf ./target"
+    "clean": "rm -rf ./target",
+    "docs": "typedoc --readme README.md --tsconfig tsconfig.build.json src/main --ignoreCompilerErrors || exit 0"
   },
   "keywords": [
     "consul",
@@ -36,6 +37,7 @@
     "lodash": "^4.17.11"
   },
   "devDependencies": {
+    "@qiwi/semantic-release-gh-pages-plugin": "^1.6.2",
     "@qiwi/substrate": "^1.9.1",
     "@semantic-release/changelog": "^3.0.2",
     "@semantic-release/git": "^7.0.8",
@@ -50,6 +52,8 @@
     "coveralls": "^3.0.3",
     "jest": "^24.7.1",
     "semantic-release": "^15.13.3",
+    "typedoc": "^0.14.2",
+    "typedoc-plugin-external-module-name": "^2.0.0",
     "ts-jest": "^24.0.2",
     "tslint": "^5.16.0",
     "tslint-config-standard": "^8.0.1",
@@ -87,7 +91,8 @@
     "verifyConditions": [
       "@semantic-release/changelog",
       "@semantic-release/npm",
-      "@semantic-release/git"
+      "@semantic-release/git",
+      "@qiwi/semantic-release-gh-pages-plugin"
     ],
     "prepare": [
       "@semantic-release/changelog",
@@ -96,7 +101,8 @@
     ],
     "publish": [
       "@semantic-release/npm",
-      "@semantic-release/github"
+      "@semantic-release/github",
+      "@qiwi/semantic-release-gh-pages-plugin"
     ]
   }
 }

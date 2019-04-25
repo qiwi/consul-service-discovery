@@ -1,3 +1,5 @@
+/** @module @qiwi/consul-service-discovery */
+
 import { ILogger } from './interface'
 import { cxt } from './ctx'
 

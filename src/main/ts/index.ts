@@ -1,3 +1,5 @@
+/** @module @qiwi/consul-service-discovery */
+
 import * as Consul from 'consul'
 
 import {
@@ -23,6 +25,9 @@ import {
 export const BACKOFF_MAX = 20000
 export const WATCH_ERROR_LIMIT = 20
 
+/**
+ * @class ConsulDiscoveryService
+ */
 export default class ConsulDiscoveryService implements IConsulDiscoveryService {
   public services = {}
   protected _consul: IConsulClient

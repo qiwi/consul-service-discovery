@@ -17,14 +17,14 @@ Consul service discovery helper.
 
 ## Usage
 ```javascript
-import ConsulDiscoveryService from '@qiwi/consul-service-discovery'
+import ConsulServiceDiscovery from '@qiwi/consul-service-discovery'
 
-const discoveryService = new ConsulDiscoveryService({
+const discovery = new ConsulServiceDiscovery({
   host: '0.0.0.0',  // local consul client host
   port: 8000        // and port
 })
 const targetServiceName = 'example-api' // registered service
-const serviceConnectionParams = await discoveryService.getConnectionParams(targetServiceName)
+const serviceConnectionParams = await discovery.getConnectionParams(targetServiceName)
 
 console.log(serviceConnectionParams) // { host: example-api-1234.qiwi.com, post: 8000 }
 ```
@@ -32,7 +32,7 @@ console.log(serviceConnectionParams) // { host: example-api-1234.qiwi.com, post:
 ## Configure
 You may override some inner lib deps like logger (console by default) or Promise implementations:
 ```javascript
-ConsulDiscoveryService.configure({
+ConsulServiceDiscovery.configure({
   Promise,  // Bluebird
   logger,   // log4js
   Consul    // consul client factory
