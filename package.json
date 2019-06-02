@@ -31,7 +31,7 @@
     "type": "git",
     "url": "git@github.com:qiwi/consul-service-discovery.git"
   },
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "consul": "^0.34.1",
     "lodash": "^4.17.11"
