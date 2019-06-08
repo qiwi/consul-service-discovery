@@ -37,26 +37,26 @@
     "lodash": "^4.17.11"
   },
   "devDependencies": {
-    "@qiwi/semantic-release-gh-pages-plugin": "^1.9.0",
+    "@qiwi/semantic-release-gh-pages-plugin": "^1.9.1",
     "@qiwi/substrate": "^1.11.2",
     "@semantic-release/changelog": "^3.0.2",
     "@semantic-release/git": "^7.0.8",
     "@semantic-release/github": "^5.2.10",
     "@semantic-release/npm": "^5.1.7",
-    "@types/bluebird": "^3.5.26",
+    "@types/bluebird": "^3.5.27",
     "@types/consul": "^0.23.33",
     "@types/jest": "^24.0.13",
-    "@types/lodash": "^4.14.130",
-    "bluebird": "^3.5.4",
-    "coveralls": "^3.0.3",
+    "@types/lodash": "^4.14.134",
+    "bluebird": "^3.5.5",
+    "coveralls": "^3.0.4",
     "jest": "^24.8.0",
     "semantic-release": "^15.13.12",
     "typedoc": "^0.14.2",
     "typedoc-plugin-external-module-name": "^2.1.0",
     "ts-jest": "^24.0.2",
-    "tslint": "^5.16.0",
+    "tslint": "^5.17.0",
     "tslint-config-standard": "^8.0.1",
-    "typescript": "^3.4.5"
+    "typescript": "^3.5.1"
   },
   "files": [
     "README.md",
