@@ -1,8 +1,9 @@
 /** @module @qiwi/consul-service-discovery */
 
-import { ILogger, IPromiseConstructor } from '@qiwi/substrate'
-export { ILogger, IPromise, IPromiseConstructor } from '@qiwi/substrate'
 import * as Consul from 'consul'
+import { ILogger, IPromiseConstructor } from '@qiwi/substrate'
+
+export { ILogger, IPromise, IPromiseConstructor } from '@qiwi/substrate'
 
 export interface IConsulClientWatch extends NodeJS.EventEmitter {
   end (): void

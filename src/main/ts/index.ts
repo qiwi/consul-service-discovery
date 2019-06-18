@@ -1,7 +1,12 @@
 /** @module @qiwi/consul-service-discovery */
 
 import * as Consul from 'consul'
-
+import log from './logger'
+import cxt from './ctx'
+import {
+  getDecomposedPromise,
+  sample
+} from './util'
 import {
   IConnectionParams,
   IConsulDiscoveryService,
@@ -14,14 +19,6 @@ import {
 } from './interface'
 
 export * from './interface'
-
-import log from './logger'
-import cxt from './ctx'
-import {
-  getDecomposedPromise,
-  sample
-} from './util'
-
 export const BACKOFF_MAX = 20000
 export const WATCH_ERROR_LIMIT = 20
 
