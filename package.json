@@ -34,21 +34,21 @@
   "license": "MIT",
   "dependencies": {
     "consul": "^0.34.1",
-    "lodash": "^4.17.11"
+    "lodash": "^4.17.14"
   },
   "devDependencies": {
     "@qiwi/semantic-release-gh-pages-plugin": "^1.10.0",
     "@qiwi/substrate": "^1.11.2",
     "@semantic-release/changelog": "^3.0.4",
-    "@semantic-release/git": "^7.0.15",
-    "@semantic-release/github": "^5.4.0",
+    "@semantic-release/git": "^7.0.16",
+    "@semantic-release/github": "^5.4.2",
     "@semantic-release/npm": "^5.1.13",
     "@types/bluebird": "^3.5.27",
     "@types/consul": "^0.23.33",
     "@types/jest": "^24.0.15",
-    "@types/lodash": "^4.14.135",
+    "@types/lodash": "^4.14.136",
     "bluebird": "^3.5.5",
-    "coveralls": "^3.0.4",
+    "coveralls": "^3.0.5",
     "jest": "^24.8.0",
     "semantic-release": "^15.13.18",
     "typedoc": "^0.14.2",
@@ -56,7 +56,7 @@
     "ts-jest": "^24.0.2",
     "tslint": "^5.18.0",
     "tslint-config-standard": "^8.0.1",
-    "typescript": "^3.5.2"
+    "typescript": "^3.5.3"
   },
   "files": [
     "README.md",
