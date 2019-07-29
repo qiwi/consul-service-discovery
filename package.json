@@ -33,7 +33,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "consul": "^0.34.1",
+    "consul": "^0.35.0",
     "lodash": "^4.17.14"
   },
   "devDependencies": {
