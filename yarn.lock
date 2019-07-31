@@ -1572,10 +1572,10 @@ console-control-strings@^1.0.0, console-control-strings@^1.1.0, console-control-
   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
   integrity sha1-PXz0Rk22RG6mRL9LOVB/mFEAjo4=
 
-consul@^0.34.1:
-  version "0.34.1"
-  resolved "https://registry.yarnpkg.com/consul/-/consul-0.34.1.tgz#b000638ad99db038fbb98e508c32d758bf598968"
-  integrity sha512-xCLBzPQBgnDgC2LdYnrT/Fc6PglRU6u7EBkpW0ExAx3Am/CdtKcP5o/3jfwOy7PBAwBqnJk3AYdwwGg+arriiQ==
+consul@^0.35.0:
+  version "0.35.0"
+  resolved "https://registry.yarnpkg.com/consul/-/consul-0.35.0.tgz#c4f5b203a90630086e9dc5461d35de47369d03d8"
+  integrity sha512-Jv4Nlrw+B0v0FPctvgyEB636zemkvsNMSWsBanyyj4fOCqm5X5Eh2LdwjUoJTMQSx/bdZFV3iT0Yi8cQu0S+UQ==
   dependencies:
     papi "^0.29.0"
 
