@@ -1,3 +1,16 @@
+# [1.4.0](https://github.com/qiwi/consul-service-discovery/compare/v1.3.1...v1.4.0) (2019-08-24)
+
+
+### Bug Fixes
+
+* **package:** add missed dev deps ([787f4c6](https://github.com/qiwi/consul-service-discovery/commit/787f4c6))
+
+
+### Features
+
+* add flowtype libdefs ([a35ee83](https://github.com/qiwi/consul-service-discovery/commit/a35ee83)), closes [#18](https://github.com/qiwi/consul-service-discovery/issues/18)
+* expose ConsulDiscoveryService separately ([de0a612](https://github.com/qiwi/consul-service-discovery/commit/de0a612))
+
 ## [1.3.1](https://github.com/qiwi/consul-service-discovery/compare/v1.3.0...v1.3.1) (2019-04-08)
 
 
