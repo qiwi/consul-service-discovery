@@ -25,7 +25,7 @@ export const WATCH_ERROR_LIMIT = 20
 /**
  * @class ConsulDiscoveryService
  */
-export default class ConsulDiscoveryService implements IConsulDiscoveryService {
+export class ConsulDiscoveryService implements IConsulDiscoveryService {
   public services: {
     [key: string]: IServiceEntry
   } = {}
@@ -153,3 +153,5 @@ export default class ConsulDiscoveryService implements IConsulDiscoveryService {
     }
   }
 }
+
+export default ConsulDiscoveryService

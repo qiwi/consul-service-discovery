@@ -1,4 +1,5 @@
-import ConsulDiscoveryService, {
+import def, {
+  ConsulDiscoveryService,
   IConnectionParams,
   IConsulClient,
   IConsulClientFactory,
@@ -51,6 +52,10 @@ const fakeLogger: ILogger = { ...console }
 
 describe('ConsulServiceDiscovery', () => {
   ConsulDiscoveryService.configure({ Consul: ConsulClientFactory })
+
+  it('exposes ConsulDiscoveryService as module default', () => {
+    expect(def).toBe(ConsulDiscoveryService)
+  })
 
   describe('constructor', () => {
     it('returns proper instance', () => {
