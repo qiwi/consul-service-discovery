@@ -7,7 +7,7 @@ const {dts} = argv
 const DTS = resolve(dts)
 const IMPORT_MAIN_PATTERN = /\timport main = require\('(.+)'\);/g
 const IMPORT_MAIN_LINE_PATTERN = /^\timport main = require\('(.+)'\);$/
-const BROKEN_MODULE_NAME = /(declare module '.+\/lib\/es5\/)[^/]*\/src\/main\/index'.+/
+const BROKEN_MODULE_NAME = /(declare module '.+\/target\/es5\/)[^/]*\/src\/main\/ts\/index'.+/
 const REFERENCE = /\/\/\/.+/
 
 assert(!!dts, ' `dts` file path should be specified')
