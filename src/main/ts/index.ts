@@ -26,7 +26,9 @@ export const WATCH_ERROR_LIMIT = 20
  * @class ConsulDiscoveryService
  */
 export default class ConsulDiscoveryService implements IConsulDiscoveryService {
-  public services = {}
+  public services: {
+    [key: string]: IServiceEntry
+  } = {}
   protected _consul: IConsulClient
 
   constructor ({ host, port }: IConnectionParams) {
