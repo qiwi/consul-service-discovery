@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/qiwi/consul-service-discovery/compare/v1.4.0...v1.4.1) (2019-09-15)
+
+
+### Performance Improvements
+
+* migrate to inside-out-promise ([10cfb99](https://github.com/qiwi/consul-service-discovery/commit/10cfb99))
+
 # [1.4.0](https://github.com/qiwi/consul-service-discovery/compare/v1.3.1...v1.4.0) (2019-08-24)
 
 
