@@ -2888,6 +2888,14 @@ init-package-json@^1.10.3:
     validate-npm-package-license "^3.0.1"
     validate-npm-package-name "^3.0.0"
 
+inside-out-promise@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/inside-out-promise/-/inside-out-promise-1.4.1.tgz#a41ec931e279f544dd2fb05a5e52477a1fa8462a"
+  integrity sha512-yjZczHHEJry4NlWaX1wTpcnWob3KKHNzKzgWKis/AuugzMoBBoFcyximFWQh57gFKly1nbkuIrVMUJ92O3N9fA==
+  dependencies:
+    "@qiwi/substrate" "^1.11.2"
+    tslib "^1.10.0"
+
 interpret@^1.0.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/interpret/-/interpret-1.2.0.tgz#d5061a6224be58e8083985f5014d844359576296"

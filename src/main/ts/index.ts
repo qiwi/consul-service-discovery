@@ -4,7 +4,7 @@ import * as Consul from 'consul'
 import log from './logger'
 import cxt from './ctx'
 import {
-  getDecomposedPromise,
+  promiseFactory,
   sample
 } from './util'
 import {
@@ -49,14 +49,14 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
       resolve,
       reject,
       promise
-    } = getDecomposedPromise()
+    } = promiseFactory()
 
     service.promise = promise
 
     log.debug(`watcher initialized, service=${serviceName}`)
 
-    ConsulDiscoveryService.watchOnChange(service, resolve, reject)
-    ConsulDiscoveryService.watchOnError(service, reject)
+    ConsulDiscoveryService.watchOnChange(service, resolve.bind(promise), reject.bind(promise))
+    ConsulDiscoveryService.watchOnError(service, reject.bind(promise))
 
     return promise
   }
@@ -97,6 +97,8 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
 
   static configure (opts: ILibConfig): void {
     Object.assign(cxt, opts)
+
+    promiseFactory.Promise = cxt.Promise
   }
 
   static watchOnChange (service: IServiceEntry, resolve: Function, reject: Function): void {

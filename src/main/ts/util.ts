@@ -1,35 +1,4 @@
 /** @module @qiwi/consul-service-discovery */
 
-import { cxt } from './ctx'
-
+export { factory as promiseFactory } from 'inside-out-promise'
 export { sample } from 'lodash'
-
-/**
- * @ignore
- */
-export const getDecomposedPromise = () => {
-  let _resolve
-  let _reject
-  let done: boolean = false
-
-  const promise = new cxt.Promise((resolve, reject) => {
-    _resolve = resolve
-    _reject = reject
-  })
-
-  const finalize = (handler) => (data?: any) => {
-    if (!done) {
-      done = true
-      return handler(data)
-    }
-  }
-
-  const resolve = finalize((data?: any) => _resolve(data))
-  const reject = finalize((err?: any) => _reject(err))
-
-  return {
-    promise,
-    resolve,
-    reject
-  }
-}

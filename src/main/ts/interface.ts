@@ -1,7 +1,7 @@
 /** @module @qiwi/consul-service-discovery */
 
 import * as Consul from 'consul'
-import { ILogger, IPromiseConstructor } from '@qiwi/substrate'
+import { ILogger } from '@qiwi/substrate'
 
 export { ILogger, IPromise, IPromiseConstructor } from '@qiwi/substrate'
 
