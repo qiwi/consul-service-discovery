@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/qiwi/consul-service-discovery/compare/v1.4.1...v1.5.0) (2019-11-04)
+
+
+### Features
+
+* add register method ([e59f4c6](https://github.com/qiwi/consul-service-discovery/commit/e59f4c6)), closes [#1](https://github.com/qiwi/consul-service-discovery/issues/1)
+
 ## [1.4.1](https://github.com/qiwi/consul-service-discovery/compare/v1.4.0...v1.4.1) (2019-09-15)
 
 
