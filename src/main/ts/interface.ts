@@ -13,9 +13,26 @@ export interface IConsulServiceHealth {
   service: any
 }
 
+export type TConsulAgentServiceRegisterOptions = Consul.Agent.Service.RegisterOptions
+
+export interface IConsulAgentService {
+  /**
+   * Registers a new local service
+   */
+  register: {
+    <TData>(opts: TConsulAgentServiceRegisterOptions, callback: Consul.Callback<TData>): void;
+  }
+}
+
+export interface IConsulAgent {
+  service: IConsulAgentService
+  [key: string]: any
+}
+
 export interface IConsulClient {
   watch (opts: Consul.Watch.Options): IConsulClientWatch
-  health: IConsulServiceHealth
+  health: IConsulServiceHealth,
+  agent: IConsulAgent
 }
 
 export interface IConsulClientFactory {
@@ -37,6 +54,7 @@ export interface IConsulDiscoveryService {
   services: {
     [key: string]: IServiceEntry
   }
+  id?: string
   getConnectionParams (serviceName: string): Promise<IConnectionParams | undefined>
 }
 
@@ -69,4 +87,11 @@ export type IServiceEntry = {
   connections: Array<IConnectionParams>,
   sequentialErrorCount: number,
   promise?: Promise<IServiceEntry>
+}
+
+export type IGenerateIdOpts = {
+  serviceName: string,
+  port?: string | number,
+  localAddress?: string,
+  remoteAddress?: string
 }

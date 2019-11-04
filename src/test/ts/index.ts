@@ -1,6 +1,6 @@
 import def, {
   ConsulDiscoveryService,
-  IConnectionParams,
+  IConnectionParams, IConsulAgent, IConsulAgentService,
   IConsulClient,
   IConsulClientFactory,
   IConsulServiceHealth,
@@ -18,13 +18,31 @@ class FakeWatcher extends EventEmitter {
   end = noop
 }
 
+class FakeAgentService implements IConsulAgentService {
+  entries: Array<any>
+  constructor() {
+    this.entries = []
+  }
+  register<TData> (opts: Consul.Agent.Service.RegisterOptions, cb: Consul.Callback<TData>): void {
+    this.entries.push(opts)
+
+    cb()
+
+    return
+  }
+}
+
 class ConsulClient implements IConsulClient {
   health: IConsulServiceHealth
+  agent: IConsulAgent
   watch () {
     return new FakeWatcher()
   }
   constructor (opts?: Object | undefined) {
     this.health = { service: null }
+    this.agent = {
+      service: new FakeAgentService()
+    }
   }
 }
 
@@ -66,6 +84,21 @@ describe('ConsulServiceDiscovery', () => {
   })
 
   describe('prototype', () => {
+    describe('#register', async () => {
+      const service = new ConsulDiscoveryService(testParams)
+      const name = 'self'
+      const address = '127.0.0.1'
+      const opts = {
+        name,
+        address
+      }
+
+
+      const res = await service.register(opts)
+
+      expect(res).toBeTruthy()
+    })
+
     describe('#getWatcher', () => {
       it('returns a new one Consul.Watcher instance', () => {
         const discoveryService = new ConsulDiscoveryService(testParams)

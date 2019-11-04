@@ -3,6 +3,7 @@
 import * as Consul from 'consul'
 import log from './logger'
 import cxt from './ctx'
+import uuid from 'uuid'
 import {
   promiseFactory,
   sample
@@ -15,7 +16,9 @@ import {
   IConsulClient,
   IServiceName,
   IServiceEntry,
-  IConsulClientWatch
+  IConsulClientWatch,
+  IGenerateIdOpts,
+  TConsulAgentServiceRegisterOptions
 } from './interface'
 
 export * from './interface'
@@ -93,6 +96,39 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
       } as Consul.Health.ServiceOptions,
       backoffMax: BACKOFF_MAX
     } as Consul.Watch.Options)
+  }
+
+  public register (opts: TConsulAgentServiceRegisterOptions): Promise<any> {
+    const id = ConsulDiscoveryService.generateId({
+      serviceName: opts.name,
+      remoteAddress: opts.address,
+      port: opts.port
+    })
+    const _opts: Consul.Agent.Service.RegisterOptions = {
+      id,
+      ...opts
+    }
+
+    const {
+      resolve,
+      reject,
+      promise
+    } = promiseFactory()
+
+    this._consul.agent.service.register(_opts, (err) => {
+      if (err) {
+        reject(err)
+      }
+
+      resolve(true)
+    })
+
+    return promise
+  }
+
+  static generateId ({ serviceName, localAddress = '0.0.0.0', port = '', remoteAddress = '0.0.0.0' }: IGenerateIdOpts) {
+    return `${serviceName}-${remoteAddress}-${localAddress}-${port}-${uuid()}`
+      .replace(/\./g, '-')
   }
 
   static configure (opts: ILibConfig): void {
