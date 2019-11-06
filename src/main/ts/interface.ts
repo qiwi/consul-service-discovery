@@ -22,6 +22,9 @@ export interface IConsulAgentService {
   register: {
     <TData>(opts: TConsulAgentServiceRegisterOptions, callback: Consul.Callback<TData>): void;
   }
+  list: {
+    <TData>(callback: Consul.Callback<TData>): void
+  }
 }
 
 export interface IConsulAgent {

@@ -3,7 +3,8 @@
 import * as Consul from 'consul'
 import log from './logger'
 import cxt from './ctx'
-import uuid from 'uuid'
+import * as uuid from 'uuid'
+
 import {
   promiseFactory,
   sample
@@ -32,6 +33,8 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
   public services: {
     [key: string]: IServiceEntry
   } = {}
+  protected _id?: string
+  protected _opts?: Consul.Agent.Service.RegisterOptions
   protected _consul: IConsulClient
 
   constructor ({ host, port }: IConnectionParams) {
@@ -104,26 +107,58 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
       remoteAddress: opts.address,
       port: opts.port
     })
+    this._id = id
     const _opts: Consul.Agent.Service.RegisterOptions = {
       id,
       ...opts
     }
+    this._opts = _opts
+    return new Promise<any>(((resolve, reject) => {
+      this._consul.agent.service.register(_opts, (err) => {
+        if (err) {
+          reject(err)
+        }
+        resolve(true)
+      })
+    }))
+  }
 
-    const {
-      resolve,
-      reject,
-      promise
-    } = promiseFactory()
+  public reregistration () {
+    if (!this._opts) {
+      throw new Error('opts is not defined')
+    }
+    return new Promise<any>(((resolve, reject) => {
+      // @ts-ignore
+      this._consul.agent.service.register(this._opts, (err) => {
+        if (err) {
+          reject(err)
+        }
+        resolve(true)
+      })
+    }))
+  }
 
-    this._consul.agent.service.register(_opts, (err) => {
-      if (err) {
-        reject(err)
+  public getServiceList (): Promise<any> {
+    return new Promise<any>(((resolve, reject) => {
+      this._consul.agent.service.list((err, result) => {
+        if (err) {
+          reject(err)
+        }
+        resolve(result)
+      })
+    }))
+  }
+
+  public find (): Promise<any> {
+    return new Promise<any>(((resolve, reject) => {
+      if (!this._id) {
+        reject()
+      } else {
+        this.getServiceList()
+        // @ts-ignore
+          .then(res => resolve(Object.keys(res).includes(this._id)))
       }
-
-      resolve(true)
-    })
-
-    return promise
+    }))
   }
 
   static generateId ({ serviceName, localAddress = '0.0.0.0', port = '', remoteAddress = '0.0.0.0' }: IGenerateIdOpts) {
