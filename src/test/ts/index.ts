@@ -5,6 +5,8 @@ import def, {
   IConsulClientFactory,
   IConsulServiceHealth,
   ILogger,
+  TConsulAgentCheckListOptions,
+  TConsulAgentServiceRegisterOptions,
   WATCH_ERROR_LIMIT
 } from '../../main/ts/index'
 import { LOG_PREFIX } from '../../main/ts/logger'
@@ -23,12 +25,14 @@ class FakeAgentService implements IConsulAgentService {
   constructor() {
     this.entries = []
   }
-  register<TData> (opts: Consul.Agent.Service.RegisterOptions, cb: Consul.Callback<TData>): void {
+  register<TData> (opts: TConsulAgentServiceRegisterOptions, cb: Consul.Callback<TData>): void {
     this.entries.push(opts)
 
     cb()
+  }
+  list<TData>(opts: TConsulAgentCheckListOptions, cb: Consul.Callback<any>): void {
 
-    return
+    cb(undefined, this.entries)
   }
 }
 
@@ -84,19 +88,42 @@ describe('ConsulServiceDiscovery', () => {
   })
 
   describe('prototype', () => {
-    describe('#register', async () => {
-      const service = new ConsulDiscoveryService(testParams)
-      const name = 'self'
-      const address = '127.0.0.1'
-      const opts = {
-        name,
-        address
-      }
+    describe('#register', () => {
+      it('returns void on success', async () => {
+        const service = new ConsulDiscoveryService(testParams)
+        const name = 'self'
+        const address = '127.0.0.1'
+        const opts = {
+          name,
+          address
+        }
 
 
-      const res = await service.register(opts)
+        const res = await service.register(opts)
 
-      expect(res).toBeTruthy()
+        expect(res).toBeUndefined()
+      })
+    })
+
+    describe('#list', () => {
+      it('returns services list', async () => {
+        const service = new ConsulDiscoveryService(testParams)
+        const list = [
+          {
+            name: 'foo',
+            address: '10.10.0.1'
+          }, {
+            name: 'bar',
+            address: '10.10.0.2'
+          }
+        ]
+        // @ts-ignore
+        service._consul.agent.service.entries.push(...list)
+
+        const res = await service.list()
+
+        expect(res).toEqual(list)
+      })
     })
 
     describe('#getWatcher', () => {

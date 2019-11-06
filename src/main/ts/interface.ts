@@ -15,6 +15,8 @@ export interface IConsulServiceHealth {
 
 export type TConsulAgentServiceRegisterOptions = Consul.Agent.Service.RegisterOptions
 
+export type TConsulAgentCheckListOptions = Consul.Agent.Check.ListOptions
+
 export interface IConsulAgentService {
   /**
    * Registers a new local service

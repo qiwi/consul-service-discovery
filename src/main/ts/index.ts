@@ -4,10 +4,10 @@ import * as Consul from 'consul'
 import log from './logger'
 import cxt from './ctx'
 import * as uuid from 'uuid'
-
 import {
   promiseFactory,
-  sample
+  sample,
+  repeat
 } from './util'
 import {
   IConnectionParams,
@@ -19,7 +19,8 @@ import {
   IServiceEntry,
   IConsulClientWatch,
   IGenerateIdOpts,
-  TConsulAgentServiceRegisterOptions
+  TConsulAgentServiceRegisterOptions,
+  TConsulAgentCheckListOptions
 } from './interface'
 
 export * from './interface'
@@ -60,7 +61,6 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     service.promise = promise
 
     log.debug(`watcher initialized, service=${serviceName}`)
-
     ConsulDiscoveryService.watchOnChange(service, resolve.bind(promise), reject.bind(promise))
     ConsulDiscoveryService.watchOnError(service, reject.bind(promise))
 
@@ -101,23 +101,33 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     } as Consul.Watch.Options)
   }
 
-  protected failToRegister (time) {
+  public autoRegister (delay) {
     const checkRegistration = () => {
-      return this.getServiceList()
-        .then((res) => {
-          if (!res) this.reregistration()
-        })
+      return this.find().then(el => {
+        return el
+      })
     }
 
-    if (time) {
-      setTimeout(() => {
-        checkRegistration()
-          .then(() => this.failToRegister(time))
-      }, time)
+    const autoreg = () => {
+      if (!this._opts || !this._consul.agent.service || !this._id) {
+        return
+      }
+
+      checkRegistration()
+        .then(el => {
+          if (!el && this._opts) {
+            this.register({ name: this._opts.name, address: this._opts.address, port: this._opts.port, id: this._id })
+              .catch(console.log)
+          }
+        })
+        .catch(e => { throw new Error(`fail to check registration: ${e}`) })
     }
+    // @ts-ignore
+    const rep = repeat(autoreg, delay, this)
+    rep().catch(console.log)
   }
 
-  public register (opts: TConsulAgentServiceRegisterOptions, time): Promise<any> {
+  public register (opts: TConsulAgentServiceRegisterOptions, delay?): Promise<any> {
     const id = ConsulDiscoveryService.generateId({
       serviceName: opts.name,
       remoteAddress: opts.address,
@@ -129,43 +139,42 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
       ...opts
     }
     this._opts = _opts
-    return new Promise<any>(((resolve, reject) => {
-      this._consul.agent.service.register(_opts, (err) => {
-        if (err) {
-          reject(err)
-        }
-        resolve(true)
-        if (time) {
-          this.failToRegister(time)
-        }
-      })
-    }))
-  }
-
-  public reregistration () {
-    if (!this._opts) {
-      throw new Error('opts is not defined')
+    const cxt = this._consul.agent.service
+    const method = this._consul.agent.service.register.bind(cxt)
+    if (delay) {
+      this.autoRegister(delay)
     }
-    return new Promise<any>(((resolve, reject) => {
-      // @ts-ignore
-      this._consul.agent.service.register(this._opts, (err) => {
-        if (err) {
-          reject(err)
-        }
-        resolve(true)
-      })
-    }))
+    return ConsulDiscoveryService.promisify(method, _opts)
   }
 
-  public getServiceList (): Promise<any> {
-    return new Promise<any>(((resolve, reject) => {
-      this._consul.agent.service.list((err, result) => {
-        if (err) {
-          reject(err)
-        }
-        resolve(result)
-      })
-    }))
+  public list (token?: string): Promise<any> {
+    const opts: TConsulAgentCheckListOptions = token
+      ? { token }
+      : {}
+    const cxt = this._consul.agent.service
+    const method = this._consul.agent.service.list.bind(cxt)
+
+    return ConsulDiscoveryService.promisify(method, opts)
+  }
+
+  static promisify (method, opts): Promise<any> {
+    const {
+      resolve,
+      reject,
+      promise
+    } = promiseFactory()
+
+    method(opts, (err, data) => {
+      if (err) {
+        reject.call(promise, err)
+
+        return
+      }
+
+      resolve.call(promise, data)
+    })
+
+    return promise
   }
 
   public find (): Promise<any> {
@@ -173,9 +182,14 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
       if (!this._id) {
         reject()
       } else {
-        this.getServiceList()
-        // @ts-ignore
-          .then(res => resolve(Object.keys(res).includes(this._id)))
+        this.list()
+          .then(res => {
+            if (!this._id) {
+              return false
+            }
+            return resolve(Object.keys(res).includes(this._id))
+          })
+          .catch(e => { throw new Error(`fail find service: ${e}`) })
       }
     }))
   }

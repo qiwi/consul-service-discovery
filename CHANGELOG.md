@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/qiwi/consul-service-discovery/compare/v1.5.0...v1.6.0) (2019-11-06)
+
+
+### Features
+
+* expose list method ([6f5d8c8](https://github.com/qiwi/consul-service-discovery/commit/6f5d8c8))
+
 # [1.5.0](https://github.com/qiwi/consul-service-discovery/compare/v1.4.1...v1.5.0) (2019-11-04)
 
 
