@@ -101,7 +101,23 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     } as Consul.Watch.Options)
   }
 
-  public register (opts: TConsulAgentServiceRegisterOptions): Promise<any> {
+  protected failToRegister (time) {
+    const checkRegistration = () => {
+      return this.getServiceList()
+        .then((res) => {
+          if (!res) this.reregistration()
+        })
+    }
+
+    if (time) {
+      setTimeout(() => {
+        checkRegistration()
+          .then(() => this.failToRegister(time))
+      }, time)
+    }
+  }
+
+  public register (opts: TConsulAgentServiceRegisterOptions, time): Promise<any> {
     const id = ConsulDiscoveryService.generateId({
       serviceName: opts.name,
       remoteAddress: opts.address,
@@ -119,6 +135,9 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
           reject(err)
         }
         resolve(true)
+        if (time) {
+          this.failToRegister(time)
+        }
       })
     }))
   }
