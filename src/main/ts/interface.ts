@@ -15,12 +15,17 @@ export interface IConsulServiceHealth {
 
 export type TConsulAgentServiceRegisterOptions = Consul.Agent.Service.RegisterOptions
 
+export type TConsulAgentCheckListOptions = Consul.Agent.Check.ListOptions
+
 export interface IConsulAgentService {
   /**
    * Registers a new local service
    */
   register: {
     <TData>(opts: TConsulAgentServiceRegisterOptions, callback: Consul.Callback<TData>): void;
+  }
+  list: {
+    <TData>(opts: TConsulAgentCheckListOptions, callback: Consul.Callback<TData>): void
   }
 }
 

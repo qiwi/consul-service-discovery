@@ -3,7 +3,7 @@
 import * as Consul from 'consul'
 import log from './logger'
 import cxt from './ctx'
-import uuid from 'uuid'
+import * as uuid from 'uuid'
 import {
   promiseFactory,
   sample
@@ -18,7 +18,8 @@ import {
   IServiceEntry,
   IConsulClientWatch,
   IGenerateIdOpts,
-  TConsulAgentServiceRegisterOptions
+  TConsulAgentServiceRegisterOptions,
+  TConsulAgentCheckListOptions
 } from './interface'
 
 export * from './interface'
@@ -108,19 +109,37 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
       id,
       ...opts
     }
+    const cxt = this._consul.agent.service
+    const method = this._consul.agent.service.register.bind(cxt)
 
+    return ConsulDiscoveryService.promisify(method, opts)
+  }
+
+  public list (token?: string): Promise<any> {
+    const opts: TConsulAgentCheckListOptions = token
+      ? { token }
+      : {}
+    const cxt = this._consul.agent.service
+    const method = this._consul.agent.service.list.bind(cxt)
+
+    return ConsulDiscoveryService.promisify(method, opts)
+  }
+
+  static promisify (method, opts): Promise<any> {
     const {
       resolve,
       reject,
       promise
     } = promiseFactory()
 
-    this._consul.agent.service.register(_opts, (err) => {
+    method(opts, (err, data) => {
       if (err) {
-        reject(err)
+        reject.call(promise, err)
+
+        return
       }
 
-      resolve(true)
+      resolve.call(promise, data)
     })
 
     return promise

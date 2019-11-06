@@ -44,14 +44,14 @@
   "dependencies": {
     "@types/uuid": "^3.4.6",
     "consul": "^0.36.0",
-    "inside-out-promise": "^1.4.1",
+    "inside-out-promise": "^1.4.2",
     "lodash": "^4.17.15",
     "tslib": "^1.10.0",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
     "@qiwi/semantic-release-gh-pages-plugin": "^1.14.1",
-    "@qiwi/substrate": "^1.16.3",
+    "@qiwi/substrate": "^1.16.4",
     "@semantic-release/changelog": "^3.0.5",
     "@semantic-release/git": "^7.0.17",
     "@semantic-release/github": "^5.5.5",
