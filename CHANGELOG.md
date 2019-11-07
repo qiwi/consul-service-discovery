@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/qiwi/consul-service-discovery/compare/v1.6.0...v1.6.1) (2019-11-07)
+
+
+### Performance Improvements
+
+* up deps && repack ([bd1f67f](https://github.com/qiwi/consul-service-discovery/commit/bd1f67f))
+
 # [1.6.0](https://github.com/qiwi/consul-service-discovery/compare/v1.5.0...v1.6.0) (2019-11-06)
 
 
