@@ -6,8 +6,10 @@ import cxt from './ctx'
 import * as uuid from 'uuid'
 import {
   promiseFactory,
-  sample
+  sample,
+  repeat
 } from './util'
+import { IControlled } from 'push-it-to-the-limit'
 import {
   IConnectionParams,
   IConsulDiscoveryService,
@@ -33,7 +35,11 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
   public services: {
     [key: string]: IServiceEntry
   } = {}
+
   protected _consul: IConsulClient
+
+  private _id?: string
+  private _repeatableRegister?: IControlled
 
   constructor ({ host, port }: IConnectionParams) {
     this._consul = cxt.Consul({
@@ -58,7 +64,6 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     service.promise = promise
 
     log.debug(`watcher initialized, service=${serviceName}`)
-
     ConsulDiscoveryService.watchOnChange(service, resolve.bind(promise), reject.bind(promise))
     ConsulDiscoveryService.watchOnError(service, reject.bind(promise))
 
@@ -99,20 +104,41 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     } as Consul.Watch.Options)
   }
 
-  public register (opts: TConsulAgentServiceRegisterOptions): Promise<any> {
-    const id = ConsulDiscoveryService.generateId({
+  public async register (opts: TConsulAgentServiceRegisterOptions, registerCheckInterval?: number): Promise<any> {
+    const reg = this._register.bind(this)
+
+    if (registerCheckInterval) {
+      if (this._repeatableRegister) {
+        this._repeatableRegister.cancel()
+      }
+      this._repeatableRegister = repeat(reg, registerCheckInterval)
+    }
+
+    const register = this._repeatableRegister || reg
+
+    return register(opts)
+  }
+
+  private async _register (opts: TConsulAgentServiceRegisterOptions): Promise<any> {
+    const id: string = this._id || ConsulDiscoveryService.generateId({
       serviceName: opts.name,
       remoteAddress: opts.address,
       port: opts.port
     })
+    this._id = id
     const _opts: Consul.Agent.Service.RegisterOptions = {
       id,
       ...opts
     }
+
+    if (await this.find(id)) {
+      return Promise.resolve(void 0)
+    }
+
     const cxt = this._consul.agent.service
     const method = this._consul.agent.service.register.bind(cxt)
 
-    return ConsulDiscoveryService.promisify(method, opts)
+    return ConsulDiscoveryService.promisify(method, _opts)
   }
 
   public list (token?: string): Promise<any> {
@@ -143,6 +169,12 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     })
 
     return promise
+  }
+
+  public find (id): Promise<any> {
+    return this.list()
+      .then(res => res[id])
+      .catch(e => { throw new Error(`fail find service: ${e}`) })
   }
 
   static generateId ({ serviceName, localAddress = '0.0.0.0', port = '', remoteAddress = '0.0.0.0' }: IGenerateIdOpts) {
