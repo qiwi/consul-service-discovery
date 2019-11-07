@@ -22,15 +22,18 @@ class FakeWatcher extends EventEmitter {
 
 class FakeAgentService implements IConsulAgentService {
   entries: Array<any>
-  constructor() {
+
+  constructor () {
     this.entries = []
   }
+
   register<TData> (opts: TConsulAgentServiceRegisterOptions, cb: Consul.Callback<TData>): void {
     this.entries.push(opts)
 
     cb()
   }
-  list<TData>(opts: TConsulAgentCheckListOptions, cb: Consul.Callback<any>): void {
+
+  list<TData> (opts: TConsulAgentCheckListOptions, cb: Consul.Callback<any>): void {
 
     cb(undefined, this.entries)
   }
@@ -39,9 +42,11 @@ class FakeAgentService implements IConsulAgentService {
 class ConsulClient implements IConsulClient {
   health: IConsulServiceHealth
   agent: IConsulAgent
+
   watch () {
     return new FakeWatcher()
   }
+
   constructor (opts?: Object | undefined) {
     this.health = { service: null }
     this.agent = {
@@ -97,8 +102,6 @@ describe('ConsulServiceDiscovery', () => {
           name,
           address
         }
-
-
         const res = await service.register(opts)
 
         expect(res).toBeUndefined()
@@ -108,17 +111,47 @@ describe('ConsulServiceDiscovery', () => {
     describe('#list', () => {
       it('returns services list', async () => {
         const service = new ConsulDiscoveryService(testParams)
-        const list = [
+        const list = {
+          'example-api123-127-0-0-1-0-0-0-0-8500-2238a091-a525-49b6-88a2-e755189cbe50':
           {
-            name: 'foo',
-            address: '10.10.0.1'
-          }, {
-            name: 'bar',
-            address: '10.10.0.2'
+            ID:
+              'example-api123-127-0-0-1-0-0-0-0-8500-2238a091-a525-49b6-88a2-e755189cbe50',
+            Service: 'example-api123',
+            Tags: [],
+            Meta: {},
+            Port: 8500,
+            Address: '127.0.0.1',
+            Weights: { Passing: 1, Warning: 1 },
+            EnableTagOverride: false
+          },
+          'example-api123-127-0-0-1-0-0-0-0-8500-43ef28fa-bf73-4c4e-9a1e-b45cba92152b':
+          {
+            ID:
+              'example-api123-127-0-0-1-0-0-0-0-8500-43ef28fa-bf73-4c4e-9a1e-b45cba92152b',
+            Service: 'example-api123',
+            Tags: [],
+            Meta: {},
+            Port: 8500,
+            Address: '127.0.0.1',
+            Weights: { Passing: 1, Warning: 1 },
+            EnableTagOverride: false
+          },
+          'example-api123-127-0-0-1-0-0-0-0-8500-4bf34948-12c6-4feb-aa7b-8ce3ff278cd8':
+          {
+            ID:
+              'example-api123-127-0-0-1-0-0-0-0-8500-4bf34948-12c6-4feb-aa7b-8ce3ff278cd8',
+            Service: 'example-api123',
+            Tags: [],
+            Meta: {},
+            Port: 8500,
+            Address: '127.0.0.1',
+            Weights: { Passing: 1, Warning: 1 },
+            EnableTagOverride: false
           }
-        ]
+        }
+
         // @ts-ignore
-        service._consul.agent.service.entries.push(...list)
+        service._consul.agent.service.entries = list
 
         const res = await service.list()
 
