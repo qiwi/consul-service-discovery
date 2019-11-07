@@ -34,7 +34,6 @@ class FakeAgentService implements IConsulAgentService {
   }
 
   list<TData> (opts: TConsulAgentCheckListOptions, cb: Consul.Callback<any>): void {
-
     cb(undefined, this.entries)
   }
 }
@@ -118,6 +117,8 @@ describe('ConsulServiceDiscovery', () => {
         // @ts-ignore
         const _registerSpy = jest.spyOn(service, '_register')
         // @ts-ignore
+        const _listSpy = jest.spyOn(service, 'list')
+        // @ts-ignore
         const _registerServiceSpy = jest.spyOn(service._consul.agent.service, 'register')
 
         service.register(opts, 10)
@@ -126,16 +127,18 @@ describe('ConsulServiceDiscovery', () => {
         expect(service._id).not.toBeUndefined()
         expect(_registerSpy).toHaveBeenCalledTimes(1)
 
-        // @ts-ignore
-        service._consul.agent.service.entries = {}
+        setTimeout(() => {
+          // @ts-ignore
+          service._consul.agent.service.entries = {}
+        }, 25)
 
         setTimeout(() => {
-          expect(_registerServiceSpy).toHaveBeenCalledTimes(1)
+          expect(_registerServiceSpy).toHaveBeenCalledTimes(2)
           expect(_registerSpy.mock.calls.length).toBeGreaterThanOrEqual(5)
+          expect(_registerSpy.mock.calls.length).toBe(_listSpy.mock.calls.length)
           done()
-        }, 50)
+        }, 60)
       })
-
     })
 
     describe('#list', () => {
