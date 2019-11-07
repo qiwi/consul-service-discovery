@@ -21,14 +21,14 @@ class FakeWatcher extends EventEmitter {
 }
 
 class FakeAgentService implements IConsulAgentService {
-  entries: Array<any>
+  entries: { [key: string]: any}
 
   constructor () {
-    this.entries = []
+    this.entries = {}
   }
 
   register<TData> (opts: TConsulAgentServiceRegisterOptions, cb: Consul.Callback<TData>): void {
-    this.entries.push(opts)
+    this.entries[opts.id || opts.name] = opts
 
     cb()
   }
@@ -106,6 +106,36 @@ describe('ConsulServiceDiscovery', () => {
 
         expect(res).toBeUndefined()
       })
+
+      it('provides continuous (repeatable) registration', done => {
+        const service = new ConsulDiscoveryService(testParams)
+        const name = 'self'
+        const address = '127.0.0.1'
+        const opts = {
+          name,
+          address
+        }
+        // @ts-ignore
+        const _registerSpy = jest.spyOn(service, '_register')
+        // @ts-ignore
+        const _registerServiceSpy = jest.spyOn(service._consul.agent.service, 'register')
+
+        service.register(opts, 10)
+
+        // @ts-ignore
+        expect(service._id).not.toBeUndefined()
+        expect(_registerSpy).toHaveBeenCalledTimes(1)
+
+        // @ts-ignore
+        service._consul.agent.service.entries = {}
+
+        setTimeout(() => {
+          expect(_registerServiceSpy).toHaveBeenCalledTimes(1)
+          expect(_registerSpy.mock.calls.length).toBeGreaterThanOrEqual(5)
+          done()
+        }, 50)
+      })
+
     })
 
     describe('#list', () => {

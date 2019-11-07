@@ -9,6 +9,7 @@ import {
   sample,
   repeat
 } from './util'
+import { IControlled } from 'push-it-to-the-limit'
 import {
   IConnectionParams,
   IConsulDiscoveryService,
@@ -34,9 +35,11 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
   public services: {
     [key: string]: IServiceEntry
   } = {}
-  protected _id?: string
-  protected _opts?: Consul.Agent.Service.RegisterOptions
+
   protected _consul: IConsulClient
+
+  private _id?: string
+  private _repeatableRegister?: IControlled
 
   constructor ({ host, port }: IConnectionParams) {
     this._consul = cxt.Consul({
@@ -101,34 +104,23 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     } as Consul.Watch.Options)
   }
 
-  public autoRegister (delay) {
-    const checkRegistration = () => {
-      return this.find().then(el => {
-        return el
-      })
-    }
+  public async register (opts: TConsulAgentServiceRegisterOptions, registerCheckInterval?: number): Promise<any> {
+    const reg = this._register.bind(this)
 
-    const autoreg = () => {
-      if (!this._opts || !this._consul.agent.service || !this._id) {
-        return
+    if (registerCheckInterval) {
+      if (this._repeatableRegister) {
+        this._repeatableRegister.cancel()
       }
-
-      checkRegistration()
-        .then(el => {
-          if (!el && this._opts) {
-            this.register({ name: this._opts.name, address: this._opts.address, port: this._opts.port, id: this._id })
-              .catch(console.log)
-          }
-        })
-        .catch(e => { throw new Error(`fail to check registration: ${e}`) })
+      this._repeatableRegister = repeat(reg, registerCheckInterval)
     }
-    // @ts-ignore
-    const rep = repeat(autoreg, delay, this)
-    rep().catch(console.log)
+
+    const register = this._repeatableRegister || reg
+
+    return register(opts)
   }
 
-  public register (opts: TConsulAgentServiceRegisterOptions, delay?): Promise<any> {
-    const id = ConsulDiscoveryService.generateId({
+  private async _register (opts: TConsulAgentServiceRegisterOptions): Promise<any> {
+    const id: string = this._id || ConsulDiscoveryService.generateId({
       serviceName: opts.name,
       remoteAddress: opts.address,
       port: opts.port
@@ -138,12 +130,14 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
       id,
       ...opts
     }
-    this._opts = _opts
+
+    if (await this.find(id)) {
+      return Promise.resolve(void 0)
+    }
+
     const cxt = this._consul.agent.service
     const method = this._consul.agent.service.register.bind(cxt)
-    if (delay) {
-      this.autoRegister(delay)
-    }
+
     return ConsulDiscoveryService.promisify(method, _opts)
   }
 
@@ -177,21 +171,10 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     return promise
   }
 
-  public find (): Promise<any> {
-    return new Promise<any>(((resolve, reject) => {
-      if (!this._id) {
-        reject()
-      } else {
-        this.list()
-          .then(res => {
-            if (!this._id) {
-              return false
-            }
-            return resolve(Object.keys(res).includes(this._id))
-          })
-          .catch(e => { throw new Error(`fail find service: ${e}`) })
-      }
-    }))
+  public find (id): Promise<any> {
+    return this.list()
+      .then(res => res[id])
+      .catch(e => { throw new Error(`fail find service: ${e}`) })
   }
 
   static generateId ({ serviceName, localAddress = '0.0.0.0', port = '', remoteAddress = '0.0.0.0' }: IGenerateIdOpts) {
