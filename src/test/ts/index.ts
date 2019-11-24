@@ -250,6 +250,17 @@ describe('ConsulServiceDiscovery', () => {
 
       }, 1000)
 
+      it('is compatible with `await` operator', async () => {
+        const discoveryService = new ConsulDiscoveryService(testParams)
+        const promise = discoveryService.getConnectionParams('testService')
+        const watcher = discoveryService.services['testService'].watcher
+        watcher.emit('change', onChangeResponse)
+
+        const serviceConnectionParams = await promise
+
+        expect(serviceConnectionParams).toEqual(testParams)
+      })
+
       it('rejects the result promise once attempt limit is reached (onError)', async () => {
         expect.assertions(1)
         const discoveryService = new ConsulDiscoveryService(testParams)

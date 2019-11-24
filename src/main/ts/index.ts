@@ -10,6 +10,7 @@ import {
   repeat
 } from './util'
 import { IControlled } from 'push-it-to-the-limit'
+import { IPromise } from '@qiwi/substrate'
 import {
   IConnectionParams,
   IConsulDiscoveryService,
@@ -48,7 +49,7 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     })
   }
 
-  public ready (serviceName: string): Promise<IServiceEntry> {
+  public ready (serviceName: string): IPromise<IServiceEntry> {
     const service = this.getService(serviceName)
 
     if (service.promise) {
