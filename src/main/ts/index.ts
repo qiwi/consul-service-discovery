@@ -94,6 +94,10 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
       .then(service => sample(service.connections))
   }
 
+  public getServiceConnections (serviceName: string): Promise<Array<IConnectionParams>> {
+    return this.ready(serviceName).then(({ connections }) => connections)
+  }
+
   public getWatcher (serviceName: IServiceName): IConsulClientWatch {
     return this._consul.watch({
       method: this._consul.health.service,

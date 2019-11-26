@@ -235,6 +235,35 @@ describe('ConsulServiceDiscovery', () => {
       })
     })
 
+    describe('#getServiceConnections', () => {
+      it('resolves available service connections', async () => {
+        const discoveryService = new ConsulDiscoveryService(testParams)
+        const promise = discoveryService.getServiceConnections('service')
+        const watcher = discoveryService.services['service'].watcher
+        watcher.emit('change', [
+          {
+            Service: {
+              Address: '10.10.0.1',
+              Port: '8888'
+            }
+          },
+          {
+            Service: {
+              Address: '10.10.0.2',
+              Port: '8888'
+            }
+          }
+        ])
+
+        const serviceConnections = await promise
+
+        expect(serviceConnections).toEqual([
+          { host:  '10.10.0.1', port: '8888' },
+          { host:  '10.10.0.2', port: '8888' }
+        ])
+      })
+    })
+
     describe('#getConnectionParams', () => {
       it('resolves service conn params through watcher subscription (onChange)', async () => {
         expect.assertions(1)
