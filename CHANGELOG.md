@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/qiwi/consul-service-discovery/compare/v1.6.1...v1.7.0) (2019-11-26)
+
+
+### Features
+
+* add getServiceConnections method ([923ff16](https://github.com/qiwi/consul-service-discovery/commit/923ff16))
+
 ## [1.6.1](https://github.com/qiwi/consul-service-discovery/compare/v1.6.0...v1.6.1) (2019-11-07)
 
 
