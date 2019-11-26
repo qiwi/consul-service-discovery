@@ -89,13 +89,31 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     return service
   }
 
-  public getConnectionParams (serviceName: string): Promise<IConnectionParams | undefined> {
-    return this.ready(serviceName)
-      .then(service => sample(service.connections))
+  /**
+   * Gets all service connections.
+   * @param {string} serviceName
+   * @return {Array<IConnectionParams>}
+   */
+  public getConnections (serviceName: string): Promise<Array<IConnectionParams>> {
+    return this.ready(serviceName).then(({ connections }) => connections)
   }
 
-  public getServiceConnections (serviceName: string): Promise<Array<IConnectionParams>> {
-    return this.ready(serviceName).then(({ connections }) => connections)
+  /**
+   * Gets random service connection.
+   * @param {string} serviceName
+   * @returns {IConnectionParams | undefined}
+   */
+  public getConnection (serviceName: string): Promise<IConnectionParams | undefined> {
+    return this.getConnections(serviceName).then(sample)
+  }
+
+  /**
+   * @deprecated
+   * @param {string} serviceName
+   * @returns {IConnectionParams | undefined}
+   */
+  public getConnectionParams (serviceName: string): Promise<IConnectionParams | undefined> {
+    return this.getConnection(serviceName)
   }
 
   public getWatcher (serviceName: IServiceName): IConsulClientWatch {

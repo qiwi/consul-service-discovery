@@ -238,7 +238,7 @@ describe('ConsulServiceDiscovery', () => {
     describe('#getServiceConnections', () => {
       it('resolves available service connections', async () => {
         const discoveryService = new ConsulDiscoveryService(testParams)
-        const promise = discoveryService.getServiceConnections('service')
+        const promise = discoveryService.getConnections('service')
         const watcher = discoveryService.services['service'].watcher
         watcher.emit('change', [
           {
