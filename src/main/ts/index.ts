@@ -158,20 +158,20 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
       return Promise.resolve(void 0)
     }
 
-    const cxt = this._consul.agent.service
-    const method = this._consul.agent.service.register.bind(cxt)
+    const agentService = this._consul.agent.service
+    const register = agentService.register.bind(agentService)
 
-    return ConsulDiscoveryService.promisify(method, _opts)
+    return ConsulDiscoveryService.promisify(register, _opts)
   }
 
   public list (token?: string): Promise<any> {
     const opts: TConsulAgentCheckListOptions = token
       ? { token }
       : {}
-    const cxt = this._consul.agent.service
-    const method = this._consul.agent.service.list.bind(cxt)
+    const agentService = this._consul.agent.service
+    const getList = this._consul.agent.service.list.bind(agentService)
 
-    return ConsulDiscoveryService.promisify(method, opts)
+    return ConsulDiscoveryService.promisify(getList, opts)
   }
 
   static promisify (method, opts): Promise<any> {
