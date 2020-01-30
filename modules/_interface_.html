@@ -102,30 +102,57 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module">
 					<a name="igenerateidopts" class="tsd-anchor"></a>
 					<h3>IGenerate<wbr>IdOpts</h3>
-					<div class="tsd-signature tsd-kind-icon">IGenerate<wbr>IdOpts<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+					<div class="tsd-signature tsd-kind-icon">IGenerate<wbr>IdOpts<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>localAddress<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>port<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>remoteAddress<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>serviceName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/3922e07/src/main/ts/interface.ts#L97">src/main/ts/interface.ts:97</a></li>
+							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/b146859/src/main/ts/interface.ts#L97">src/main/ts/interface.ts:97</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> local<wbr>Address<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> port<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> remote<wbr>Address<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>service<wbr>Name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+							</li>
 						</ul>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module">
 					<a name="iserviceentry" class="tsd-anchor"></a>
 					<h3>IService<wbr>Entry</h3>
-					<div class="tsd-signature tsd-kind-icon">IService<wbr>Entry<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+					<div class="tsd-signature tsd-kind-icon">IService<wbr>Entry<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>connections<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_interface_.iconnectionparams.html" class="tsd-signature-type">IConnectionParams</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>name<span class="tsd-signature-symbol">: </span><a href="_interface_.html#iservicename" class="tsd-signature-type">IServiceName</a><span class="tsd-signature-symbol">; </span>promise<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_interface_.icxt.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="_interface_.html#iserviceentry" class="tsd-signature-type">IServiceEntry</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>sequentialErrorCount<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>watcher<span class="tsd-signature-symbol">: </span><a href="../interfaces/_interface_.iconsulclientwatch.html" class="tsd-signature-type">IConsulClientWatch</a><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/3922e07/src/main/ts/interface.ts#L89">src/main/ts/interface.ts:89</a></li>
+							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/b146859/src/main/ts/interface.ts#L89">src/main/ts/interface.ts:89</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5>connections<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_interface_.iconnectionparams.html" class="tsd-signature-type">IConnectionParams</a><span class="tsd-signature-symbol">&gt;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>name<span class="tsd-signature-symbol">: </span><a href="_interface_.html#iservicename" class="tsd-signature-type">IServiceName</a></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> promise<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_interface_.icxt.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="_interface_.html#iserviceentry" class="tsd-signature-type">IServiceEntry</a><span class="tsd-signature-symbol">&gt;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>sequential<wbr>Error<wbr>Count<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>watcher<span class="tsd-signature-symbol">: </span><a href="../interfaces/_interface_.iconsulclientwatch.html" class="tsd-signature-type">IConsulClientWatch</a></h5>
+							</li>
 						</ul>
 					</div>
 				</section>
@@ -135,7 +162,7 @@
 					<div class="tsd-signature tsd-kind-icon">IService<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/3922e07/src/main/ts/interface.ts#L87">src/main/ts/interface.ts:87</a></li>
+							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/b146859/src/main/ts/interface.ts#L87">src/main/ts/interface.ts:87</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -145,7 +172,7 @@
 					<div class="tsd-signature tsd-kind-icon">TConsul<wbr>Agent<wbr>Check<wbr>List<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ListOptions</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/3922e07/src/main/ts/interface.ts#L18">src/main/ts/interface.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/b146859/src/main/ts/interface.ts#L18">src/main/ts/interface.ts:18</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -155,7 +182,7 @@
 					<div class="tsd-signature tsd-kind-icon">TConsul<wbr>Agent<wbr>Service<wbr>Register<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegisterOptions</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/3922e07/src/main/ts/interface.ts#L16">src/main/ts/interface.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/b146859/src/main/ts/interface.ts#L16">src/main/ts/interface.ts:16</a></li>
 						</ul>
 					</aside>
 				</section>
