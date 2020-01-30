@@ -1,9 +1,9 @@
 /** @module @qiwi/consul-service-discovery */
 
-import * as Consul from 'consul'
+import Consul from 'consul'
+import * as uuid from 'uuid'
 import log from './logger'
 import cxt from './ctx'
-import * as uuid from 'uuid'
 import {
   promiseFactory,
   sample,
