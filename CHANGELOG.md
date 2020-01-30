@@ -1,3 +1,10 @@
+## [1.7.2](https://github.com/qiwi/consul-service-discovery/compare/v1.7.1...v1.7.2) (2020-01-30)
+
+
+### Bug Fixes
+
+* **libdef:** handle prefix issue for external deps ([5640f0a](https://github.com/qiwi/consul-service-discovery/commit/5640f0a))
+
 ## [1.7.1](https://github.com/qiwi/consul-service-discovery/compare/v1.7.0...v1.7.1) (2020-01-30)
 
 
