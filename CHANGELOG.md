@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/qiwi/consul-service-discovery/compare/v1.7.0...v1.7.1) (2020-01-30)
+
+
+### Bug Fixes
+
+* fix reexported types ([b146859](https://github.com/qiwi/consul-service-discovery/commit/b146859))
+
 # [1.7.0](https://github.com/qiwi/consul-service-discovery/compare/v1.6.1...v1.7.0) (2019-11-26)
 
 
