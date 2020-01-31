@@ -1,3 +1,10 @@
+## [1.7.3](https://github.com/qiwi/consul-service-discovery/compare/v1.7.2...v1.7.3) (2020-01-31)
+
+
+### Bug Fixes
+
+* fix Consul import ([a3746a1](https://github.com/qiwi/consul-service-discovery/commit/a3746a1))
+
 ## [1.7.2](https://github.com/qiwi/consul-service-discovery/compare/v1.7.1...v1.7.2) (2020-01-30)
 
 
