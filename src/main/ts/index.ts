@@ -1,6 +1,6 @@
 /** @module @qiwi/consul-service-discovery */
 
-import Consul from 'consul'
+import * as Consul from 'consul'
 import * as uuid from 'uuid'
 import log from './logger'
 import cxt from './ctx'
