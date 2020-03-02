@@ -1,7 +1,7 @@
 /** @module @qiwi/consul-service-discovery */
 
 import * as Consul from 'consul'
-import * as uuid from 'uuid'
+import { v4 as uuid } from 'uuid'
 import log from './logger'
 import cxt from './ctx'
 import {
