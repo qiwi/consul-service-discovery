@@ -1,3 +1,10 @@
+## [1.7.4](https://github.com/qiwi/consul-service-discovery/compare/v1.7.3...v1.7.4) (2020-03-02)
+
+
+### Performance Improvements
+
+* **package:** up uuid ([2f72914](https://github.com/qiwi/consul-service-discovery/commit/2f72914))
+
 ## [1.7.3](https://github.com/qiwi/consul-service-discovery/compare/v1.7.2...v1.7.3) (2020-01-31)
 
 
