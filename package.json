@@ -42,7 +42,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@types/uuid": "^7.0.0",
+    "@types/uuid": "^8.0.0",
     "@types/consul": "^0.23.34",
     "@qiwi/substrate": "^1.18.11",
     "consul": "^0.37.0",
@@ -50,7 +50,7 @@
     "lodash": "^4.17.15",
     "push-it-to-the-limit": "^1.12.1",
     "tslib": "^1.11.1",
-    "uuid": "^7.0.1"
+    "uuid": "^8.0.0"
   },
   "devDependencies": {
     "@qiwi/semantic-release-gh-pages-plugin": "^1.15.9",
