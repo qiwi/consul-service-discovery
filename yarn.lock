@@ -655,12 +655,12 @@
     sync-request "^6.1.0"
     tslib "^1.10.0"
 
-"@qiwi/substrate-abstract@^1.17.11":
-  version "1.17.11"
-  resolved "https://registry.yarnpkg.com/@qiwi/substrate-abstract/-/substrate-abstract-1.17.11.tgz#b4681182692e601a6cdd98bc6249897e50ce359e"
-  integrity sha512-fL8Vp0W2A0BA4GF7y7Kc8NXOhLVfQJ5zWULlqxjx6bNvjSnuo+dPE++AwqfQGTKMi3kgb3A5FA9hbZpcsweG2g==
+"@qiwi/substrate-abstract@1.17.46":
+  version "1.17.46"
+  resolved "https://registry.yarnpkg.com/@qiwi/substrate-abstract/-/substrate-abstract-1.17.46.tgz#fe236fcf92ecbcab97c3e4f5d0e2ca2ad808ebde"
+  integrity sha512-Ol2XaWkhf60RkkIJqw7863YQy4AOj5T4fz+SlduLN18A+lsCpd00vki6MOL+52ABs29xSaIA4hFAoOAAsEyWwQ==
   dependencies:
-    "@qiwi/substrate-types" "^1.19.7"
+    "@qiwi/substrate-types" "1.41.0"
 
 "@qiwi/substrate-abstract@^1.17.22":
   version "1.17.24"
@@ -676,10 +676,17 @@
   dependencies:
     "@qiwi/substrate-types" "^1.23.0"
 
-"@qiwi/substrate-types@^1.19.7", "@qiwi/substrate-types@^1.20.0":
-  version "1.20.0"
-  resolved "https://registry.yarnpkg.com/@qiwi/substrate-types/-/substrate-types-1.20.0.tgz#ba99b5ecc27c19805d854262e1eca657787e75e4"
-  integrity sha512-zHlkYoENm8iCBjjqg4xMUXVT8YtIHNZ6gbMRFnmHDaOEc3kKILoQmY84npxsBJUFJ/oVTtozLNp2aQNT8zzcpQ==
+"@qiwi/substrate-std@1.0.34":
+  version "1.0.34"
+  resolved "https://registry.yarnpkg.com/@qiwi/substrate-std/-/substrate-std-1.0.34.tgz#6d6b4d09fd2090e647137033674688af03bfa82c"
+  integrity sha512-YpOlXPpd9GniYT/w9ofVNaozTh5cZ9ao30qgk4c+e4h3LVIdJSWwsiBe0XTjATdl+iZQ2ZeXDaRz48ov2XKhxA==
+  dependencies:
+    "@qiwi/substrate-types" "1.41.0"
+
+"@qiwi/substrate-types@1.41.0":
+  version "1.41.0"
+  resolved "https://registry.yarnpkg.com/@qiwi/substrate-types/-/substrate-types-1.41.0.tgz#58961c7cad11375f2a33cd10617a0265cf2f1ef8"
+  integrity sha512-2fVQP/20zMBaSc8onxRy3te2Ep3yJjVgCoYjqFlCAzNl3nvX4uuAEK3VbwBG0iobUe8LL5zzgr0bySYXkkfucw==
 
 "@qiwi/substrate-types@^1.23.0":
   version "1.24.0"
@@ -691,14 +698,6 @@
   resolved "https://registry.yarnpkg.com/@qiwi/substrate-types/-/substrate-types-1.27.1.tgz#a69226dc70cbd5c7bff7b7ca11750752b3975f48"
   integrity sha512-rXaI0PGIbCSkJO/3ZCEB82tOaTc13auFN20ai1OyYssUY8RaQzk/n4DnW+ryN+h0c+rJCZv4GF5xeZD7nxiOlA==
 
-"@qiwi/substrate@^1.17.12":
-  version "1.17.12"
-  resolved "https://registry.yarnpkg.com/@qiwi/substrate/-/substrate-1.17.12.tgz#82f4411167aca24e40206c392edfbfcd83ec7756"
-  integrity sha512-TR2vdtezey2avMzJI0vGEvPipHZyfmA54q05R1VIiRDRL3S/mZ/kRbez3GGtwOPPabsWId+jpPtpxMXPwgFudg==
-  dependencies:
-    "@qiwi/substrate-abstract" "^1.17.11"
-    "@qiwi/substrate-types" "^1.20.0"
-
 "@qiwi/substrate@^1.18.11":
   version "1.18.11"
   resolved "https://registry.yarnpkg.com/@qiwi/substrate/-/substrate-1.18.11.tgz#5dea919aa1f7f2e6493557762f2d40cf0b893f39"
@@ -707,6 +706,15 @@
     "@qiwi/substrate-abstract" "^1.17.22"
     "@qiwi/substrate-std" "*"
     "@qiwi/substrate-types" "^1.26.0"
+
+"@qiwi/substrate@^1.18.33":
+  version "1.18.33"
+  resolved "https://registry.yarnpkg.com/@qiwi/substrate/-/substrate-1.18.33.tgz#fba9adbad6f42f8014b996dee6fca5c7bd310b50"
+  integrity sha512-cZ9lKTiF0KdrnfLpj4s1G3IY8m+Ff1AoZwGkjscxc+F0m9iHupc38SxmiCfJfGI/i6wvbxa7HVvqoeNryp/koQ==
+  dependencies:
+    "@qiwi/substrate-abstract" "1.17.46"
+    "@qiwi/substrate-std" "1.0.34"
+    "@qiwi/substrate-types" "1.41.0"
 
 "@semantic-release/changelog@^5.0.0":
   version "5.0.0"
@@ -1463,6 +1471,11 @@ bin-links@^1.1.2, bin-links@^1.1.3:
     gentle-fs "^2.0.1"
     graceful-fs "^4.1.15"
     write-file-atomic "^2.3.0"
+
+bind-decorator@^1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/bind-decorator/-/bind-decorator-1.0.11.tgz#e41bc06a1f65dd9cec476c91c5daf3978488252f"
+  integrity sha1-5BvAah9l3ZzsR2yRxdrzl4SIJS8=
 
 bluebird@^3.5.1, bluebird@^3.5.3, bluebird@^3.5.5:
   version "3.5.5"
@@ -3501,13 +3514,14 @@ init-package-json@^1.10.3:
     validate-npm-package-license "^3.0.1"
     validate-npm-package-name "^3.0.0"
 
-inside-out-promise@^1.4.3:
-  version "1.4.3"
-  resolved "https://registry.yarnpkg.com/inside-out-promise/-/inside-out-promise-1.4.3.tgz#904d936c5fad737a856b48b6a0cc916888a0ad9c"
-  integrity sha512-03UJVeFfMlq90Kf4K6iQmiGQOphkEXVOwsPcrDrKAGEUw4cHJfuyJoeUMUIo/8S9Q0EpIfR0kln2Yoqt9cM06Q==
+inside-out-promise@^2.0.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/inside-out-promise/-/inside-out-promise-2.1.0.tgz#7d3b0d64bcf2a62e74ad73de588c816532706417"
+  integrity sha512-ODVK7jrG7UWH/NvAkUAr1Byd88qHYN4f7oJZCnsdhw/ZkHAQHqYGnaHoXRMfZQSo2AvERUnB+qYviNlRy1o3aA==
   dependencies:
-    "@qiwi/substrate" "^1.17.12"
-    tslib "^1.10.0"
+    "@qiwi/substrate" "^1.18.33"
+    bind-decorator "^1.0.11"
+    tslib "^2.0.0"
 
 interpret@^1.0.0:
   version "1.2.0"
@@ -7380,6 +7394,11 @@ tslib@^1.11.1:
   version "1.11.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.11.1.tgz#eb15d128827fbee2841549e171f45ed338ac7e35"
   integrity sha512-aZW88SY8kQbU7gpV19lN24LtXh/yD4ZZg6qieAJDDg+YBsJcSmLGK9QpnUjAKVG/xefmvJGd1WUmfpT/g6AJGA==
+
+tslib@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.0.0.tgz#18d13fc2dce04051e20f074cc8387fd8089ce4f3"
+  integrity sha512-lTqkx847PI7xEDYJntxZH89L2/aXInsyF2luSafe/+0fHOMjlBNXdH6th7f70qxLDhul7KZK0zC8V5ZIyHl0/g==
 
 tslint-config-standard@^9.0.0:
   version "9.0.0"
