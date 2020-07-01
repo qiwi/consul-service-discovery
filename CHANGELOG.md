@@ -1,3 +1,10 @@
+## [1.7.5](https://github.com/qiwi/consul-service-discovery/compare/v1.7.4...v1.7.5) (2020-07-01)
+
+
+### Performance Improvements
+
+* **package:** up deps ([e0b6b14](https://github.com/qiwi/consul-service-discovery/commit/e0b6b14f0f06d67fbea6f137cf8bd6d09baa4140))
+
 ## [1.7.4](https://github.com/qiwi/consul-service-discovery/compare/v1.7.3...v1.7.4) (2020-03-02)
 
 
