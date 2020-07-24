@@ -65,8 +65,8 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     service.promise = promise
 
     log.debug(`watcher initialized, service=${serviceName}`)
-    ConsulDiscoveryService.watchOnChange(service, resolve.bind(promise), reject.bind(promise))
-    ConsulDiscoveryService.watchOnError(service, reject.bind(promise))
+    ConsulDiscoveryService.watchOnChange(service, resolve, reject, this.services)
+    ConsulDiscoveryService.watchOnError(service, reject, this.services)
 
     return promise
   }
@@ -211,7 +211,7 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     promiseFactory.Promise = cxt.Promise
   }
 
-  static watchOnChange (service: IServiceEntry, resolve: Function, reject: Function): void {
+  static watchOnChange (service: IServiceEntry, resolve: Function, reject: Function, services: Record<string, IServiceEntry>): void {
     service.watcher
       .on('change', (data: IEntryPoint[]) => {
         const connections: IConnectionParams[] = data.reduce((memo: IConnectionParams[], entryPoint: IEntryPoint) => {
@@ -239,17 +239,17 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
         if (service.connections.length) {
           resolve(service)
         } else {
-          this.handleError(service, reject, new Error('got empty or invalid connection params'))
+          this.handleError(service, reject, new Error('got empty or invalid connection params'), services)
         }
       })
   }
 
-  static watchOnError (service: IServiceEntry, reject: Function): void {
+  static watchOnError (service: IServiceEntry, reject: Function, services: Record<string, IServiceEntry>): void {
     service.watcher
-      .on('error', (err: Error) => this.handleError(service, reject, err))
+      .on('error', (err: Error) => this.handleError(service, reject, err, services))
   }
 
-  static handleError (service: IServiceEntry, reject: Function, err: any): void {
+  static handleError (service: IServiceEntry, reject: Function, err: any, services: Record<string, IServiceEntry>): void {
     service.sequentialErrorCount += 1
 
     log.error(`watcher error, service=${service.name}`, 'error=', err)
@@ -259,6 +259,7 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     if (service.sequentialErrorCount >= WATCH_ERROR_LIMIT) {
       service.watcher.end()
       delete service.promise
+      delete services[service.name]
 
       log.error(`watcher error limit is reached, service=${service.name}`)
       reject(err)
