@@ -65,8 +65,8 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     service.promise = promise
 
     log.debug(`watcher initialized, service=${serviceName}`)
-    ConsulDiscoveryService.watchOnChange(service, resolve.bind(promise), reject.bind(promise), this.services)
-    ConsulDiscoveryService.watchOnError(service, reject.bind(promise), this.services)
+    ConsulDiscoveryService.watchOnChange(service, resolve, reject, this.services)
+    ConsulDiscoveryService.watchOnError(service, reject, this.services)
 
     return promise
   }
