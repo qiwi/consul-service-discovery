@@ -1,3 +1,10 @@
+## [1.7.6](https://github.com/qiwi/consul-service-discovery/compare/v1.7.5...v1.7.6) (2020-07-24)
+
+
+### Bug Fixes
+
+* remove broken service from pull ([8685aeb](https://github.com/qiwi/consul-service-discovery/commit/8685aeba755291bb59924b5149f181bcd040bfe8))
+
 ## [1.7.5](https://github.com/qiwi/consul-service-discovery/compare/v1.7.4...v1.7.5) (2020-07-01)
 
 
