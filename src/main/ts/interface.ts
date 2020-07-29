@@ -90,7 +90,6 @@ export type IServiceEntry = {
   name: IServiceName,
   watcher: IConsulClientWatch,
   connections: Array<IConnectionParams>,
-  sequentialErrorCount: number,
   promise?: Promise<IServiceEntry>
 }
 

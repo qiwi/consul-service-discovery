@@ -27,7 +27,6 @@ import {
 
 export * from './interface'
 export const BACKOFF_MAX = 20000
-export const WATCH_ERROR_LIMIT = 20
 
 /**
  * @class ConsulDiscoveryService
@@ -81,9 +80,9 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     const service = {
       name: serviceName,
       watcher,
-      connections,
-      sequentialErrorCount: 0
+      connections
     }
+
     this.services[serviceName] = service
 
     return service
@@ -229,7 +228,6 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
         }, [])
 
         if (connections.length > 0) {
-          service.sequentialErrorCount = 0
           service.connections.length = 0
           service.connections.push(...connections)
         } else {
@@ -250,20 +248,11 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
   }
 
   static handleError (service: IServiceEntry, reject: Function, err: any, services: Record<string, IServiceEntry>): void {
-    service.sequentialErrorCount += 1
 
     log.error(`watcher error, service=${service.name}`, 'error=', err)
-    log.info(`sequentialErrorCount=${service.sequentialErrorCount}`)
-
-    // Once WATCH_ERROR_LIMIT is reached, reset watcher and instances
-    if (service.sequentialErrorCount >= WATCH_ERROR_LIMIT) {
-      service.watcher.end()
-      delete service.promise
-      delete services[service.name]
-
-      log.error(`watcher error limit is reached, service=${service.name}`)
-      reject(err)
-    }
+    delete service.promise
+    delete services[service.name]
+    reject(err)
   }
 }
 
