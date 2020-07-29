@@ -6,8 +6,7 @@ import def, {
   IConsulServiceHealth,
   ILogger,
   TConsulAgentCheckListOptions,
-  TConsulAgentServiceRegisterOptions,
-  WATCH_ERROR_LIMIT
+  TConsulAgentServiceRegisterOptions
 } from '../../main/ts/index'
 import { LOG_PREFIX } from '../../main/ts/logger'
 import cxt from '../../main/ts/ctx'
@@ -212,8 +211,7 @@ describe('ConsulServiceDiscovery', () => {
         expect(service).toEqual({
           name: 'foobar',
           watcher: expect.any(FakeWatcher),
-          connections: [],
-          sequentialErrorCount: 0
+          connections: []
         })
       })
 
@@ -289,33 +287,6 @@ describe('ConsulServiceDiscovery', () => {
 
         expect(serviceConnectionParams).toEqual(testParams)
       })
-
-      it('rejects the result promise once attempt limit is reached (onError)', async () => {
-        expect.assertions(1)
-        const discoveryService = new ConsulDiscoveryService(testParams)
-        const serviceConnectionParams = discoveryService.getConnectionParams('testService')
-        const watcher = discoveryService.services['testService'].watcher
-
-        for (let i = 0; i <= WATCH_ERROR_LIMIT; i++) {
-          watcher.emit('error', expectedError)
-        }
-
-        // tslint:disable-next-line:no-floating-promises
-        return expect(serviceConnectionParams).rejects.toEqual(expectedError)
-      }, 1000)
-
-      it('rejects the result promise once attempt limit is reached (onChange)', async () => {
-        const discoveryService = new ConsulDiscoveryService(testParams)
-        const serviceConnectionParams = discoveryService.getConnectionParams('testService')
-        const watcher = discoveryService.services['testService'].watcher
-
-        for (let i = 0; i <= WATCH_ERROR_LIMIT; i++) {
-          watcher.emit('change', [])
-        }
-
-        // tslint:disable-next-line:no-floating-promises
-        return expect(serviceConnectionParams).rejects.toEqual(new Error('got empty or invalid connection params'))
-      }, 1000)
 
       it('resolves promise with the previous valid response', async () => {
         const discoveryService = new ConsulDiscoveryService(testParams)
