@@ -250,6 +250,7 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
   static handleError (service: IServiceEntry, reject: Function, err: any, services: Record<string, IServiceEntry>): void {
 
     log.error(`watcher error, service=${service.name}`, 'error=', err)
+    service.watcher.end()
     delete service.promise
     delete services[service.name]
     reject(err)
