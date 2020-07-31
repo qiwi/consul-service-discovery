@@ -254,16 +254,23 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
 
     log.error(`watcher error, service=${service.name}`, 'error=', err)
     log.info(`sequentialErrorCount=${service.sequentialErrorCount}`)
+    reject(err)
+    delete service.promise
+
+    if (service.connections.length === 0) {
+      ConsulDiscoveryService.clearService(services, service)
+    }
 
     // Once WATCH_ERROR_LIMIT is reached, reset watcher and instances
     if (service.sequentialErrorCount >= WATCH_ERROR_LIMIT) {
-      service.watcher.end()
-      delete service.promise
-      delete services[service.name]
-
+      ConsulDiscoveryService.clearService(services, service)
       log.error(`watcher error limit is reached, service=${service.name}`)
-      reject(err)
     }
+  }
+
+  static clearService (services: Record<string, IServiceEntry>, service: IServiceEntry) {
+    service.watcher.end()
+    delete services[service.name]
   }
 }
 
