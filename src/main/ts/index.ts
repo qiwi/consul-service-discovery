@@ -212,6 +212,10 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
   }
 
   static watchOnChange (service: IServiceEntry, resolve: Function, reject: Function, services: Record<string, IServiceEntry>): void {
+    if (service.watcher.listenerCount('change')) {
+      return
+    }
+
     service.watcher
       .on('change', (data: IEntryPoint[]) => {
         const connections: IConnectionParams[] = data.reduce((memo: IConnectionParams[], entryPoint: IEntryPoint) => {
@@ -245,6 +249,10 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
   }
 
   static watchOnError (service: IServiceEntry, reject: Function, services: Record<string, IServiceEntry>): void {
+    if (service.watcher.listenerCount('error')) {
+      return
+    }
+
     service.watcher
       .on('error', (err: Error) => this.handleError(service, reject, err, services))
   }
