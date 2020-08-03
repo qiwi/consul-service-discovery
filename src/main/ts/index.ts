@@ -212,6 +212,10 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
   }
 
   static watchOnChange (service: IServiceEntry, resolve: Function, reject: Function, services: Record<string, IServiceEntry>): void {
+    if (service.watcher.listenerCount('change')) {
+      return
+    }
+
     service.watcher
       .on('change', (data: IEntryPoint[]) => {
         const connections: IConnectionParams[] = data.reduce((memo: IConnectionParams[], entryPoint: IEntryPoint) => {
@@ -245,6 +249,10 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
   }
 
   static watchOnError (service: IServiceEntry, reject: Function, services: Record<string, IServiceEntry>): void {
+    if (service.watcher.listenerCount('error')) {
+      return
+    }
+
     service.watcher
       .on('error', (err: Error) => this.handleError(service, reject, err, services))
   }
@@ -254,16 +262,23 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
 
     log.error(`watcher error, service=${service.name}`, 'error=', err)
     log.info(`sequentialErrorCount=${service.sequentialErrorCount}`)
+    reject(err)
+    delete service.promise
+
+    if (service.connections.length === 0) {
+      ConsulDiscoveryService.clearService(services, service)
+    }
 
     // Once WATCH_ERROR_LIMIT is reached, reset watcher and instances
     if (service.sequentialErrorCount >= WATCH_ERROR_LIMIT) {
-      service.watcher.end()
-      delete service.promise
-      delete services[service.name]
-
+      ConsulDiscoveryService.clearService(services, service)
       log.error(`watcher error limit is reached, service=${service.name}`)
-      reject(err)
     }
+  }
+
+  static clearService (services: Record<string, IServiceEntry>, service: IServiceEntry) {
+    service.watcher.end()
+    delete services[service.name]
   }
 }
 
