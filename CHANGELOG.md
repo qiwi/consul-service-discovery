@@ -1,3 +1,10 @@
+## [1.7.7](https://github.com/qiwi/consul-service-discovery/compare/v1.7.6...v1.7.7) (2020-08-03)
+
+
+### Bug Fixes
+
+* destroy service if service doesn't have connections ([23662c2](https://github.com/qiwi/consul-service-discovery/commit/23662c204b59d81fb36a1781766d61b6d5d203b0))
+
 ## [1.7.6](https://github.com/qiwi/consul-service-discovery/compare/v1.7.5...v1.7.6) (2020-07-24)
 
 
