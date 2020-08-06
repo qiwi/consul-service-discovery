@@ -221,7 +221,7 @@ describe('ConsulServiceDiscovery', () => {
       it('creates new discovery service entry', () => {
         const service = discoveryService.getService('foobar', 'discovery')
 
-        discoveryService.services['foobar'].watcher.emit('change', onChangeResponse)
+        discoveryService.services.discovery['foobar'].watcher.emit('change', onChangeResponse)
 
         expect(service).toEqual({
           name: 'foobar',
@@ -235,7 +235,7 @@ describe('ConsulServiceDiscovery', () => {
       it('creates new kv service entry', () => {
         const service = discoveryService.getService('foobarbaz', 'kv')
 
-        discoveryService.services['foobarbaz'].watcher.emit('change', onChangeResponseKv)
+        discoveryService.services.kv['foobarbaz'].watcher.emit('change', onChangeResponseKv)
 
         expect(service).toEqual({
           name: 'foobarbaz',
@@ -247,7 +247,7 @@ describe('ConsulServiceDiscovery', () => {
       })
 
       it('returns cached service entry if exists', () => {
-        const service = discoveryService.services['foobar']
+        const service = discoveryService.services.discovery['foobar']
 
         expect(service).not.toBeUndefined()
 
@@ -268,7 +268,7 @@ describe('ConsulServiceDiscovery', () => {
       it('resolves available service connections', async () => {
         const discoveryService = new ConsulDiscoveryService(testParams)
         const promise = discoveryService.getConnections('service')
-        const watcher = discoveryService.services['service'].watcher
+        const watcher = discoveryService.services.discovery['service'].watcher
         watcher.emit('change', [
           {
             Service: {
@@ -299,7 +299,7 @@ describe('ConsulServiceDiscovery', () => {
         const discoveryService = new ConsulDiscoveryService(testParams)
 
         const serviceConnectionParams = discoveryService.getConnectionParams('testService')
-        const watcher = discoveryService.services['testService'].watcher
+        const watcher = discoveryService.services.discovery['testService'].watcher
 
         watcher.emit('change', onChangeResponse)
 
@@ -311,7 +311,7 @@ describe('ConsulServiceDiscovery', () => {
       it('is compatible with `await` operator', async () => {
         const discoveryService = new ConsulDiscoveryService(testParams)
         const promise = discoveryService.getConnectionParams('testService')
-        const watcher = discoveryService.services['testService'].watcher
+        const watcher = discoveryService.services.discovery['testService'].watcher
         watcher.emit('change', onChangeResponse)
 
         const serviceConnectionParams = await promise
@@ -323,7 +323,7 @@ describe('ConsulServiceDiscovery', () => {
         expect.assertions(1)
         const discoveryService = new ConsulDiscoveryService(testParams)
         const serviceConnectionParams = discoveryService.getConnectionParams('testService')
-        const watcher = discoveryService.services['testService'].watcher
+        const watcher = discoveryService.services.discovery['testService'].watcher
 
         for (let i = 0; i <= WATCH_ERROR_LIMIT; i++) {
           watcher.emit('error', expectedError)
@@ -336,7 +336,7 @@ describe('ConsulServiceDiscovery', () => {
       it('rejects the result promise once attempt limit is reached (onChange)', async () => {
         const discoveryService = new ConsulDiscoveryService(testParams)
         const serviceConnectionParams = discoveryService.getConnectionParams('testService')
-        const watcher = discoveryService.services['testService'].watcher
+        const watcher = discoveryService.services.discovery['testService'].watcher
 
         for (let i = 0; i <= WATCH_ERROR_LIMIT; i++) {
           watcher.emit('change', [])
@@ -349,7 +349,7 @@ describe('ConsulServiceDiscovery', () => {
       it('resolves promise with the previous valid response', async () => {
         const discoveryService = new ConsulDiscoveryService(testParams)
         const serviceConnectionParams = discoveryService.getConnectionParams('testService')
-        const watcher = discoveryService.services['testService'].watcher
+        const watcher = discoveryService.services.discovery['testService'].watcher
 
         watcher.emit('change', [
           {

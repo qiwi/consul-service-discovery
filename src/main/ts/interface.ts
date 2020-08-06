@@ -70,7 +70,8 @@ export interface INormalizedConsulKvValue {
 
 export interface IConsulDiscoveryService {
   services: {
-    [key: string]: IServiceKvEntry | IServiceDiscoveryEntry
+    discovery: { [key: string]: IServiceDiscoveryEntry }
+    kv: { [key: string]: IServiceKvEntry }
   }
   id?: string
   getConnectionParams (serviceName: string): Promise<IConnectionParams | undefined>
@@ -108,13 +109,13 @@ export interface ILibConfig {
 
 export type IServiceName = string
 
-export type IDiscovery = 'discovery'
-export type IKv = 'kv'
+export type IDiscoveryServiceType = 'discovery'
+export type IKvServiceType = 'kv'
 
-export type IServiceType = IDiscovery | IKv
+export type IServiceType = IDiscoveryServiceType | IKvServiceType
 
 export type IServiceDiscoveryEntry = {
-  type: IDiscovery,
+  type: IDiscoveryServiceType,
   name: IServiceName,
   watcher: IConsulClientWatch,
   sequentialErrorCount: number,
@@ -123,7 +124,7 @@ export type IServiceDiscoveryEntry = {
 }
 
 export type IServiceKvEntry = {
-  type: IKv,
+  type: IKvServiceType,
   name: IServiceName,
   watcher: IConsulClientWatch,
   sequentialErrorCount: number,

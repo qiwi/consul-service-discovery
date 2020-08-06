@@ -35,8 +35,12 @@ export const WATCH_ERROR_LIMIT = 20
  */
 export class ConsulDiscoveryService implements IConsulDiscoveryService {
   public services: {
-    [key: string]: IServiceDiscoveryEntry | IServiceKvEntry
-  } = {}
+    discovery: { [key: string]: IServiceDiscoveryEntry }
+    kv: { [key: string]: IServiceKvEntry }
+  } = {
+    discovery: {},
+    kv: {}
+  }
 
   protected _consul: IConsulClient
 
@@ -50,7 +54,7 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     })
   }
 
-  public getValueByKey (key: string) {
+  public getKv (key: string) {
     return this.ready(key, 'kv').then(({ data }) => data)
   }
 
@@ -73,9 +77,9 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
       service,
       resolve,
       reject,
-      this.services
+      this.services[type]
     )
-    ConsulDiscoveryService.watchOnError(service, reject, this.services)
+    ConsulDiscoveryService.watchOnError(service, reject, this.services[type])
 
     return promise
   }
@@ -84,7 +88,7 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     serviceName: IServiceName,
     type: IServiceType
   ): IServiceEntry {
-    return this.services[serviceName] || this.createService(serviceName, type)
+    return this.services[type][serviceName] || this.createService(serviceName, type)
   }
 
   public createService (
@@ -101,7 +105,7 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     }
 
     // @ts-ignore
-    this.services[serviceName] = service
+    this.services[type][serviceName] = service
 
     // @ts-ignore
     return service
@@ -240,12 +244,7 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
       })
   }
 
-  static generateId ({
-                      serviceName,
-                      localAddress = '0.0.0.0',
-                      port = '',
-                      remoteAddress = '0.0.0.0'
-                    }: IGenerateIdOpts) {
+  static generateId ({ serviceName, localAddress = '0.0.0.0', port = '', remoteAddress = '0.0.0.0' }: IGenerateIdOpts) {
     return `${serviceName}-${remoteAddress}-${localAddress}-${port}-${uuid()}`.replace(
       /\./g,
       '-'
