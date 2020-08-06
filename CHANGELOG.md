@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/qiwi/consul-service-discovery/compare/v1.7.7...v1.8.0) (2020-08-06)
+
+
+### Features
+
+* add kv support ([3a12135](https://github.com/qiwi/consul-service-discovery/commit/3a12135211f5a52dced0efe3dde2cacbf024b4a1))
+
 ## [1.7.7](https://github.com/qiwi/consul-service-discovery/compare/v1.7.6...v1.7.7) (2020-08-03)
 
 
