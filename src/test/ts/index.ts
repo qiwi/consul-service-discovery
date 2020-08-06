@@ -264,6 +264,14 @@ describe('ConsulServiceDiscovery', () => {
       })
     })
 
+    describe('#getKv', async () => {
+      const discoveryService = new ConsulDiscoveryService(testParams)
+      const promise = discoveryService.getKv('kvservice')
+      const watcher = discoveryService.services.kv['kvservice'].watcher
+      expect(watcher).not.toBeUndefined()
+      expect(promise).not.toBeUndefined()
+    })
+
     describe('#getServiceConnections', () => {
       it('resolves available service connections', async () => {
         const discoveryService = new ConsulDiscoveryService(testParams)
@@ -409,17 +417,34 @@ describe('ConsulServiceDiscovery', () => {
         expect(await promise).toMatchObject({})
       })
     })
-    describe('#configure', () => {
-      it('supports logger customization', async () => {
-        const spy = jest.spyOn(fakeLogger, 'debug')
-        ConsulDiscoveryService.configure({ logger: fakeLogger })
+    describe('#promisify', () => {
+      it('handle kv value', async () => {
+        const value = {
+          createIndex: 1,
+          modifyIndex: 2,
+          lockIndex: 3,
+          key: 'string',
+          flags: 4,
+          value: 'string'
+        }
+        const { resolve, reject, promise } = promiseFactory()
 
-        const res = new ConsulDiscoveryService(testParams).ready('foo', 'discovery')
-
-        // tslint:disable-next-line:no-floating-promises
-        expect(res).resolves.toEqual(undefined)
-        expect(cxt.logger).toBe(fakeLogger)
-        expect(spy).toHaveBeenCalledWith(LOG_PREFIX, 'watcher initialized, service=foo')
+        ConsulDiscoveryService.handleKvValue(value, { service: {} },
+          // @ts-ignore
+          { type: 'kv', data: {}, name: 'service', promise, sequentialErrorCount: 0, watcher: {} }, resolve, reject)
+        expect(await promise).toMatchObject({})
+      })
+    })
+    describe('#configure', async () => {
+      it('reject on error', async () => {
+        const method = (opts, fn) => {
+          fn('test reject', null)
+        }
+        try {
+          await ConsulDiscoveryService.promisify(method, 'test')
+        } catch (e) {
+          expect(e).toBe('test reject')
+        }
       })
 
       it('supports custom Promises', async () => {
