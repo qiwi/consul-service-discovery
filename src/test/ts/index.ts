@@ -2,7 +2,7 @@ import def, {
   ConsulDiscoveryService,
   IConnectionParams, IConsulAgent, IConsulAgentService,
   IConsulClient,
-  IConsulClientFactory,
+  IConsulClientFactory, IConsulKvValue,
   IConsulServiceHealth,
   ILogger,
   TConsulAgentCheckListOptions,
@@ -15,6 +15,7 @@ import { EventEmitter } from 'events'
 import * as Bluebird from 'bluebird'
 import * as Consul from 'consul'
 import { noop } from 'lodash'
+import { promiseFactory } from '../../main/ts/util'
 
 class FakeWatcher extends EventEmitter {
   end = noop
@@ -41,6 +42,9 @@ class FakeAgentService implements IConsulAgentService {
 class ConsulClient implements IConsulClient {
   health: IConsulServiceHealth
   agent: IConsulAgent
+  kv: {
+    get: any
+  }
 
   watch () {
     return new FakeWatcher()
@@ -48,6 +52,7 @@ class ConsulClient implements IConsulClient {
 
   constructor (opts?: Object | undefined) {
     this.health = { service: null }
+    this.kv = { get: null }
     this.agent = {
       service: new FakeAgentService()
     }
@@ -66,6 +71,15 @@ const onChangeResponse: any = [
     }
   }
 ]
+
+const onChangeResponseKv: IConsulKvValue = {
+  CreateIndex: 1,
+  ModifyIndex: 1,
+  LockIndex: 1,
+  Key: 'string',
+  Flags: 1,
+  Value: 'string'
+}
 
 const testParams: IConnectionParams = {
   host: '0.0.0.0',
@@ -195,7 +209,7 @@ describe('ConsulServiceDiscovery', () => {
     describe('#getWatcher', () => {
       it('returns a new one Consul.Watcher instance', () => {
         const discoveryService = new ConsulDiscoveryService(testParams)
-        const watcher = discoveryService.getWatcher('foo')
+        const watcher = discoveryService.getWatcher('foo', 'discovery')
 
         expect(watcher).toBeInstanceOf(EventEmitter)
       })
@@ -204,25 +218,40 @@ describe('ConsulServiceDiscovery', () => {
     describe('#getService', () => {
       const discoveryService = new ConsulDiscoveryService(testParams)
 
-      it('creates new service entry', () => {
-        const service = discoveryService.getService('foobar')
+      it('creates new discovery service entry', () => {
+        const service = discoveryService.getService('foobar', 'discovery')
 
-        discoveryService.services['foobar'].watcher.emit('change', onChangeResponse)
+        discoveryService.services.discovery['foobar'].watcher.emit('change', onChangeResponse)
 
         expect(service).toEqual({
           name: 'foobar',
+          type: 'discovery',
           watcher: expect.any(FakeWatcher),
-          connections: [],
+          data: [],
+          sequentialErrorCount: 0
+        })
+      })
+
+      it('creates new kv service entry', () => {
+        const service = discoveryService.getService('foobarbaz', 'kv')
+
+        discoveryService.services.kv['foobarbaz'].watcher.emit('change', onChangeResponseKv)
+
+        expect(service).toEqual({
+          name: 'foobarbaz',
+          type: 'kv',
+          watcher: expect.any(FakeWatcher),
+          data: {},
           sequentialErrorCount: 0
         })
       })
 
       it('returns cached service entry if exists', () => {
-        const service = discoveryService.services['foobar']
+        const service = discoveryService.services.discovery['foobar']
 
         expect(service).not.toBeUndefined()
 
-        expect(discoveryService.getService('foobar')).toBe(service)
+        expect(discoveryService.getService('foobar', 'discovery')).toBe(service)
       })
     })
 
@@ -231,15 +260,23 @@ describe('ConsulServiceDiscovery', () => {
         const discoveryService = new ConsulDiscoveryService(testParams)
 
         // tslint:disable-next-line:no-floating-promises
-        expect(discoveryService.ready('foo')).toBe(discoveryService.ready('foo'))
+        expect(discoveryService.ready('foo', 'discovery')).toBe(discoveryService.ready('foo', 'discovery'))
       })
+    })
+
+    describe('#getKv', async () => {
+      const discoveryService = new ConsulDiscoveryService(testParams)
+      const promise = discoveryService.getKv('kvservice')
+      const watcher = discoveryService.services.kv['kvservice'].watcher
+      expect(watcher).not.toBeUndefined()
+      expect(promise).not.toBeUndefined()
     })
 
     describe('#getServiceConnections', () => {
       it('resolves available service connections', async () => {
         const discoveryService = new ConsulDiscoveryService(testParams)
         const promise = discoveryService.getConnections('service')
-        const watcher = discoveryService.services['service'].watcher
+        const watcher = discoveryService.services.discovery['service'].watcher
         watcher.emit('change', [
           {
             Service: {
@@ -270,7 +307,7 @@ describe('ConsulServiceDiscovery', () => {
         const discoveryService = new ConsulDiscoveryService(testParams)
 
         const serviceConnectionParams = discoveryService.getConnectionParams('testService')
-        const watcher = discoveryService.services['testService'].watcher
+        const watcher = discoveryService.services.discovery['testService'].watcher
 
         watcher.emit('change', onChangeResponse)
 
@@ -282,7 +319,7 @@ describe('ConsulServiceDiscovery', () => {
       it('is compatible with `await` operator', async () => {
         const discoveryService = new ConsulDiscoveryService(testParams)
         const promise = discoveryService.getConnectionParams('testService')
-        const watcher = discoveryService.services['testService'].watcher
+        const watcher = discoveryService.services.discovery['testService'].watcher
         watcher.emit('change', onChangeResponse)
 
         const serviceConnectionParams = await promise
@@ -294,7 +331,7 @@ describe('ConsulServiceDiscovery', () => {
         expect.assertions(1)
         const discoveryService = new ConsulDiscoveryService(testParams)
         const serviceConnectionParams = discoveryService.getConnectionParams('testService')
-        const watcher = discoveryService.services['testService'].watcher
+        const watcher = discoveryService.services.discovery['testService'].watcher
 
         for (let i = 0; i <= WATCH_ERROR_LIMIT; i++) {
           watcher.emit('error', expectedError)
@@ -307,7 +344,7 @@ describe('ConsulServiceDiscovery', () => {
       it('rejects the result promise once attempt limit is reached (onChange)', async () => {
         const discoveryService = new ConsulDiscoveryService(testParams)
         const serviceConnectionParams = discoveryService.getConnectionParams('testService')
-        const watcher = discoveryService.services['testService'].watcher
+        const watcher = discoveryService.services.discovery['testService'].watcher
 
         for (let i = 0; i <= WATCH_ERROR_LIMIT; i++) {
           watcher.emit('change', [])
@@ -320,7 +357,7 @@ describe('ConsulServiceDiscovery', () => {
       it('resolves promise with the previous valid response', async () => {
         const discoveryService = new ConsulDiscoveryService(testParams)
         const serviceConnectionParams = discoveryService.getConnectionParams('testService')
-        const watcher = discoveryService.services['testService'].watcher
+        const watcher = discoveryService.services.discovery['testService'].watcher
 
         watcher.emit('change', [
           {
@@ -341,23 +378,79 @@ describe('ConsulServiceDiscovery', () => {
   })
 
   describe('static', () => {
-    describe('#configure', () => {
-      it('supports logger customization', async () => {
-        const spy = jest.spyOn(fakeLogger, 'debug')
-        ConsulDiscoveryService.configure({ logger: fakeLogger })
+    describe('#normalizeKvValue', () => {
+      it('normalize kv value', async () => {
+        const value = {
+          CreateIndex: 1,
+          ModifyIndex: 2,
+          LockIndex: 3,
+          Key: 'string',
+          Flags: 4,
+          Value: 'string'
+        }
 
-        const res = new ConsulDiscoveryService(testParams).ready('foo')
+        expect(ConsulDiscoveryService.normalizeKvValue(value)).toMatchObject({
+          createIndex: 1,
+          modifyIndex: 2,
+          lockIndex: 3,
+          key: 'string',
+          flags: 4,
+          value: 'string'
+        })
+      })
+    })
+    describe('#handleKvValue', () => {
+      it('handle kv value', async () => {
+        const value = {
+          createIndex: 1,
+          modifyIndex: 2,
+          lockIndex: 3,
+          key: 'string',
+          flags: 4,
+          value: 'string'
+        }
+        const { resolve, reject, promise } = promiseFactory()
 
-        // tslint:disable-next-line:no-floating-promises
-        expect(res).resolves.toEqual(undefined)
-        expect(cxt.logger).toBe(fakeLogger)
-        expect(spy).toHaveBeenCalledWith(LOG_PREFIX, 'watcher initialized, service=foo')
+        ConsulDiscoveryService.handleKvValue(value, { service: {} },
+          // @ts-ignore
+          { type: 'kv', data: {}, name: 'service', promise, sequentialErrorCount: 0, watcher: {} }, resolve, reject)
+        expect(await promise).toMatchObject({})
+      })
+    })
+    describe('#promisify', () => {
+      it('handle kv value', async () => {
+        const value = {
+          createIndex: 1,
+          modifyIndex: 2,
+          lockIndex: 3,
+          key: 'string',
+          flags: 4,
+          value: 'string'
+        }
+        const { resolve, reject, promise } = promiseFactory()
+
+        ConsulDiscoveryService.handleKvValue(value, { service: {} },
+          // @ts-ignore
+          { type: 'kv', data: {}, name: 'service', promise, sequentialErrorCount: 0, watcher: {} }, resolve, reject)
+        expect(await promise).toMatchObject({})
+      })
+    })
+    describe('#configure', async () => {
+      it('reject on error', async () => {
+        const method = (opts, fn) => {
+          fn('test reject', null)
+        }
+        try {
+          await ConsulDiscoveryService.promisify(method, 'test')
+        } catch (e) {
+          expect(e).toBe('test reject')
+        }
       })
 
       it('supports custom Promises', async () => {
         ConsulDiscoveryService.configure({ Promise: Bluebird })
 
-        const res = new ConsulDiscoveryService(testParams).ready('bar')
+        const res = new ConsulDiscoveryService(testParams).ready('bar', 'discovery')
 
         // tslint:disable-next-line:no-floating-promises
         expect(res).toBeInstanceOf(Bluebird)
