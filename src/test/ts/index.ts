@@ -370,19 +370,28 @@ describe('ConsulServiceDiscovery', () => {
   })
 
   describe('static', () => {
-    describe('#configure', () => {
-      it('supports logger customization', async () => {
-        const spy = jest.spyOn(fakeLogger, 'debug')
-        ConsulDiscoveryService.configure({ logger: fakeLogger })
+    describe('#normalizeKvValue', () => {
+      it('normalize kv value', async () => {
+        const value = {
+          CreateIndex: 1,
+          ModifyIndex: 2,
+          LockIndex: 3,
+          Key: 'string',
+          Flags: 4,
+          Value: 'string'
+        }
 
-        const res = new ConsulDiscoveryService(testParams).ready('foo', 'discovery')
-
-        // tslint:disable-next-line:no-floating-promises
-        expect(res).resolves.toEqual(undefined)
-        expect(cxt.logger).toBe(fakeLogger)
-        expect(spy).toHaveBeenCalledWith(LOG_PREFIX, 'watcher initialized, service=foo')
+        expect(ConsulDiscoveryService.normalizeKvValue(value)).toMatchObject({
+          createIndex: 1,
+          modifyIndex: 2,
+          lockIndex: 3,
+          key: 'string',
+          flags: 4,
+          value: 'string'
+        })
       })
-
+    })
+    describe('#handleKvValue', () => {
       it('handle kv value', async () => {
         const value = {
           createIndex: 1,
@@ -398,6 +407,19 @@ describe('ConsulServiceDiscovery', () => {
           // @ts-ignore
           { type: 'kv', data: {}, name: 'service', promise, sequentialErrorCount: 0, watcher: {} }, resolve, reject)
         expect(await promise).toMatchObject({})
+      })
+    })
+    describe('#configure', () => {
+      it('supports logger customization', async () => {
+        const spy = jest.spyOn(fakeLogger, 'debug')
+        ConsulDiscoveryService.configure({ logger: fakeLogger })
+
+        const res = new ConsulDiscoveryService(testParams).ready('foo', 'discovery')
+
+        // tslint:disable-next-line:no-floating-promises
+        expect(res).resolves.toEqual(undefined)
+        expect(cxt.logger).toBe(fakeLogger)
+        expect(spy).toHaveBeenCalledWith(LOG_PREFIX, 'watcher initialized, service=foo')
       })
 
       it('supports custom Promises', async () => {
