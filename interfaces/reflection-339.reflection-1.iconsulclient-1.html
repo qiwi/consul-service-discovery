@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>IConsulDiscoveryService | @qiwi/consul-service-discovery</title>
+	<title>IConsulClient | @qiwi/consul-service-discovery</title>
 	<meta name="description" content="Documentation for @qiwi/consul-service-discovery">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,16 +54,16 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/reflection-268.html"></a>
+					<a href="../modules/reflection-339.html"></a>
 				</li>
 				<li>
-					<a href="../modules/reflection-268.reflection-1.html"></a>
+					<a href="../modules/reflection-339.reflection-1.html"></a>
 				</li>
 				<li>
-					<a href="reflection-268.reflection-1.iconsuldiscoveryservice-1.html">IConsulDiscoveryService</a>
+					<a href="reflection-339.reflection-1.iconsulclient-1.html">IConsulClient</a>
 				</li>
 			</ul>
-			<h1>Interface IConsulDiscoveryService</h1>
+			<h1>Interface IConsulClient</h1>
 		</div>
 	</div>
 </header>
@@ -74,14 +74,8 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">IConsulDiscoveryService</span>
+						<span class="target">IConsulClient</span>
 					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel">
-				<h3>Implemented by</h3>
-				<ul class="tsd-hierarchy">
-					<li><a href="../classes/reflection-268.reflection-1.consuldiscoveryservice.html" class="tsd-signature-type">ConsulDiscoveryService</a></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -91,14 +85,15 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="reflection-268.reflection-1.iconsuldiscoveryservice-1.html#id" class="tsd-kind-icon">id</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="reflection-268.reflection-1.iconsuldiscoveryservice-1.html#services" class="tsd-kind-icon">services</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="reflection-339.reflection-1.iconsulclient-1.html#agent" class="tsd-kind-icon">agent</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="reflection-339.reflection-1.iconsulclient-1.html#health" class="tsd-kind-icon">health</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="reflection-339.reflection-1.iconsulclient-1.html#kv" class="tsd-kind-icon">kv</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="reflection-268.reflection-1.iconsuldiscoveryservice-1.html#getconnectionparams" class="tsd-kind-icon">get<wbr>Connection<wbr>Params</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="reflection-339.reflection-1.iconsulclient-1.html#watch" class="tsd-kind-icon">watch</a></li>
 							</ul>
 						</section>
 					</div>
@@ -107,29 +102,39 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="id" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> id</h3>
-					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<a name="agent" class="tsd-anchor"></a>
+					<h3>agent</h3>
+					<div class="tsd-signature tsd-kind-icon">agent<span class="tsd-signature-symbol">:</span> <a href="reflection-339.reflection-1.iconsulagent-1.html" class="tsd-signature-type">IConsulAgent</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/23662c2/src/main/ts/interface.ts#L62">src/main/ts/interface.ts:62</a></li>
+							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/3a12135/src/main/ts/interface.ts#L40">src/main/ts/interface.ts:40</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="services" class="tsd-anchor"></a>
-					<h3>services</h3>
-					<div class="tsd-signature tsd-kind-icon">services<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span></div>
+					<a name="health" class="tsd-anchor"></a>
+					<h3>health</h3>
+					<div class="tsd-signature tsd-kind-icon">health<span class="tsd-signature-symbol">:</span> <a href="reflection-339.reflection-1.iconsulservicehealth-1.html" class="tsd-signature-type">IConsulServiceHealth</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/23662c2/src/main/ts/interface.ts#L59">src/main/ts/interface.ts:59</a></li>
+							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/3a12135/src/main/ts/interface.ts#L39">src/main/ts/interface.ts:39</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="kv" class="tsd-anchor"></a>
+					<h3>kv</h3>
+					<div class="tsd-signature tsd-kind-icon">kv<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>get<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/3a12135/src/main/ts/interface.ts#L41">src/main/ts/interface.ts:41</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
-							<li class="tsd-parameter-index-signature">
-								<h5><span class="tsd-signature-symbol">[</span>key: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><a href="../modules/reflection-268.reflection-1.html#iserviceentry" class="tsd-signature-type">IServiceEntry</a></h5>
+							<li class="tsd-parameter">
+								<h5>get<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></h5>
 							</li>
 						</ul>
 					</div>
@@ -138,25 +143,25 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="getconnectionparams" class="tsd-anchor"></a>
-					<h3>get<wbr>Connection<wbr>Params</h3>
+					<a name="watch" class="tsd-anchor"></a>
+					<h3>watch</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Connection<wbr>Params<span class="tsd-signature-symbol">(</span>serviceName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="reflection-268.reflection-1.iconnectionparams-1.html" class="tsd-signature-type">IConnectionParams</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">watch<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Options</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="reflection-339.reflection-1.iconsulclientwatch-1.html" class="tsd-signature-type">IConsulClientWatch</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/23662c2/src/main/ts/interface.ts#L63">src/main/ts/interface.ts:63</a></li>
+									<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/3a12135/src/main/ts/interface.ts#L38">src/main/ts/interface.ts:38</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>serviceName: <span class="tsd-signature-type">string</span></h5>
+									<h5>opts: <span class="tsd-signature-type">Options</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="reflection-268.reflection-1.iconnectionparams-1.html" class="tsd-signature-type">IConnectionParams</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="reflection-339.reflection-1.iconsulclientwatch-1.html" class="tsd-signature-type">IConsulClientWatch</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -175,16 +180,19 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="reflection-268.reflection-1.iconsuldiscoveryservice-1.html" class="tsd-kind-icon">IConsul<wbr>Discovery<wbr>Service</a>
+						<a href="reflection-339.reflection-1.iconsulclient-1.html" class="tsd-kind-icon">IConsul<wbr>Client</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="reflection-268.reflection-1.iconsuldiscoveryservice-1.html#id" class="tsd-kind-icon">id</a>
+								<a href="reflection-339.reflection-1.iconsulclient-1.html#agent" class="tsd-kind-icon">agent</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="reflection-268.reflection-1.iconsuldiscoveryservice-1.html#services" class="tsd-kind-icon">services</a>
+								<a href="reflection-339.reflection-1.iconsulclient-1.html#health" class="tsd-kind-icon">health</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="reflection-339.reflection-1.iconsulclient-1.html#kv" class="tsd-kind-icon">kv</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="reflection-268.reflection-1.iconsuldiscoveryservice-1.html#getconnectionparams" class="tsd-kind-icon">get<wbr>Connection<wbr>Params</a>
+								<a href="reflection-339.reflection-1.iconsulclient-1.html#watch" class="tsd-kind-icon">watch</a>
 							</li>
 						</ul>
 					</li>
