@@ -38,6 +38,10 @@ export interface IConsulClient {
   watch (opts: Consul.Watch.Options): IConsulClientWatch
   health: IConsulServiceHealth,
   agent: IConsulAgent
+  kv: {
+    get: any
+  }
+
 }
 
 export interface IConsulClientFactory {
@@ -55,9 +59,18 @@ export interface IConnectionParams {
   host: string
 }
 
+export interface INormalizedConsulKvValue {
+  createIndex?: number,
+  modifyIndex?: number,
+  lockIndex?: number,
+  key?: string,
+  flags?: number,
+  value?: string
+}
+
 export interface IConsulDiscoveryService {
   services: {
-    [key: string]: IServiceEntry
+    [key: string]: IServiceKvEntry | IServiceDiscoveryEntry
   }
   id?: string
   getConnectionParams (serviceName: string): Promise<IConnectionParams | undefined>
@@ -78,6 +91,15 @@ export interface IEntryPoint {
   }
 }
 
+export interface IConsulKvValue {
+  CreateIndex: number,
+  ModifyIndex: number,
+  LockIndex: number,
+  Key: string,
+  Flags: number,
+  Value: string
+}
+
 export interface ILibConfig {
   Promise?: any,
   logger?: ILogger,
@@ -86,13 +108,30 @@ export interface ILibConfig {
 
 export type IServiceName = string
 
-export type IServiceEntry = {
+export type IDiscovery = 'discovery'
+export type IKv = 'kv'
+
+export type IServiceType = IDiscovery | IKv
+
+export type IServiceDiscoveryEntry = {
+  type: IDiscovery,
   name: IServiceName,
   watcher: IConsulClientWatch,
-  connections: Array<IConnectionParams>,
   sequentialErrorCount: number,
-  promise?: Promise<IServiceEntry>
+  promise?: Promise<IServiceDiscoveryEntry>
+  data: Array<IConnectionParams>
 }
+
+export type IServiceKvEntry = {
+  type: IKv,
+  name: IServiceName,
+  watcher: IConsulClientWatch,
+  sequentialErrorCount: number,
+  promise?: Promise<IServiceDiscoveryEntry>
+  data: INormalizedConsulKvValue
+}
+
+export type IServiceEntry = IServiceKvEntry | IServiceDiscoveryEntry
 
 export type IGenerateIdOpts = {
   serviceName: string,
