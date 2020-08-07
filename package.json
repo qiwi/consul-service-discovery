@@ -1,6 +1,6 @@
 {
   "name": "@qiwi/consul-service-discovery",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "Consul service discovery",
   "main": "target/es5/index.js",
   "types": "typings/index.d.ts",

@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/qiwi/consul-service-discovery/compare/v1.8.0...v1.8.1) (2020-08-07)
+
+
+### Bug Fixes
+
+* update types ([b0d86e2](https://github.com/qiwi/consul-service-discovery/commit/b0d86e2009bb60edc46cc8684fb68edf0fff8fc3))
+
 # [1.8.0](https://github.com/qiwi/consul-service-discovery/compare/v1.7.7...v1.8.0) (2020-08-06)
 
 
