@@ -38,9 +38,7 @@ export interface IConsulClient {
   watch (opts: Consul.Watch.Options): IConsulClientWatch
   health: IConsulServiceHealth,
   agent: IConsulAgent
-  kv: {
-    get: any
-  }
+  kv: any
 
 }
 
@@ -75,6 +73,7 @@ export interface IConsulDiscoveryService {
   }
   id?: string
   getConnectionParams (serviceName: string): Promise<IConnectionParams | undefined>
+  getKv (key: string): Promise<INormalizedConsulKvValue>
 }
 
 export interface IConnectionParams {
