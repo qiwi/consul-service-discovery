@@ -38,9 +38,7 @@ export interface IConsulClient {
   watch (opts: Consul.Watch.Options): IConsulClientWatch
   health: IConsulServiceHealth,
   agent: IConsulAgent
-  kv: {
-    get: (key: string) => IConsulKvValue
-  }
+  kv: any
 
 }
 
