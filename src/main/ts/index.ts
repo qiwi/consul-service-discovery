@@ -54,17 +54,18 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     })
   }
 
-  public getKv (key: string) {
+  public getKv (key: string): Promise<INormalizedConsulKvValue> {
     return this.ready(key, 'kv').then(({ data }) => data)
   }
 
-  public ready (
+  public ready<T extends IServiceType> (
     serviceName: string,
-    type: IServiceType
-  ): IPromise<IServiceDiscoveryEntry> {
+    type: T
+  ): IPromise<T extends 'discovery' ? IServiceDiscoveryEntry : IServiceKvEntry> {
     const service = this.getService(serviceName, type)
 
     if (service.promise) {
+      // @ts-ignore
       return service.promise
     }
 
@@ -87,27 +88,31 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
   public getService (
     serviceName: IServiceName,
     type: IServiceType
-  ): IServiceEntry {
+  ): IServiceDiscoveryEntry | IServiceKvEntry {
     return this.services[type][serviceName] || this.createService(serviceName, type)
   }
 
   public createService (
     serviceName: IServiceName,
     type: IServiceType
-  ): IServiceEntry {
+  ): IServiceDiscoveryEntry | IServiceKvEntry {
     const watcher = this.getWatcher(serviceName, type)
-    const service = {
+    const service: IServiceKvEntry | IServiceDiscoveryEntry = type === 'kv' ? {
       type,
       name: serviceName,
       watcher,
-      data: type === 'kv' ? {} : [],
+      data: {},
+      sequentialErrorCount: 0
+    } : {
+      type,
+      name: serviceName,
+      watcher,
+      data: [],
       sequentialErrorCount: 0
     }
 
-    // @ts-ignore
     this.services[type][serviceName] = service
 
-    // @ts-ignore
     return service
   }
 

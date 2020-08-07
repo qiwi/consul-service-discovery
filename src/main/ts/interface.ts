@@ -39,7 +39,7 @@ export interface IConsulClient {
   health: IConsulServiceHealth,
   agent: IConsulAgent
   kv: {
-    get: any
+    get: (key: string) => IConsulKvValue
   }
 
 }
@@ -75,6 +75,7 @@ export interface IConsulDiscoveryService {
   }
   id?: string
   getConnectionParams (serviceName: string): Promise<IConnectionParams | undefined>
+  getKv (key: string): Promise<INormalizedConsulKvValue>
 }
 
 export interface IConnectionParams {
