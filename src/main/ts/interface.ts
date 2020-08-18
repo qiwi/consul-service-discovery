@@ -63,7 +63,7 @@ export interface INormalizedConsulKvValue {
   lockIndex?: number,
   key?: string,
   flags?: number,
-  value?: string
+  value?: string | null
 }
 
 export interface IConsulDiscoveryService {

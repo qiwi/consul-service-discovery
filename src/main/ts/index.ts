@@ -303,13 +303,13 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
         data
       )
     }
-    if (data.value) {
+    if ((service.data as INormalizedConsulKvValue).value) {
       resolve(service)
     } else {
       this.handleError(
         service,
         reject,
-        new Error('got empty or invalid connection params'),
+        new Error('got empty or invalid kv data'),
         services
       )
     }
@@ -403,7 +403,7 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
       ConsulDiscoveryService.clearService(services, service)
     }
 
-    if (service.type === 'kv' && service.data.value === undefined) {
+    if (service.type === 'kv' && (service.data.value === undefined || service.data.value === null)) {
       ConsulDiscoveryService.clearService(services, service)
     }
 
