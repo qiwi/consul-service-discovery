@@ -1,30 +1,26 @@
 /** @module @qiwi/consul-service-discovery */
 
-import * as Consul from 'consul'
-import { v4 as uuid } from 'uuid'
+import Consul from 'consul'
 import log from './logger'
-import cxt from './ctx'
+import cxt from './cxt'
 import { promiseFactory, sample, repeat } from './util'
 import { IControlled } from 'push-it-to-the-limit'
 import { IPromise } from '@qiwi/substrate'
 import {
   IConnectionParams,
   IConsulDiscoveryService,
-  IEntryPoint,
-  IConsulKvValue,
-  IServiceEntry,
   INormalizedConsulKvValue,
-  ILibConfig,
   IConsulClient,
   IServiceName,
   IServiceDiscoveryEntry,
   IServiceKvEntry,
   IServiceType,
   IConsulClientWatch,
-  IGenerateIdOpts,
   TConsulAgentServiceRegisterOptions,
-  TConsulAgentCheckListOptions
+  TConsulAgentCheckListOptions,
+  IConsulKvSetOptions, ILibConfig
 } from './interface'
+import { ConsulUtils } from './consulUtils'
 
 export * from './interface'
 export const BACKOFF_MAX = 20000
@@ -58,6 +54,18 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     return this.ready(key, 'kv').then(({ data }) => data)
   }
 
+  public setKv (data: IConsulKvSetOptions): IPromise<boolean> {
+    return new Promise((resolve, reject) => {
+      this._consul.kv.set(data, (err, res) => {
+        if (err) {
+          reject(err)
+        }
+
+        resolve(res)
+      })
+    })
+  }
+
   public ready<T extends IServiceType> (
     serviceName: string,
     type: T
@@ -74,13 +82,13 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     service.promise = promise
 
     log.debug(`watcher initialized, service=${serviceName}`)
-    ConsulDiscoveryService.watchOnChange(
+    ConsulUtils.watchOnChange(
       service,
       resolve,
       reject,
       this.services[type]
     )
-    ConsulDiscoveryService.watchOnError(service, reject, this.services[type])
+    ConsulUtils.watchOnError(service, reject, this.services[type])
 
     return promise
   }
@@ -196,7 +204,7 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
   ): Promise<any> {
     const id: string =
       this._id ||
-      ConsulDiscoveryService.generateId({
+      ConsulUtils.generateId({
         serviceName: opts.name,
         remoteAddress: opts.address,
         port: opts.port
@@ -214,7 +222,7 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     const agentService = this._consul.agent.service
     const register = agentService.register.bind(agentService)
 
-    return ConsulDiscoveryService.promisify(register, _opts)
+    return ConsulUtils.promisify(register, _opts)
   }
 
   public list (token?: string): Promise<any> {
@@ -222,23 +230,7 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     const agentService = this._consul.agent.service
     const getList = this._consul.agent.service.list.bind(agentService)
 
-    return ConsulDiscoveryService.promisify(getList, opts)
-  }
-
-  static promisify (method, opts): Promise<any> {
-    const { resolve, reject, promise } = promiseFactory()
-
-    method(opts, (err, data) => {
-      if (err) {
-        reject.call(promise, err)
-
-        return
-      }
-
-      resolve.call(promise, data)
-    })
-
-    return promise
+    return ConsulUtils.promisify(getList, opts)
   }
 
   public find (id): Promise<any> {
@@ -249,178 +241,10 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
       })
   }
 
-  static generateId ({ serviceName, localAddress = '0.0.0.0', port = '', remoteAddress = '0.0.0.0' }: IGenerateIdOpts) {
-    return `${serviceName}-${remoteAddress}-${localAddress}-${port}-${uuid()}`.replace(
-      /\./g,
-      '-'
-    )
-  }
-
   static configure (opts: ILibConfig): void {
-    Object.assign(cxt, opts)
-
-    promiseFactory.Promise = cxt.Promise
+    ConsulUtils.configure(opts, cxt, promiseFactory)
   }
 
-  static normalizeKvValue (data: IConsulKvValue): INormalizedConsulKvValue {
-    return Object.keys(data).reduce((acc, el) => {
-      const key = el[0].toLowerCase() + el.slice(1)
-      acc[key] = data[el]
-      return acc
-    }, {} as INormalizedConsulKvValue)
-  }
-
-  static normalizeEntryPoint (data: IEntryPoint[]): IConnectionParams[] {
-    return data.reduce((memo: IConnectionParams[], entryPoint: IEntryPoint) => {
-      const address = entryPoint.Service.Address || entryPoint.Node.Address
-      const port = entryPoint.Service.Port
-
-      if (address) {
-        memo.push({
-          host: address,
-          port: port
-        })
-      }
-
-      return memo
-    }, [])
-  }
-
-  static handleKvValue (
-    data: INormalizedConsulKvValue,
-    services,
-    service: IServiceEntry,
-    resolve,
-    reject
-  ) {
-    if (data.value) {
-      service.sequentialErrorCount = 0
-      service.data = data
-    } else {
-      log.warn(
-        `watcher got empty or invalid kv data, service=${service.name}`,
-        'data=',
-        data
-      )
-    }
-    if ((service.data as INormalizedConsulKvValue).value) {
-      resolve(service)
-    } else {
-      this.handleError(
-        service,
-        reject,
-        new Error('got empty or invalid kv data'),
-        services
-      )
-    }
-  }
-
-  static handleConnectionParams (
-    data: IConnectionParams[],
-    services,
-    service: IServiceDiscoveryEntry,
-    resolve,
-    reject
-  ) {
-    if (data.length > 0) {
-      service.sequentialErrorCount = 0
-      service.data.length = 0
-      service.data.push(...data)
-    } else {
-      log.warn(
-        `watcher got empty or invalid connection params, service=${service.name}`,
-        'data=',
-        data
-      )
-    }
-
-    if (service.data.length) {
-      resolve(service)
-    } else {
-      this.handleError(
-        service,
-        reject,
-        new Error('got empty or invalid connection params'),
-        services
-      )
-    }
-  }
-
-  static watchOnChange (
-    service: IServiceEntry,
-    resolve: Function,
-    reject: Function,
-    services: Record<string, IServiceEntry>
-  ): void {
-    if (service.watcher.listenerCount('change')) {
-      return
-    }
-
-    service.watcher.on('change', (data: IEntryPoint[] | IConsulKvValue) => {
-      const normalizedData:
-        | IConnectionParams[]
-        | INormalizedConsulKvValue = Array.isArray(data)
-        ? ConsulDiscoveryService.normalizeEntryPoint(data)
-        : ConsulDiscoveryService.normalizeKvValue(data)
-
-      if (Array.isArray(normalizedData)) {
-        //  @ts-ignore
-        this.handleConnectionParams(normalizedData, services, service, resolve, reject)
-      } else {
-        this.handleKvValue(normalizedData, services, service, resolve, reject)
-      }
-    })
-  }
-
-  static watchOnError (
-    service: IServiceEntry,
-    reject: Function,
-    services: Record<string, IServiceEntry>
-  ): void {
-    if (service.watcher.listenerCount('error')) {
-      return
-    }
-
-    service.watcher.on('error', (err: Error) =>
-      this.handleError(service, reject, err, services)
-    )
-  }
-
-  static handleError (
-    service: IServiceEntry,
-    reject: Function,
-    err: any,
-    services: Record<string, IServiceEntry>
-  ): void {
-    service.sequentialErrorCount += 1
-
-    log.error(`watcher error, service=${service.name}`, 'error=', err)
-    log.info(`sequentialErrorCount=${service.sequentialErrorCount}`)
-    reject(err)
-    delete service.promise
-
-    if (service.type === 'discovery' && service.data.length === 0) {
-      ConsulDiscoveryService.clearService(services, service)
-    }
-
-    if (service.type === 'kv' && (service.data.value === undefined || service.data.value === null)) {
-      ConsulDiscoveryService.clearService(services, service)
-    }
-
-    // Once WATCH_ERROR_LIMIT is reached, reset watcher and instances
-    if (service.sequentialErrorCount >= WATCH_ERROR_LIMIT) {
-      ConsulDiscoveryService.clearService(services, service)
-      log.error(`watcher error limit is reached, service=${service.name}`)
-    }
-  }
-
-  static clearService (
-    services: Record<string, IServiceEntry>,
-    service: IServiceEntry
-  ) {
-    service.watcher.end()
-    delete services[service.name]
-  }
 }
 
 export default ConsulDiscoveryService
