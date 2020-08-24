@@ -224,8 +224,12 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
 
     return ConsulUtils.promisify(register, _opts)
       .then((data) => {
-        log.info('registered in consul OK')
+        log.info(`service ${id} registered`)
         return data
+      })
+      .catch(e => {
+        log.error(`failed to register ${id}`)
+        throw e
       })
 
   }
