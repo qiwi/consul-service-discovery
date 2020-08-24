@@ -223,6 +223,11 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     const register = agentService.register.bind(agentService)
 
     return ConsulUtils.promisify(register, _opts)
+      .then((data) => {
+        log.info('registered in consul OK')
+        return data
+      })
+
   }
 
   public list (token?: string): Promise<any> {
