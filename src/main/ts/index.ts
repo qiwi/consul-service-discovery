@@ -2,7 +2,7 @@
 
 import Consul from 'consul'
 import log from './logger'
-import cxt from './ctx'
+import ctx from './ctx'
 import { promiseFactory, sample, repeat } from './util'
 import { IControlled } from 'push-it-to-the-limit'
 import { IPromise } from '@qiwi/substrate'
@@ -18,9 +18,8 @@ import {
   IConsulClientWatch,
   TConsulAgentServiceRegisterOptions,
   TConsulAgentCheckListOptions,
-  IConsulKvSetOptions
+  IConsulKvSetOptions, ILibConfig
 } from './interface'
-
 import { ConsulUtils } from './consulUtils'
 
 export * from './interface'
@@ -45,7 +44,7 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
   private _repeatableRegister?: IControlled
 
   constructor ({ host, port }: IConnectionParams) {
-    this._consul = cxt.Consul({
+    this._consul = ctx.Consul({
       host,
       port: port.toString()
     })
@@ -241,6 +240,11 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
         throw new Error(`fail find service: ${e}`)
       })
   }
+
+  static configure (opts: ILibConfig): void {
+    ConsulUtils.configure(opts, ctx, promiseFactory)
+  }
+
 }
 
 export default ConsulDiscoveryService

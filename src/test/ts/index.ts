@@ -15,7 +15,7 @@ import {
 } from '../stub/mocks'
 
 describe('ConsulServiceDiscovery', () => {
-  ConsulUtils.configure({ Consul: ConsulClientFactory })
+  ConsulDiscoveryService.configure({ Consul: ConsulClientFactory })
 
   it('exposes ConsulDiscoveryService as module default', () => {
     expect(def).toBe(ConsulDiscoveryService)

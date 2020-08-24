@@ -8,7 +8,6 @@ import {
   INormalizedConsulKvValue, IServiceDiscoveryEntry, IServiceEntry
 } from './interface'
 import { v4 as uuid } from 'uuid'
-import cxt from './ctx'
 import log from './logger'
 import { WATCH_ERROR_LIMIT } from './index'
 
@@ -36,10 +35,10 @@ export class ConsulUtils {
     )
   }
 
-  static configure (opts: ILibConfig): void {
-    Object.assign(cxt, opts)
+  static configure (opts: ILibConfig, ctx, promiseFactory): void {
+    Object.assign(ctx, opts)
 
-    promiseFactory.Promise = cxt.Promise
+    promiseFactory.Promise = ctx.Promise
   }
 
   static normalizeKvValue (data: IConsulKvValue): INormalizedConsulKvValue {

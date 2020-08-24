@@ -42,7 +42,6 @@ export type IConsulKvSetOptions = {
   cas?: string
   acquire?: string
   release?: string
-  // Так?
   token?: string
 }
 
