@@ -1,97 +1,21 @@
 import def, {
   ConsulDiscoveryService,
-  IConnectionParams, IConsulAgent, IConsulAgentService,
-  IConsulClient,
-  IConsulClientFactory, IConsulKvValue,
-  IConsulServiceHealth,
-  ILogger,
-  TConsulAgentCheckListOptions,
-  TConsulAgentServiceRegisterOptions,
   WATCH_ERROR_LIMIT
 } from '../../main/ts/index'
-import { LOG_PREFIX } from '../../main/ts/logger'
-import cxt from '../../main/ts/ctx'
 import { EventEmitter } from 'events'
-import * as Bluebird from 'bluebird'
-import * as Consul from 'consul'
-import { noop } from 'lodash'
-import { promiseFactory } from '../../main/ts/util'
+import { ConsulUtils } from '../../main/ts/consulUtils'
 
-class FakeWatcher extends EventEmitter {
-  end = noop
-}
-
-class FakeAgentService implements IConsulAgentService {
-  entries: { [key: string]: any}
-
-  constructor () {
-    this.entries = {}
-  }
-
-  register<TData> (opts: TConsulAgentServiceRegisterOptions, cb: Consul.Callback<TData>): void {
-    this.entries[opts.id || opts.name] = opts
-
-    cb()
-  }
-
-  list<TData> (opts: TConsulAgentCheckListOptions, cb: Consul.Callback<any>): void {
-    cb(undefined, this.entries)
-  }
-}
-
-class ConsulClient implements IConsulClient {
-  health: IConsulServiceHealth
-  agent: IConsulAgent
-  kv: {
-    get: any
-  }
-
-  watch () {
-    return new FakeWatcher()
-  }
-
-  constructor (opts?: Object | undefined) {
-    this.health = { service: null }
-    this.kv = { get: null }
-    this.agent = {
-      service: new FakeAgentService()
-    }
-  }
-}
-
-const ConsulClientFactory: IConsulClientFactory = (opts?: Consul.ConsulOptions) => {
-  return new ConsulClient(opts)
-}
-
-const onChangeResponse: any = [
-  {
-    Service: {
-      Address: '0.0.0.0',
-      Port: '8888'
-    }
-  }
-]
-
-const onChangeResponseKv: IConsulKvValue = {
-  CreateIndex: 1,
-  ModifyIndex: 1,
-  LockIndex: 1,
-  Key: 'string',
-  Flags: 1,
-  Value: 'string'
-}
-
-const testParams: IConnectionParams = {
-  host: '0.0.0.0',
-  port: '8888'
-}
-
-const expectedError = 'test error'
-
-const fakeLogger: ILogger = { ...console }
+import {
+  expectedError,
+  ConsulClientFactory,
+  FakeWatcher,
+  onChangeResponse,
+  onChangeResponseKv,
+  testParams
+} from '../stub/mocks'
 
 describe('ConsulServiceDiscovery', () => {
-  ConsulDiscoveryService.configure({ Consul: ConsulClientFactory })
+  ConsulUtils.configure({ Consul: ConsulClientFactory })
 
   it('exposes ConsulDiscoveryService as module default', () => {
     expect(def).toBe(ConsulDiscoveryService)
@@ -106,6 +30,13 @@ describe('ConsulServiceDiscovery', () => {
   })
 
   describe('prototype', () => {
+    describe('#setKv', () => {
+      it('', async () => {
+        const service = new ConsulDiscoveryService(testParams)
+        expect(await service.setKv({ key: 'key', value: 'value' })).toEqual(true)
+      })
+    })
+
     describe('#register', () => {
       it('returns void on success', async () => {
         const service = new ConsulDiscoveryService(testParams)
@@ -264,12 +195,14 @@ describe('ConsulServiceDiscovery', () => {
       })
     })
 
-    describe('#getKv', async () => {
-      const discoveryService = new ConsulDiscoveryService(testParams)
-      const promise = discoveryService.getKv('kvservice')
-      const watcher = discoveryService.services.kv['kvservice'].watcher
-      expect(watcher).not.toBeUndefined()
-      expect(promise).not.toBeUndefined()
+    describe('#getKv', () => {
+      it('getKv works correctly', async () => {
+        const discoveryService = new ConsulDiscoveryService(testParams)
+        const promise = discoveryService.getKv('kvservice')
+        const watcher = discoveryService.services.kv['kvservice'].watcher
+        expect(watcher).not.toBeUndefined()
+        expect(promise).not.toBeUndefined()
+      })
     })
 
     describe('#getServiceConnections', () => {
@@ -374,96 +307,6 @@ describe('ConsulServiceDiscovery', () => {
         // tslint:disable-next-line:no-floating-promises
         return expect(serviceConnectionParams).resolves.toEqual(testParams)
       }, 1000)
-    })
-  })
-
-  describe('static', () => {
-    describe('#normalizeKvValue', () => {
-      it('normalize kv value', async () => {
-        const value = {
-          CreateIndex: 1,
-          ModifyIndex: 2,
-          LockIndex: 3,
-          Key: 'string',
-          Flags: 4,
-          Value: 'string'
-        }
-
-        expect(ConsulDiscoveryService.normalizeKvValue(value)).toMatchObject({
-          createIndex: 1,
-          modifyIndex: 2,
-          lockIndex: 3,
-          key: 'string',
-          flags: 4,
-          value: 'string'
-        })
-      })
-    })
-    describe('#handleKvValue', () => {
-      it('handle kv value', async () => {
-        const value = {
-          createIndex: 1,
-          modifyIndex: 2,
-          lockIndex: 3,
-          key: 'string',
-          flags: 4,
-          value: 'string'
-        }
-        const { resolve, reject, promise } = promiseFactory()
-
-        ConsulDiscoveryService.handleKvValue(value, { service: {} },
-          // @ts-ignore
-          { type: 'kv', data: {}, name: 'service', promise, sequentialErrorCount: 0, watcher: {} }, resolve, reject)
-        expect(await promise).toMatchObject({})
-      })
-    })
-    describe('#promisify', () => {
-      it('handle kv value', async () => {
-        const value = {
-          createIndex: 1,
-          modifyIndex: 2,
-          lockIndex: 3,
-          key: 'string',
-          flags: 4,
-          value: 'string'
-        }
-        const { resolve, reject, promise } = promiseFactory()
-
-        ConsulDiscoveryService.handleKvValue(value, { service: {} },
-          // @ts-ignore
-          { type: 'kv', data: {}, name: 'service', promise, sequentialErrorCount: 0, watcher: {} }, resolve, reject)
-        expect(await promise).toMatchObject({})
-      })
-    })
-    describe('#configure', async () => {
-      it('reject on error', async () => {
-        const method = (opts, fn) => {
-          fn('test reject', null)
-        }
-        try {
-          await ConsulDiscoveryService.promisify(method, 'test')
-        } catch (e) {
-          expect(e).toBe('test reject')
-        }
-      })
-
-      it('supports custom Promises', async () => {
-        ConsulDiscoveryService.configure({ Promise: Bluebird })
-
-        const res = new ConsulDiscoveryService(testParams).ready('bar', 'discovery')
-
-        // tslint:disable-next-line:no-floating-promises
-        expect(res).toBeInstanceOf(Bluebird)
-        expect(cxt.Promise).toBe(Bluebird)
-        // tslint:disable-next-line:no-floating-promises
-        expect(res).resolves.toEqual(undefined)
-      })
-
-      it('supports custom consul client factory', () => {
-        ConsulDiscoveryService.configure({ Consul: ConsulClientFactory })
-
-        expect(cxt.Consul).toBe(ConsulClientFactory)
-      })
     })
   })
 })

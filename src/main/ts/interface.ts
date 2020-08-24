@@ -34,12 +34,23 @@ export interface IConsulAgent {
   [key: string]: any
 }
 
+export type IConsulKvSetOptions = {
+  key: string
+  value: string | Buffer
+  dc?: string
+  flags?: number
+  cas?: string
+  acquire?: string
+  release?: string
+  // Так?
+  token?: string
+}
+
 export interface IConsulClient {
   watch (opts: Consul.Watch.Options): IConsulClientWatch
   health: IConsulServiceHealth,
   agent: IConsulAgent
   kv: any
-
 }
 
 export interface IConsulClientFactory {
