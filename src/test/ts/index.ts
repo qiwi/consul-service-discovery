@@ -3,7 +3,6 @@ import def, {
   WATCH_ERROR_LIMIT
 } from '../../main/ts/index'
 import { EventEmitter } from 'events'
-import { ConsulUtils } from '../../main/ts/consulUtils'
 
 import {
   expectedError,
@@ -13,6 +12,8 @@ import {
   onChangeResponseKv,
   testParams
 } from '../stub/mocks'
+import * as Bluebird from 'bluebird'
+import cxt from '../../main/ts/cxt'
 
 describe('ConsulServiceDiscovery', () => {
   ConsulDiscoveryService.configure({ Consul: ConsulClientFactory })
@@ -308,5 +309,31 @@ describe('ConsulServiceDiscovery', () => {
         return expect(serviceConnectionParams).resolves.toEqual(testParams)
       }, 1000)
     })
+  })
+
+  describe('static', () => {
+    describe('#configure', () => {
+
+      it('supports custom Promises', async () => {
+        // tslint:disable-next-line:no-empty
+        ConsulDiscoveryService.configure({ Promise: Bluebird })
+
+        const res = new ConsulDiscoveryService(testParams).ready('bar', 'discovery')
+
+        // tslint:disable-next-line:no-floating-promises
+        expect(res).toBeInstanceOf(Bluebird)
+        expect(cxt.Promise).toBe(Bluebird)
+        // tslint:disable-next-line:no-floating-promises
+        expect(res).resolves.toEqual(undefined)
+      })
+
+      it('supports custom consul client factory', () => {
+        // tslint:disable-next-line:no-empty
+        ConsulDiscoveryService.configure({ Consul: ConsulClientFactory, logger: console, Promise: Bluebird })
+
+        expect(cxt.Consul).toBe(ConsulClientFactory)
+      })
+    })
+
   })
 })

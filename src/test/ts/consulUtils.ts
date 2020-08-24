@@ -3,7 +3,7 @@ import {
 } from '../../main/ts'
 import { promiseFactory } from '../../main/ts/util'
 import * as Bluebird from 'bluebird'
-import ctx from '../../main/ts/ctx'
+import cxt from '../../main/ts/cxt'
 import { ConsulUtils } from '../../main/ts/consulUtils'
 import { ConsulClientFactory, testParams } from '../stub/mocks'
 
@@ -80,22 +80,22 @@ describe('ConsulUtils', () => {
 
       it('supports custom Promises', async () => {
         // tslint:disable-next-line:no-empty
-        ConsulUtils.configure({ Promise: Bluebird }, ctx, promiseFactory)
+        ConsulUtils.configure({ Promise: Bluebird }, cxt, promiseFactory)
 
         const res = new ConsulDiscoveryService(testParams).ready('bar', 'discovery')
 
         // tslint:disable-next-line:no-floating-promises
         expect(res).toBeInstanceOf(Bluebird)
-        expect(ctx.Promise).toBe(Bluebird)
+        expect(cxt.Promise).toBe(Bluebird)
         // tslint:disable-next-line:no-floating-promises
         expect(res).resolves.toEqual(undefined)
       })
 
       it('supports custom consul client factory', () => {
         // tslint:disable-next-line:no-empty
-        ConsulUtils.configure({ Consul: ConsulClientFactory, logger: console, Promise: Bluebird }, ctx, promiseFactory)
+        ConsulUtils.configure({ Consul: ConsulClientFactory, logger: console, Promise: Bluebird }, cxt, promiseFactory)
 
-        expect(ctx.Consul).toBe(ConsulClientFactory)
+        expect(cxt.Consul).toBe(ConsulClientFactory)
       })
     })
   })

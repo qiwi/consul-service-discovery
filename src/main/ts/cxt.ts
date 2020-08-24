@@ -1,12 +1,12 @@
 /** @module @qiwi/consul-service-discovery */
 
-import { ICtx } from './interface'
+import { ICxt } from './interface'
 import * as Consul from 'consul'
 
-export const ctx: ICtx = {
+export const cxt: ICxt = {
   Consul: Consul,
   Promise: Promise,
   logger: console
 }
 
-export default ctx
+export default cxt

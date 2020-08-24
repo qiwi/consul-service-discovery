@@ -2,7 +2,7 @@
 
 import Consul from 'consul'
 import log from './logger'
-import ctx from './ctx'
+import cxt from './cxt'
 import { promiseFactory, sample, repeat } from './util'
 import { IControlled } from 'push-it-to-the-limit'
 import { IPromise } from '@qiwi/substrate'
@@ -44,7 +44,7 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
   private _repeatableRegister?: IControlled
 
   constructor ({ host, port }: IConnectionParams) {
-    this._consul = ctx.Consul({
+    this._consul = cxt.Consul({
       host,
       port: port.toString()
     })
@@ -242,7 +242,7 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
   }
 
   static configure (opts: ILibConfig): void {
-    ConsulUtils.configure(opts, ctx, promiseFactory)
+    ConsulUtils.configure(opts, cxt, promiseFactory)
   }
 
 }

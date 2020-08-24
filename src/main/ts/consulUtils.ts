@@ -35,10 +35,10 @@ export class ConsulUtils {
     )
   }
 
-  static configure (opts: ILibConfig, ctx, promiseFactory): void {
-    Object.assign(ctx, opts)
+  static configure (opts: ILibConfig, cxt, promiseFactory): void {
+    Object.assign(cxt, opts)
 
-    promiseFactory.Promise = ctx.Promise
+    promiseFactory.Promise = cxt.Promise
   }
 
   static normalizeKvValue (data: IConsulKvValue): INormalizedConsulKvValue {
