@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/qiwi/consul-service-discovery/compare/v1.8.2...v1.9.0) (2020-08-24)
+
+
+### Features
+
+* add setKv method, some refactor ([fdbbc87](https://github.com/qiwi/consul-service-discovery/commit/fdbbc8779abeee3c718d6c44ce41a03bbfe6eed1))
+
 ## [1.8.2](https://github.com/qiwi/consul-service-discovery/compare/v1.8.1...v1.8.2) (2020-08-18)
 
 
