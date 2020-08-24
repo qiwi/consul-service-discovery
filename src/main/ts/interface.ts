@@ -56,7 +56,7 @@ export interface IConsulClientFactory {
   (opts?: Consul.ConsulOptions): IConsulClient
 }
 
-export interface ICxt {
+export interface ICtx {
   Consul: IConsulClientFactory
   Promise: any
   logger: ILogger
