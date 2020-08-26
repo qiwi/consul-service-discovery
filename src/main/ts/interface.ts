@@ -77,6 +77,7 @@ export interface INormalizedConsulKvValue {
 }
 
 export interface IConsulDiscoveryService {
+  cxt: ICxt
   services: {
     discovery: { [key: string]: IServiceDiscoveryEntry }
     kv: { [key: string]: IServiceKvEntry }

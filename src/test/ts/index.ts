@@ -1,7 +1,5 @@
-import def, {
-  ConsulDiscoveryService,
-  WATCH_ERROR_LIMIT
-} from '../../main/ts/index'
+import def, { ConsulDiscoveryService } from '../../main/ts/index'
+import { WATCH_ERROR_LIMIT } from '../../main/ts/consulUtils'
 import { EventEmitter } from 'events'
 
 import {
@@ -12,19 +10,15 @@ import {
   onChangeResponseKv,
   testParams
 } from '../stub/mocks'
-import * as Bluebird from 'bluebird'
-import cxt from '../../main/ts/cxt'
 
 describe('ConsulServiceDiscovery', () => {
-  ConsulDiscoveryService.configure({ Consul: ConsulClientFactory })
-
   it('exposes ConsulDiscoveryService as module default', () => {
     expect(def).toBe(ConsulDiscoveryService)
   })
 
   describe('constructor', () => {
     it('returns proper instance', () => {
-      const service = new ConsulDiscoveryService(testParams)
+      const service = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
 
       expect(service).toBeInstanceOf(ConsulDiscoveryService)
     })
@@ -33,14 +27,14 @@ describe('ConsulServiceDiscovery', () => {
   describe('prototype', () => {
     describe('#setKv', () => {
       it('', async () => {
-        const service = new ConsulDiscoveryService(testParams)
+        const service = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
         expect(await service.setKv({ key: 'key', value: 'value' })).toEqual(true)
       })
     })
 
     describe('#register', () => {
       it('returns void on success', async () => {
-        const service = new ConsulDiscoveryService(testParams)
+        const service = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
         const name = 'self'
         const address = '127.0.0.1'
         const opts = {
@@ -53,7 +47,7 @@ describe('ConsulServiceDiscovery', () => {
       })
 
       it('provides continuous (repeatable) registration', done => {
-        const service = new ConsulDiscoveryService(testParams)
+        const service = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
         const name = 'self'
         const address = '127.0.0.1'
         const opts = {
@@ -89,7 +83,7 @@ describe('ConsulServiceDiscovery', () => {
 
     describe('#list', () => {
       it('returns services list', async () => {
-        const service = new ConsulDiscoveryService(testParams)
+        const service = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
         const list = {
           'example-api123-127-0-0-1-0-0-0-0-8500-2238a091-a525-49b6-88a2-e755189cbe50':
           {
@@ -140,7 +134,7 @@ describe('ConsulServiceDiscovery', () => {
 
     describe('#getWatcher', () => {
       it('returns a new one Consul.Watcher instance', () => {
-        const discoveryService = new ConsulDiscoveryService(testParams)
+        const discoveryService = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
         const watcher = discoveryService.getWatcher('foo', 'discovery')
 
         expect(watcher).toBeInstanceOf(EventEmitter)
@@ -148,7 +142,7 @@ describe('ConsulServiceDiscovery', () => {
     })
 
     describe('#getService', () => {
-      const discoveryService = new ConsulDiscoveryService(testParams)
+      const discoveryService = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
 
       it('creates new discovery service entry', () => {
         const service = discoveryService.getService('foobar', 'discovery')
@@ -189,7 +183,7 @@ describe('ConsulServiceDiscovery', () => {
 
     describe('#ready', () => {
       it('reuses service entry\'s promise', () => {
-        const discoveryService = new ConsulDiscoveryService(testParams)
+        const discoveryService = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
 
         // tslint:disable-next-line:no-floating-promises
         expect(discoveryService.ready('foo', 'discovery')).toBe(discoveryService.ready('foo', 'discovery'))
@@ -198,7 +192,7 @@ describe('ConsulServiceDiscovery', () => {
 
     describe('#getKv', () => {
       it('getKv works correctly', async () => {
-        const discoveryService = new ConsulDiscoveryService(testParams)
+        const discoveryService = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
         const promise = discoveryService.getKv('kvservice')
         const watcher = discoveryService.services.kv['kvservice'].watcher
         expect(watcher).not.toBeUndefined()
@@ -208,7 +202,7 @@ describe('ConsulServiceDiscovery', () => {
 
     describe('#getServiceConnections', () => {
       it('resolves available service connections', async () => {
-        const discoveryService = new ConsulDiscoveryService(testParams)
+        const discoveryService = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
         const promise = discoveryService.getConnections('service')
         const watcher = discoveryService.services.discovery['service'].watcher
         watcher.emit('change', [
@@ -238,7 +232,7 @@ describe('ConsulServiceDiscovery', () => {
     describe('#getConnectionParams', () => {
       it('resolves service conn params through watcher subscription (onChange)', async () => {
         expect.assertions(1)
-        const discoveryService = new ConsulDiscoveryService(testParams)
+        const discoveryService = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
 
         const serviceConnectionParams = discoveryService.getConnectionParams('testService')
         const watcher = discoveryService.services.discovery['testService'].watcher
@@ -251,7 +245,7 @@ describe('ConsulServiceDiscovery', () => {
       }, 1000)
 
       it('is compatible with `await` operator', async () => {
-        const discoveryService = new ConsulDiscoveryService(testParams)
+        const discoveryService = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
         const promise = discoveryService.getConnectionParams('testService')
         const watcher = discoveryService.services.discovery['testService'].watcher
         watcher.emit('change', onChangeResponse)
@@ -263,7 +257,7 @@ describe('ConsulServiceDiscovery', () => {
 
       it('rejects the result promise once attempt limit is reached (onError)', async () => {
         expect.assertions(1)
-        const discoveryService = new ConsulDiscoveryService(testParams)
+        const discoveryService = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
         const serviceConnectionParams = discoveryService.getConnectionParams('testService')
         const watcher = discoveryService.services.discovery['testService'].watcher
 
@@ -276,7 +270,7 @@ describe('ConsulServiceDiscovery', () => {
       }, 1000)
 
       it('rejects the result promise once attempt limit is reached (onChange)', async () => {
-        const discoveryService = new ConsulDiscoveryService(testParams)
+        const discoveryService = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
         const serviceConnectionParams = discoveryService.getConnectionParams('testService')
         const watcher = discoveryService.services.discovery['testService'].watcher
 
@@ -289,7 +283,7 @@ describe('ConsulServiceDiscovery', () => {
       }, 1000)
 
       it('resolves promise with the previous valid response', async () => {
-        const discoveryService = new ConsulDiscoveryService(testParams)
+        const discoveryService = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
         const serviceConnectionParams = discoveryService.getConnectionParams('testService')
         const watcher = discoveryService.services.discovery['testService'].watcher
 
@@ -309,31 +303,5 @@ describe('ConsulServiceDiscovery', () => {
         return expect(serviceConnectionParams).resolves.toEqual(testParams)
       }, 1000)
     })
-  })
-
-  describe('static', () => {
-    describe('#configure', () => {
-
-      it('supports custom Promises', async () => {
-        // tslint:disable-next-line:no-empty
-        ConsulDiscoveryService.configure({ Promise: Bluebird })
-
-        const res = new ConsulDiscoveryService(testParams).ready('bar', 'discovery')
-
-        // tslint:disable-next-line:no-floating-promises
-        expect(res).toBeInstanceOf(Bluebird)
-        expect(cxt.Promise).toBe(Bluebird)
-        // tslint:disable-next-line:no-floating-promises
-        expect(res).resolves.toEqual(undefined)
-      })
-
-      it('supports custom consul client factory', () => {
-        // tslint:disable-next-line:no-empty
-        ConsulDiscoveryService.configure({ Consul: ConsulClientFactory, logger: console, Promise: Bluebird })
-
-        expect(cxt.Consul).toBe(ConsulClientFactory)
-      })
-    })
-
   })
 })

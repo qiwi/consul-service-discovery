@@ -1,12 +1,13 @@
 /** @module @qiwi/consul-service-discovery */
 
-import { ICxt } from './interface'
+import { ICxt, ILibConfig } from './interface'
 import * as Consul from 'consul'
+import { createeLogger } from './logger'
 
-export const cxt: ICxt = {
-  Consul: Consul,
-  Promise: Promise,
-  logger: console
+export const createContext = (cxt: ILibConfig = {}): ICxt => {
+  return {
+    Consul: cxt.Consul || Consul,
+    Promise: cxt.Promise || Promise,
+    logger: createeLogger(cxt.logger || console)
+  }
 }
-
-export default cxt
