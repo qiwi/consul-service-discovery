@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>IConsulServiceHealth | @qiwi/consul-service-discovery</title>
+	<title>ILibConfig | @qiwi/consul-service-discovery</title>
 	<meta name="description" content="Documentation for @qiwi/consul-service-discovery">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,16 +54,16 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/reflection-362.html"></a>
+					<a href="../modules/reflection-363.html"></a>
 				</li>
 				<li>
-					<a href="../modules/reflection-362.reflection-1.html"></a>
+					<a href="../modules/reflection-363.reflection-1.html"></a>
 				</li>
 				<li>
-					<a href="reflection-362.reflection-1.iconsulservicehealth-1.html">IConsulServiceHealth</a>
+					<a href="reflection-363.reflection-1.ilibconfig-1.html">ILibConfig</a>
 				</li>
 			</ul>
-			<h1>Interface IConsulServiceHealth</h1>
+			<h1>Interface ILibConfig</h1>
 		</div>
 	</div>
 </header>
@@ -74,7 +74,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">IConsulServiceHealth</span>
+						<span class="target">ILibConfig</span>
 					</li>
 				</ul>
 			</section>
@@ -85,7 +85,9 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="reflection-362.reflection-1.iconsulservicehealth-1.html#service" class="tsd-kind-icon">service</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="reflection-363.reflection-1.ilibconfig-1.html#consul" class="tsd-kind-icon">Consul</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="reflection-363.reflection-1.ilibconfig-1.html#promise" class="tsd-kind-icon">Promise</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="reflection-363.reflection-1.ilibconfig-1.html#logger" class="tsd-kind-icon">logger</a></li>
 							</ul>
 						</section>
 					</div>
@@ -94,12 +96,32 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="service" class="tsd-anchor"></a>
-					<h3>service</h3>
-					<div class="tsd-signature tsd-kind-icon">service<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
+					<a name="consul" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> Consul</h3>
+					<div class="tsd-signature tsd-kind-icon">Consul<span class="tsd-signature-symbol">:</span> <a href="../modules/reflection-363.reflection-1.html#iconsulclientfactory" class="tsd-signature-type">IConsulClientFactory</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/fdbbc87/src/main/ts/interface.ts#L13">src/main/ts/interface.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/32b5128/src/main/ts/interface.ts#L117">src/main/ts/interface.ts:117</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="promise" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> Promise</h3>
+					<div class="tsd-signature tsd-kind-icon">Promise<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/32b5128/src/main/ts/interface.ts#L115">src/main/ts/interface.ts:115</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="logger" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> logger</h3>
+					<div class="tsd-signature tsd-kind-icon">logger<span class="tsd-signature-symbol">:</span> <a href="../modules/reflection-363.reflection-1.html#ilogger" class="tsd-signature-type">ILogger</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/32b5128/src/main/ts/interface.ts#L116">src/main/ts/interface.ts:116</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -118,10 +140,16 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="reflection-362.reflection-1.iconsulservicehealth-1.html" class="tsd-kind-icon">IConsul<wbr>Service<wbr>Health</a>
+						<a href="reflection-363.reflection-1.ilibconfig-1.html" class="tsd-kind-icon">ILib<wbr>Config</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="reflection-362.reflection-1.iconsulservicehealth-1.html#service" class="tsd-kind-icon">service</a>
+								<a href="reflection-363.reflection-1.ilibconfig-1.html#consul" class="tsd-kind-icon">Consul</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="reflection-363.reflection-1.ilibconfig-1.html#promise" class="tsd-kind-icon">Promise</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="reflection-363.reflection-1.ilibconfig-1.html#logger" class="tsd-kind-icon">logger</a>
 							</li>
 						</ul>
 					</li>

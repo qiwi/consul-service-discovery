@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>IConnectionParams | @qiwi/consul-service-discovery</title>
+	<title>IEntryPoint | @qiwi/consul-service-discovery</title>
 	<meta name="description" content="Documentation for @qiwi/consul-service-discovery">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,16 +54,16 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/reflection-362.html"></a>
+					<a href="../modules/reflection-363.html"></a>
 				</li>
 				<li>
-					<a href="../modules/reflection-362.reflection-1.html"></a>
+					<a href="../modules/reflection-363.reflection-1.html"></a>
 				</li>
 				<li>
-					<a href="reflection-362.reflection-1.iconnectionparams-1.html">IConnectionParams</a>
+					<a href="reflection-363.reflection-1.ientrypoint-1.html">IEntryPoint</a>
 				</li>
 			</ul>
-			<h1>Interface IConnectionParams</h1>
+			<h1>Interface IEntryPoint</h1>
 		</div>
 	</div>
 </header>
@@ -74,7 +74,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">IConnectionParams</span>
+						<span class="target">IEntryPoint</span>
 					</li>
 				</ul>
 			</section>
@@ -85,8 +85,8 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="reflection-362.reflection-1.iconnectionparams-1.html#host" class="tsd-kind-icon">host</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="reflection-362.reflection-1.iconnectionparams-1.html#port" class="tsd-kind-icon">port</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="reflection-363.reflection-1.ientrypoint-1.html#node" class="tsd-kind-icon">Node</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="reflection-363.reflection-1.ientrypoint-1.html#service" class="tsd-kind-icon">Service</a></li>
 							</ul>
 						</section>
 					</div>
@@ -95,26 +95,43 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="host" class="tsd-anchor"></a>
-					<h3>host</h3>
-					<div class="tsd-signature tsd-kind-icon">host<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="node" class="tsd-anchor"></a>
+					<h3>Node</h3>
+					<div class="tsd-signature tsd-kind-icon">Node<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>Address<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/fdbbc87/src/main/ts/interface.ts#L67">src/main/ts/interface.ts:67</a></li>
-							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/fdbbc87/src/main/ts/interface.ts#L90">src/main/ts/interface.ts:90</a></li>
+							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/32b5128/src/main/ts/interface.ts#L100">src/main/ts/interface.ts:100</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5>Address<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+							</li>
+						</ul>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="port" class="tsd-anchor"></a>
-					<h3>port</h3>
-					<div class="tsd-signature tsd-kind-icon">port<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="service" class="tsd-anchor"></a>
+					<h3>Service</h3>
+					<div class="tsd-signature tsd-kind-icon">Service<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>Address<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>Port<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/fdbbc87/src/main/ts/interface.ts#L66">src/main/ts/interface.ts:66</a></li>
-							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/fdbbc87/src/main/ts/interface.ts#L91">src/main/ts/interface.ts:91</a></li>
+							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/32b5128/src/main/ts/interface.ts#L96">src/main/ts/interface.ts:96</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5>Address<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>Port<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+							</li>
+						</ul>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -131,13 +148,13 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="reflection-362.reflection-1.iconnectionparams-1.html" class="tsd-kind-icon">IConnection<wbr>Params</a>
+						<a href="reflection-363.reflection-1.ientrypoint-1.html" class="tsd-kind-icon">IEntry<wbr>Point</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="reflection-362.reflection-1.iconnectionparams-1.html#host" class="tsd-kind-icon">host</a>
+								<a href="reflection-363.reflection-1.ientrypoint-1.html#node" class="tsd-kind-icon">Node</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="reflection-362.reflection-1.iconnectionparams-1.html#port" class="tsd-kind-icon">port</a>
+								<a href="reflection-363.reflection-1.ientrypoint-1.html#service" class="tsd-kind-icon">Service</a>
 							</li>
 						</ul>
 					</li>
