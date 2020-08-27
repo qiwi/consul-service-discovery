@@ -4,12 +4,12 @@ import {
   IConsulKvValue,
   IEntryPoint,
   IGenerateIdOpts,
-  ILibConfig,
+  ILogger,
   INormalizedConsulKvValue, IServiceDiscoveryEntry, IServiceEntry
 } from './interface'
 import { v4 as uuid } from 'uuid'
-import log from './logger'
-import { WATCH_ERROR_LIMIT } from './index'
+
+export const WATCH_ERROR_LIMIT = 20
 
 export class ConsulUtils {
   static promisify (method, opts): Promise<any> {
@@ -33,12 +33,6 @@ export class ConsulUtils {
       /\./g,
       '-'
     )
-  }
-
-  static configure (opts: ILibConfig, cxt, promiseFactory): void {
-    Object.assign(cxt, opts)
-
-    promiseFactory.Promise = cxt.Promise
   }
 
   static normalizeKvValue (data: IConsulKvValue): INormalizedConsulKvValue {
@@ -70,13 +64,14 @@ export class ConsulUtils {
     services,
     service: IServiceEntry,
     resolve,
-    reject
+    reject,
+    logger: ILogger
   ) {
     if (data.value) {
       service.sequentialErrorCount = 0
       service.data = data
     } else {
-      log.warn(
+      logger.warn(
         `watcher got empty or invalid kv data, service=${service.name}`,
         'data=',
         data
@@ -85,11 +80,12 @@ export class ConsulUtils {
     if ((service.data as INormalizedConsulKvValue).value) {
       resolve(service)
     } else {
-      this.handleError(
+      ConsulUtils.handleError(
         service,
         reject,
         new Error('got empty or invalid kv data'),
-        services
+        services,
+        logger
       )
     }
   }
@@ -99,14 +95,16 @@ export class ConsulUtils {
     services,
     service: IServiceDiscoveryEntry,
     resolve,
-    reject
+    reject,
+    logger: ILogger
   ) {
+
     if (data.length > 0) {
       service.sequentialErrorCount = 0
       service.data.length = 0
       service.data.push(...data)
     } else {
-      log.warn(
+      logger.warn(
         `watcher got empty or invalid connection params, service=${service.name}`,
         'data=',
         data
@@ -116,11 +114,12 @@ export class ConsulUtils {
     if (service.data.length) {
       resolve(service)
     } else {
-      this.handleError(
+      ConsulUtils.handleError(
         service,
         reject,
         new Error('got empty or invalid connection params'),
-        services
+        services,
+        logger
       )
     }
   }
@@ -129,7 +128,8 @@ export class ConsulUtils {
     service: IServiceEntry,
     resolve: Function,
     reject: Function,
-    services: Record<string, IServiceEntry>
+    services: Record<string, IServiceEntry>,
+    logger: ILogger
   ): void {
     if (service.watcher.listenerCount('change')) {
       return
@@ -144,9 +144,9 @@ export class ConsulUtils {
 
       if (Array.isArray(normalizedData)) {
         //  @ts-ignore
-        this.handleConnectionParams(normalizedData, services, service, resolve, reject)
+        ConsulUtils.handleConnectionParams(normalizedData, services, service, resolve, reject, logger)
       } else {
-        this.handleKvValue(normalizedData, services, service, resolve, reject)
+        ConsulUtils.handleKvValue(normalizedData, services, service, resolve, reject, logger)
       }
     })
   }
@@ -154,14 +154,15 @@ export class ConsulUtils {
   static watchOnError (
     service: IServiceEntry,
     reject: Function,
-    services: Record<string, IServiceEntry>
+    services: Record<string, IServiceEntry>,
+    logger: ILogger
   ): void {
     if (service.watcher.listenerCount('error')) {
       return
     }
 
     service.watcher.on('error', (err: Error) =>
-      this.handleError(service, reject, err, services)
+      ConsulUtils.handleError(service, reject, err, services, logger)
     )
   }
 
@@ -169,12 +170,13 @@ export class ConsulUtils {
     service: IServiceEntry,
     reject: Function,
     err: any,
-    services: Record<string, IServiceEntry>
+    services: Record<string, IServiceEntry>,
+    logger: ILogger
   ): void {
     service.sequentialErrorCount += 1
 
-    log.error(`watcher error, service=${service.name}`, 'error=', err)
-    log.info(`sequentialErrorCount=${service.sequentialErrorCount}`)
+    logger.error(`watcher error, service=${service.name}`, 'error=', err)
+    logger.info(`sequentialErrorCount=${service.sequentialErrorCount}`)
     reject(err)
     delete service.promise
 
@@ -189,7 +191,7 @@ export class ConsulUtils {
     // Once WATCH_ERROR_LIMIT is reached, reset watcher and instances
     if (service.sequentialErrorCount >= WATCH_ERROR_LIMIT) {
       ConsulUtils.clearService(services, service)
-      log.error(`watcher error limit is reached, service=${service.name}`)
+      logger.error(`watcher error limit is reached, service=${service.name}`)
     }
   }
 

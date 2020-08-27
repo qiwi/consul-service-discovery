@@ -1,8 +1,7 @@
 /** @module @qiwi/consul-service-discovery */
 
 import Consul from 'consul'
-import log from './logger'
-import cxt from './cxt'
+import { createContext } from './cxt'
 import { promiseFactory, sample, repeat } from './util'
 import { IControlled } from 'push-it-to-the-limit'
 import { IPromise } from '@qiwi/substrate'
@@ -18,13 +17,12 @@ import {
   IConsulClientWatch,
   TConsulAgentServiceRegisterOptions,
   TConsulAgentCheckListOptions,
-  IConsulKvSetOptions, ILibConfig
+  IConsulKvSetOptions, ILibConfig, ICxt
 } from './interface'
 import { ConsulUtils } from './consulUtils'
 
 export * from './interface'
 export const BACKOFF_MAX = 20000
-export const WATCH_ERROR_LIMIT = 20
 
 /**
  * @class ConsulDiscoveryService
@@ -38,13 +36,16 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     kv: {}
   }
 
+  cxt: ICxt
+
   protected _consul: IConsulClient
 
   private _id?: string
   private _repeatableRegister?: IControlled
 
-  constructor ({ host, port }: IConnectionParams) {
-    this._consul = cxt.Consul({
+  constructor ({ host, port }: IConnectionParams, cxt: ILibConfig = {}) {
+    this.cxt = createContext(cxt)
+    this._consul = this.cxt.Consul({
       host,
       port: port.toString()
     })
@@ -81,14 +82,15 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
 
     service.promise = promise
 
-    log.debug(`watcher initialized, service=${serviceName}`)
+    this.cxt.logger.debug(`watcher initialized, service=${serviceName}`)
     ConsulUtils.watchOnChange(
       service,
       resolve,
       reject,
-      this.services[type]
+      this.services[type],
+      this.cxt.logger
     )
-    ConsulUtils.watchOnError(service, reject, this.services[type])
+    ConsulUtils.watchOnError(service, reject, this.services[type], this.cxt.logger)
 
     return promise
   }
@@ -223,6 +225,15 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     const register = agentService.register.bind(agentService)
 
     return ConsulUtils.promisify(register, _opts)
+      .then((data) => {
+        this.cxt.logger.info(`service ${id} registered`)
+        return data
+      })
+      .catch(e => {
+        this.cxt.logger.error(`failed to register ${id}`)
+        throw e
+      })
+
   }
 
   public list (token?: string): Promise<any> {
@@ -240,11 +251,6 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
         throw new Error(`fail find service: ${e}`)
       })
   }
-
-  static configure (opts: ILibConfig): void {
-    ConsulUtils.configure(opts, cxt, promiseFactory)
-  }
-
 }
 
 export default ConsulDiscoveryService
