@@ -1,3 +1,10 @@
+## [1.9.1](https://github.com/qiwi/consul-service-discovery/compare/v1.9.0...v1.9.1) (2020-08-27)
+
+
+### Bug Fixes
+
+* add logging registration ([32b5128](https://github.com/qiwi/consul-service-discovery/commit/32b51280a81885611231dc3021a4abc7642a400d))
+
 # [1.9.0](https://github.com/qiwi/consul-service-discovery/compare/v1.8.2...v1.9.0) (2020-08-24)
 
 
