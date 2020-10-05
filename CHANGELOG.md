@@ -1,3 +1,10 @@
+## [1.9.2](https://github.com/qiwi/consul-service-discovery/compare/v1.9.1...v1.9.2) (2020-10-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency consul to ^0.38.0 ([70377ee](https://github.com/qiwi/consul-service-discovery/commit/70377ee9b43c706d584573d91f6e14d0a556afb2))
+
 ## [1.9.1](https://github.com/qiwi/consul-service-discovery/compare/v1.9.0...v1.9.1) (2020-08-27)
 
 
