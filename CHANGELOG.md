@@ -1,3 +1,10 @@
+## [1.9.3](https://github.com/qiwi/consul-service-discovery/compare/v1.9.2...v1.9.3) (2020-12-18)
+
+
+### Performance Improvements
+
+* update deps versions, new .travis.yaml ([#62](https://github.com/qiwi/consul-service-discovery/issues/62)) ([4858ff1](https://github.com/qiwi/consul-service-discovery/commit/4858ff1a8d93ba7d501c277920c91de5560b1c24))
+
 ## [1.9.2](https://github.com/qiwi/consul-service-discovery/compare/v1.9.1...v1.9.2) (2020-10-05)
 
 
