@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>IConsulAgent | @qiwi/consul-service-discovery</title>
+	<title>ICxt | @qiwi/consul-service-discovery</title>
 	<meta name="description" content="Documentation for @qiwi/consul-service-discovery">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,16 +54,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/reflection-363.html"></a>
+					<a href="../modules/root.html">root</a>
 				</li>
 				<li>
-					<a href="../modules/reflection-363.reflection-1.html"></a>
-				</li>
-				<li>
-					<a href="reflection-363.reflection-1.iconsulagent-1.html">IConsulAgent</a>
+					<a href="root.icxt-1.html">ICxt</a>
 				</li>
 			</ul>
-			<h1>Interface IConsulAgent</h1>
+			<h1>Interface ICxt</h1>
 		</div>
 	</div>
 </header>
@@ -74,13 +71,9 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">IConsulAgent</span>
+						<span class="target">ICxt</span>
 					</li>
 				</ul>
-			</section>
-			<section class="tsd-panel tsd-kind-interface tsd-parent-kind-module">
-				<h3 class="tsd-before-signature">Indexable</h3>
-				<div class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">[</span>key: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">any</span></div>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
@@ -89,7 +82,9 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="reflection-363.reflection-1.iconsulagent-1.html#service" class="tsd-kind-icon">service</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="root.icxt-1.html#consul" class="tsd-kind-icon">Consul</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="root.icxt-1.html#promise" class="tsd-kind-icon">Promise</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="root.icxt-1.html#logger" class="tsd-kind-icon">logger</a></li>
 							</ul>
 						</section>
 					</div>
@@ -98,12 +93,32 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="service" class="tsd-anchor"></a>
-					<h3>service</h3>
-					<div class="tsd-signature tsd-kind-icon">service<span class="tsd-signature-symbol">:</span> <a href="reflection-363.reflection-1.iconsulagentservice-1.html" class="tsd-signature-type">IConsulAgentService</a></div>
+					<a name="consul" class="tsd-anchor"></a>
+					<h3>Consul</h3>
+					<div class="tsd-signature tsd-kind-icon">Consul<span class="tsd-signature-symbol">:</span> <a href="root.iconsulclientfactory-1.html" class="tsd-signature-type">IConsulClientFactory</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/70377ee/src/main/ts/interface.ts#L33">src/main/ts/interface.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/4858ff1/src/main/ts/interface.ts#L60">src/main/ts/interface.ts:60</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="promise" class="tsd-anchor"></a>
+					<h3>Promise</h3>
+					<div class="tsd-signature tsd-kind-icon">Promise<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/4858ff1/src/main/ts/interface.ts#L61">src/main/ts/interface.ts:61</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="logger" class="tsd-anchor"></a>
+					<h3>logger</h3>
+					<div class="tsd-signature tsd-kind-icon">logger<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ILogger</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/qiwi/consul-service-discovery/blob/4858ff1/src/main/ts/interface.ts#L62">src/main/ts/interface.ts:62</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -115,6 +130,9 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
+					<li class="current tsd-kind-module">
+						<a href="../modules/root.html">root</a>
+					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
@@ -122,10 +140,16 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="reflection-363.reflection-1.iconsulagent-1.html" class="tsd-kind-icon">IConsul<wbr>Agent</a>
+						<a href="root.icxt-1.html" class="tsd-kind-icon">ICxt</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="reflection-363.reflection-1.iconsulagent-1.html#service" class="tsd-kind-icon">service</a>
+								<a href="root.icxt-1.html#consul" class="tsd-kind-icon">Consul</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="root.icxt-1.html#promise" class="tsd-kind-icon">Promise</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="root.icxt-1.html#logger" class="tsd-kind-icon">logger</a>
 							</li>
 						</ul>
 					</li>
@@ -141,7 +165,16 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
 			</ul>
 		</div>
 	</div>
