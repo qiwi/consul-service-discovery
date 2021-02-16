@@ -1266,10 +1266,10 @@ concat-map@0.0.1:
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=
 
-consul@^0.39.0:
-  version "0.39.0"
-  resolved "https://registry.yarnpkg.com/consul/-/consul-0.39.0.tgz#4cca710c9caf10b2a3ba6b819914602f8a83186b"
-  integrity sha512-FeEr+B+ADEGzoKonNkheKu0QbODdYKbY9TbWaxX9MHcdlmBuJWlIFMcD1JVrQpTrZEM+z+7AJBz+uw5MOD3giA==
+consul@^0.40.0:
+  version "0.40.0"
+  resolved "https://registry.yarnpkg.com/consul/-/consul-0.40.0.tgz#ab5d001961c56644d7bb2c3bc21e430a59869940"
+  integrity sha512-GJdxzLAXJZZDddGhgVBeac2KeBGPABWeAlxGVjct5fAwSa2P0Zqy/e2MDPa6O1OvR5h2ko10zCyRrMjctbfytg==
   dependencies:
     papi "^0.29.0"
 
