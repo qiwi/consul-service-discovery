@@ -51,7 +51,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@qiwi/libdefkit": "^2.1.5",
+    "@qiwi/libdefkit": "^3.0.0",
     "@types/bluebird": "^3.5.33",
     "@types/jest": "^26.0.19",
     "bluebird": "^3.7.2",
