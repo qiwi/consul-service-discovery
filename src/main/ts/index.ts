@@ -17,7 +17,7 @@ import {
   IConsulClientWatch,
   TConsulAgentServiceRegisterOptions,
   TConsulAgentCheckListOptions,
-  IConsulKvSetOptions, ILibConfig, ICxt
+  IConsulKvSetOptions, ILibConfig, ICxt, IConsulEntries
 } from './interface'
 import { ConsulUtils } from './consulUtils'
 
@@ -28,10 +28,7 @@ export const BACKOFF_MAX = 20000
  * @class ConsulDiscoveryService
  */
 export class ConsulDiscoveryService implements IConsulDiscoveryService {
-  public services: {
-    discovery: { [key: string]: IServiceDiscoveryEntry }
-    kv: { [key: string]: IServiceKvEntry }
-  } = {
+  public services: IConsulEntries = {
     discovery: {},
     kv: {}
   }
