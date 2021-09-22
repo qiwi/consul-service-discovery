@@ -34,12 +34,13 @@ describe('ConsulUtils', () => {
           flags: 4,
           value: 'string'
         }
-        const { resolve, reject, promise } = promiseFactory()
+        const service = { type: 'kv', data: {}, name: 'service', iop: promiseFactory(), sequentialErrorCount: 0, watcher: {} }
 
         ConsulUtils.handleKvValue(value, { service: {} },
           // @ts-ignore
-          { type: 'kv', data: {}, name: 'service', promise, sequentialErrorCount: 0, watcher: {} }, resolve, reject, console)
-        expect(await promise).toMatchObject({})
+          service, console)
+
+        expect(await service.iop.promise).toMatchObject({})
       })
     })
     describe('#promisify', () => {

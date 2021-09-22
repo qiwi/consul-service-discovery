@@ -2,6 +2,7 @@
 
 import * as Consul from 'consul'
 import { ILogger, IPromise, IPromiseConstructor } from '@qiwi/substrate'
+import { TInsideOutPromise } from 'inside-out-promise'
 
 export { ILogger, IPromise, IPromiseConstructor }
 
@@ -131,7 +132,7 @@ export type IServiceDiscoveryEntry = {
   name: IServiceName,
   watcher: IConsulClientWatch,
   sequentialErrorCount: number,
-  promise?: Promise<IServiceDiscoveryEntry>
+  iop?: TInsideOutPromise<IServiceDiscoveryEntry>
   data: Array<IConnectionParams>
 }
 
@@ -140,7 +141,7 @@ export type IServiceKvEntry = {
   name: IServiceName,
   watcher: IConsulClientWatch,
   sequentialErrorCount: number,
-  promise?: Promise<IServiceDiscoveryEntry>
+  iop?: TInsideOutPromise<IServiceDiscoveryEntry>
   data: INormalizedConsulKvValue
 }
 

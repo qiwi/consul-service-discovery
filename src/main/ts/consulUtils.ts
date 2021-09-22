@@ -63,8 +63,6 @@ export class ConsulUtils {
     data: INormalizedConsulKvValue,
     services,
     service: IServiceEntry,
-    resolve,
-    reject,
     logger: ILogger
   ) {
     if (data.value) {
@@ -78,11 +76,10 @@ export class ConsulUtils {
       )
     }
     if ((service.data as INormalizedConsulKvValue).value) {
-      resolve(service)
+      service.iop?.resolve(service)
     } else {
       ConsulUtils.handleError(
         service,
-        reject,
         new Error('got empty or invalid kv data'),
         services,
         logger
@@ -94,8 +91,6 @@ export class ConsulUtils {
     data: IConnectionParams[],
     services,
     service: IServiceDiscoveryEntry,
-    resolve,
-    reject,
     logger: ILogger
   ) {
 
@@ -112,11 +107,10 @@ export class ConsulUtils {
     }
 
     if (service.data.length) {
-      resolve(service)
+      service.iop?.resolve(service)
     } else {
       ConsulUtils.handleError(
         service,
-        reject,
         new Error('got empty or invalid connection params'),
         services,
         logger
@@ -126,8 +120,6 @@ export class ConsulUtils {
 
   static watchOnChange (
     service: IServiceEntry,
-    resolve: Function,
-    reject: Function,
     services: Record<string, IServiceEntry>,
     logger: ILogger
   ): void {
@@ -142,22 +134,21 @@ export class ConsulUtils {
         ? ConsulUtils.normalizeEntryPoint(data)
         : ConsulUtils.normalizeKvValue(data)
 
-      if (service.promise) {
-        delete service.promise
+      if (service.iop?.isFulfilled()) {
+        service.iop = promiseFactory()
       }
 
       if (Array.isArray(normalizedData)) {
         //  @ts-ignore
-        ConsulUtils.handleConnectionParams(normalizedData, services, service, resolve, reject, logger)
+        ConsulUtils.handleConnectionParams(normalizedData, services, service, logger)
       } else {
-        ConsulUtils.handleKvValue(normalizedData, services, service, resolve, reject, logger)
+        ConsulUtils.handleKvValue(normalizedData, services, service, logger)
       }
     })
   }
 
   static watchOnError (
     service: IServiceEntry,
-    reject: Function,
     services: Record<string, IServiceEntry>,
     logger: ILogger
   ): void {
@@ -166,13 +157,12 @@ export class ConsulUtils {
     }
 
     service.watcher.on('error', (err: Error) =>
-      ConsulUtils.handleError(service, reject, err, services, logger)
+      ConsulUtils.handleError(service, err, services, logger)
     )
   }
 
   static handleError (
     service: IServiceEntry,
-    reject: Function,
     err: any,
     services: Record<string, IServiceEntry>,
     logger: ILogger
@@ -181,8 +171,8 @@ export class ConsulUtils {
 
     logger.error(`watcher error, service=${service.name} type=${service.type}`, 'error=', err)
     logger.info(`sequentialErrorCount=${service.sequentialErrorCount}, service=${service.name} type=${service.type}`)
-    reject(err)
-    delete service.promise
+    service.iop?.reject(err)
+    delete service.iop
 
     if (service.type === 'discovery' && service.data.length === 0) {
       ConsulUtils.clearService(services, service)
