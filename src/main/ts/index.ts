@@ -70,26 +70,23 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
   ): IPromise<T extends 'discovery' ? IServiceDiscoveryEntry : IServiceKvEntry> {
     const service = this.getService(serviceName, type)
 
-    if (service.promise) {
+    if (service.iop) {
       // @ts-ignore
-      return service.promise
+      return service.iop.promise
     }
 
-    const { resolve, reject, promise } = promiseFactory()
-
-    service.promise = promise
+    service.iop = promiseFactory()
 
     this.cxt.logger.debug(`watcher initialized, service=${serviceName}`)
+
+    ConsulUtils.watchOnError(service, this.services[type], this.cxt.logger)
     ConsulUtils.watchOnChange(
       service,
-      resolve,
-      reject,
       this.services[type],
       this.cxt.logger
     )
-    ConsulUtils.watchOnError(service, reject, this.services[type], this.cxt.logger)
 
-    return promise
+    return service.iop.promise as IPromise
   }
 
   public getService (
