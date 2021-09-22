@@ -1,3 +1,10 @@
+## [1.9.5](https://github.com/qiwi/consul-service-discovery/compare/v1.9.4...v1.9.5) (2021-09-22)
+
+
+### Bug Fixes
+
+* refresh service promise on watcher update event ([9d9a491](https://github.com/qiwi/consul-service-discovery/commit/9d9a49172cf8c4d3fbe4a4fe4ad9c5a2642f6913))
+
 ## [1.9.4](https://github.com/qiwi/consul-service-discovery/compare/v1.9.3...v1.9.4) (2021-02-17)
 
 
