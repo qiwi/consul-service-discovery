@@ -76,12 +76,14 @@ export interface INormalizedConsulKvValue {
   value?: string | null
 }
 
+export interface IConsulEntries {
+  discovery: { [key: string]: IServiceDiscoveryEntry }
+  kv: { [key: string]: IServiceKvEntry }
+}
+
 export interface IConsulDiscoveryService {
   cxt: ICxt
-  services: {
-    discovery: { [key: string]: IServiceDiscoveryEntry }
-    kv: { [key: string]: IServiceKvEntry }
-  }
+  services: IConsulEntries
   id?: string
   getConnectionParams (serviceName: string): Promise<IConnectionParams | undefined>
   getKv (key: string): Promise<INormalizedConsulKvValue>

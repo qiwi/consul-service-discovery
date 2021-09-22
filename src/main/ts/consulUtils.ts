@@ -142,6 +142,10 @@ export class ConsulUtils {
         ? ConsulUtils.normalizeEntryPoint(data)
         : ConsulUtils.normalizeKvValue(data)
 
+      if (service.promise) {
+        delete service.promise
+      }
+
       if (Array.isArray(normalizedData)) {
         //  @ts-ignore
         ConsulUtils.handleConnectionParams(normalizedData, services, service, resolve, reject, logger)
@@ -175,8 +179,8 @@ export class ConsulUtils {
   ): void {
     service.sequentialErrorCount += 1
 
-    logger.error(`watcher error, service=${service.name}`, 'error=', err)
-    logger.info(`sequentialErrorCount=${service.sequentialErrorCount}`)
+    logger.error(`watcher error, service=${service.name} type=${service.type}`, 'error=', err)
+    logger.info(`sequentialErrorCount=${service.sequentialErrorCount}, service=${service.name} type=${service.type}`)
     reject(err)
     delete service.promise
 
@@ -199,7 +203,9 @@ export class ConsulUtils {
     services: Record<string, IServiceEntry>,
     service: IServiceEntry
   ) {
-    service.watcher.end()
-    delete services[service.name]
+    if (services[service.name]) {
+      service.watcher.end()
+      delete services[service.name]
+    }
   }
 }
