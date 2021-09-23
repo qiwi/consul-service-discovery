@@ -1,3 +1,10 @@
+## [1.9.6](https://github.com/qiwi/consul-service-discovery/compare/v1.9.5...v1.9.6) (2021-09-23)
+
+
+### Bug Fixes
+
+* fix readiness promise ([a61e1d0](https://github.com/qiwi/consul-service-discovery/commit/a61e1d0ca43999bed94b586ade52a05b64576846))
+
 ## [1.9.5](https://github.com/qiwi/consul-service-discovery/compare/v1.9.4...v1.9.5) (2021-09-22)
 
 
