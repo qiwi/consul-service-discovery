@@ -7,9 +7,8 @@ import {
   ILogger,
   INormalizedConsulKvValue, IServiceDiscoveryEntry, IServiceEntry
 } from './interface'
+import { WATCH_ERROR_LIMIT } from './defaults'
 import { v4 as uuid } from 'uuid'
-
-export const WATCH_ERROR_LIMIT = 20
 
 export class ConsulUtils {
   static promisify (method, opts): Promise<any> {
@@ -173,6 +172,15 @@ export class ConsulUtils {
     logger.info(`sequentialErrorCount=${service.sequentialErrorCount}, service=${service.name} type=${service.type}`)
     service.iop?.reject(err)
     delete service.iop
+
+    // https://github.com/qiwi/consul-service-discovery/issues/81
+    // Recreate instance if it hangs
+    if (err.isPapi && /request timed out/.test(err.message)) {
+      ConsulUtils.clearService(services, service)
+      logger.error(`watcher timeout err=${err.message}`)
+
+      return
+    }
 
     if (service.type === 'discovery' && service.data.length === 0) {
       ConsulUtils.clearService(services, service)

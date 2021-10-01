@@ -61,11 +61,14 @@ export interface ICxt {
   Consul: IConsulClientFactory
   Promise: any
   logger: ILogger
+  timeout: number
 }
 
 export interface IConnectionParams {
   port: string
   host: string
+  secure?: boolean
+  timeout?: number
 }
 
 export interface INormalizedConsulKvValue {
@@ -118,6 +121,7 @@ export interface ILibConfig {
   Promise?: any,
   logger?: ILogger,
   Consul?: IConsulClientFactory
+  timeout?: number
 }
 
 export type IServiceName = string

@@ -19,10 +19,11 @@ import {
   TConsulAgentCheckListOptions,
   IConsulKvSetOptions, ILibConfig, ICxt, IConsulEntries
 } from './interface'
+import { BACKOFF_MAX } from './defaults'
 import { ConsulUtils } from './consulUtils'
 
 export * from './interface'
-export const BACKOFF_MAX = 20000
+export * from './defaults'
 
 /**
  * @class ConsulDiscoveryService
