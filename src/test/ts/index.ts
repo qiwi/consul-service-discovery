@@ -1,5 +1,4 @@
-import def, { ConsulDiscoveryService } from '../../main/ts/index'
-import { WATCH_ERROR_LIMIT } from '../../main/ts/consulUtils'
+import def, { ConsulDiscoveryService, WATCH_ERROR_LIMIT } from '../../main/ts/index'
 import { EventEmitter } from 'events'
 
 import {
