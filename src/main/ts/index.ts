@@ -1,6 +1,6 @@
 /** @module @qiwi/consul-service-discovery */
 
-import Consul from 'consul'
+import Consul, { ConsulOptions } from 'consul'
 import { createContext } from './cxt'
 import { promiseFactory, sample, repeat } from './util'
 import { IControlled } from 'push-it-to-the-limit'
@@ -41,11 +41,14 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
   private _id?: string
   private _repeatableRegister?: IControlled
 
-  constructor ({ host, port }: IConnectionParams, cxt: ILibConfig = {}) {
+  constructor ({ host, port, secure, defaults, ca }: ConsulOptions, cxt: ILibConfig = {}) {
     this.cxt = createContext(cxt)
     this._consul = this.cxt.Consul({
+      secure,
       host,
-      port: port.toString()
+      port: port?.toString(),
+      defaults,
+      ca
     })
   }
 
