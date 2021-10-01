@@ -1,3 +1,11 @@
+# [1.10.0](https://github.com/qiwi/consul-service-discovery/compare/v1.9.6...v1.10.0) (2021-10-01)
+
+
+### Features
+
+* pass ca, secure and defaults opts to consul client factory ([3005874](https://github.com/qiwi/consul-service-discovery/commit/3005874930c5cd6b480e886a906d83a95b3d9949))
+* rebuild watcher instance if it hangs ([5e913aa](https://github.com/qiwi/consul-service-discovery/commit/5e913aaca4a23b65fde4cf43d8954d17d4742c65))
+
 ## [1.9.6](https://github.com/qiwi/consul-service-discovery/compare/v1.9.5...v1.9.6) (2021-09-23)
 
 
