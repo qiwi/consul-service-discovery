@@ -48,7 +48,7 @@
     "lodash": "^4.17.21",
     "push-it-to-the-limit": "^1.17.3",
     "tslib": "^2.3.1",
-    "uuid": "^8.3.2"
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@qiwi/libdefkit": "^4.0.0",
