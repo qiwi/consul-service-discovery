@@ -1281,12 +1281,12 @@ concat-map@0.0.1:
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=
 
-consul@^0.40.0:
-  version "0.40.0"
-  resolved "https://registry.yarnpkg.com/consul/-/consul-0.40.0.tgz#ab5d001961c56644d7bb2c3bc21e430a59869940"
-  integrity sha512-GJdxzLAXJZZDddGhgVBeac2KeBGPABWeAlxGVjct5fAwSa2P0Zqy/e2MDPa6O1OvR5h2ko10zCyRrMjctbfytg==
+consul@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/consul/-/consul-1.0.1.tgz#10f857c7ac842cf44b0b5d5fba043cc42897caca"
+  integrity sha512-EdrhVDk32kfLcgwFfMqWpQFqArvhnJOsKD1JjTbCPrw8S9DphygjrObKoHXOQ7jx+/3SbasLjAWvrpXzzKGtaw==
   dependencies:
-    papi "^0.29.0"
+    papi "^1.1.0"
 
 convert-source-map@^1.4.0, convert-source-map@^1.6.0, convert-source-map@^1.7.0:
   version "1.8.0"
@@ -2773,10 +2773,10 @@ p-try@^2.0.0:
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-2.2.0.tgz#cb2868540e313d61de58fafbe35ce9004d5540e6"
   integrity sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==
 
-papi@^0.29.0:
-  version "0.29.1"
-  resolved "https://registry.yarnpkg.com/papi/-/papi-0.29.1.tgz#7373e2c527f5117d61fd2a0e6c6b1dd72bf7f180"
-  integrity sha512-Y9ipSMfWuuVFO3zY9PlxOmEg+bQ7CeJ28sa9/a0veYNynLf9fwjR3+3fld5otEy7okUaEOUuCHVH62MyTmACXQ==
+papi@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/papi/-/papi-1.1.0.tgz#15eb3f10b219f478544d51b1b4da394062c67e65"
+  integrity sha512-w02EYhPtKYAGB8XJz+yi5WJPfSev1Zfo3vZrqqvHN6LvkIIJKfJ+VwAnL9EanBMcg6G8Bbwgxh7cqirfsJn2IQ==
 
 parse-json@^5.2.0:
   version "5.2.0"
