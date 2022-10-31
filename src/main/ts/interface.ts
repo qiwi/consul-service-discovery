@@ -1,13 +1,14 @@
+/* eslint-disable no-use-before-define */
 /** @module @qiwi/consul-service-discovery */
 
-import * as Consul from 'consul'
 import { ILogger, IPromise, IPromiseConstructor } from '@qiwi/substrate'
+import * as Consul from 'consul'
 import { TInsideOutPromise } from 'inside-out-promise'
 
 export { ILogger, IPromise, IPromiseConstructor }
 
 export interface IConsulClientWatch extends NodeJS.EventEmitter {
-  end (): void
+  end(): void
 }
 
 export interface IConsulServiceHealth {
@@ -47,7 +48,7 @@ export type IConsulKvSetOptions = {
 }
 
 export interface IConsulClient {
-  watch (opts: Consul.Watch.Options): IConsulClientWatch
+  watch(opts: Consul.Watch.Options): IConsulClientWatch
   health: IConsulServiceHealth,
   agent: IConsulAgent
   kv: any
@@ -64,6 +65,7 @@ export interface ICxt {
   timeout: number
 }
 
+// eslint-disable-next-line import/export
 export interface IConnectionParams {
   port: string
   host: string
@@ -89,10 +91,11 @@ export interface IConsulDiscoveryService {
   cxt: ICxt
   services: IConsulEntries
   id?: string
-  getConnectionParams (serviceName: string): Promise<IConnectionParams | undefined>
-  getKv (key: string): Promise<INormalizedConsulKvValue>
+  getConnectionParams(serviceName: string): Promise<IConnectionParams | undefined>
+  getKv(key: string): Promise<INormalizedConsulKvValue>
 }
 
+// eslint-disable-next-line import/export
 export interface IConnectionParams {
   host: string
   port: string

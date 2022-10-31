@@ -1,26 +1,26 @@
 /** @module @qiwi/consul-service-discovery */
 
-import Consul, { ConsulOptions } from 'consul'
-import { createContext } from './cxt'
-import { promiseFactory, sample, repeat } from './util'
-import { IControlled } from 'push-it-to-the-limit'
 import { IPromise } from '@qiwi/substrate'
+import Consul, { ConsulOptions } from 'consul'
+import { IControlled } from 'push-it-to-the-limit'
+
+import { ConsulUtils } from './consulUtils'
+import { createContext } from './cxt'
+import { BACKOFF_MAX } from './defaults'
 import {
   IConnectionParams,
-  IConsulDiscoveryService,
-  INormalizedConsulKvValue,
   IConsulClient,
-  IServiceName,
+  IConsulClientWatch,
+  IConsulDiscoveryService,
+IConsulEntries,
+  IConsulKvSetOptions, ICxt, ILibConfig,   INormalizedConsulKvValue,
   IServiceDiscoveryEntry,
   IServiceKvEntry,
+  IServiceName,
   IServiceType,
-  IConsulClientWatch,
-  TConsulAgentServiceRegisterOptions,
   TConsulAgentCheckListOptions,
-  IConsulKvSetOptions, ILibConfig, ICxt, IConsulEntries
-} from './interface'
-import { BACKOFF_MAX } from './defaults'
-import { ConsulUtils } from './consulUtils'
+  TConsulAgentServiceRegisterOptions} from './interface'
+import { promiseFactory, repeat,sample } from './util'
 
 export * from './interface'
 export * from './defaults'
@@ -175,7 +175,7 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
         } as Consul.Health.ServiceOptions)
 
     return this._consul.watch({
-      method: method,
+      method,
       options,
       backoffMax: BACKOFF_MAX
     } as Consul.Watch.Options)

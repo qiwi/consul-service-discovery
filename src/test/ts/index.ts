@@ -1,9 +1,9 @@
-import def, { ConsulDiscoveryService, WATCH_ERROR_LIMIT } from '../../main/ts/index'
 import { EventEmitter } from 'events'
 
+import def, { ConsulDiscoveryService, WATCH_ERROR_LIMIT } from '../../main/ts/index'
 import {
-  expectedError,
   ConsulClientFactory,
+  expectedError,
   FakeWatcher,
   onChangeResponse,
   onChangeResponseKv,
@@ -88,6 +88,7 @@ describe('ConsulServiceDiscovery', () => {
           {
             ID:
               'example-api123-127-0-0-1-0-0-0-0-8500-2238a091-a525-49b6-88a2-e755189cbe50',
+            // eslint-disable-next-line sonarjs/no-duplicate-string
             Service: 'example-api123',
             Tags: [],
             Meta: {},
@@ -222,8 +223,8 @@ describe('ConsulServiceDiscovery', () => {
         const serviceConnections = await promise
 
         expect(serviceConnections).toEqual([
-          { host:  '10.10.0.1', port: '8888' },
-          { host:  '10.10.0.2', port: '8888' }
+          { host: '10.10.0.1', port: '8888' },
+          { host: '10.10.0.2', port: '8888' }
         ])
       })
     })

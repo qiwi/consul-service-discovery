@@ -1,34 +1,36 @@
+import * as Consul from 'consul'
 import { EventEmitter } from 'events'
 import { noop } from 'lodash'
+
 import {
   IConnectionParams,
   IConsulAgent,
   IConsulAgentService,
-  IConsulClient, IConsulKvValue, IConsulServiceHealth, ILogger,
+  IConsulClient, IConsulClientFactory,
+  IConsulKvValue, IConsulServiceHealth, ILogger,
   TConsulAgentCheckListOptions,
-  TConsulAgentServiceRegisterOptions,
-  IConsulClientFactory
+  TConsulAgentServiceRegisterOptions
 } from '../../main/ts'
-import * as Consul from 'consul'
 
 export class FakeWatcher extends EventEmitter {
   end = noop
 }
 
 export class FakeAgentService implements IConsulAgentService {
-  entries: { [key: string]: any}
+  entries: { [key: string]: any }
 
-  constructor () {
+  constructor() {
     this.entries = {}
   }
 
-  register<TData> (opts: TConsulAgentServiceRegisterOptions, cb: Consul.Callback<TData>): void {
+  register<TData>(opts: TConsulAgentServiceRegisterOptions, cb: Consul.Callback<TData>): void {
     this.entries[opts.id || opts.name] = opts
 
     cb()
   }
 
-  list<TData> (opts: TConsulAgentCheckListOptions, cb: Consul.Callback<any>): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  list<TData>(opts: TConsulAgentCheckListOptions, cb: Consul.Callback<any>): void {
     cb(undefined, this.entries)
   }
 }
@@ -38,11 +40,12 @@ export class ConsulClient implements IConsulClient {
   agent: IConsulAgent
   kv: any
 
-  watch () {
+  watch() {
     return new FakeWatcher()
   }
 
-  constructor (opts?: Object | undefined) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  constructor(opts?: Object | undefined) {
     this.health = { service: null }
     this.kv = {
       get: null,

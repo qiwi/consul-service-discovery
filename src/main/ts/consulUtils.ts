@@ -1,4 +1,6 @@
-import { promiseFactory } from './util'
+import { v4 as uuid } from 'uuid'
+
+import { WATCH_ERROR_LIMIT } from './defaults'
 import {
   IConnectionParams,
   IConsulKvValue,
@@ -7,8 +9,7 @@ import {
   ILogger,
   INormalizedConsulKvValue, IServiceDiscoveryEntry, IServiceEntry
 } from './interface'
-import { WATCH_ERROR_LIMIT } from './defaults'
-import { v4 as uuid } from 'uuid'
+import { promiseFactory } from './util'
 
 export class ConsulUtils {
   static promisify (method, opts): Promise<any> {
@@ -50,7 +51,7 @@ export class ConsulUtils {
       if (address) {
         memo.push({
           host: address,
-          port: port
+          port
         })
       }
 
@@ -105,7 +106,7 @@ export class ConsulUtils {
       )
     }
 
-    if (service.data.length) {
+    if (service.data.length > 0) {
       service.iop?.resolve(service)
     } else {
       ConsulUtils.handleError(
