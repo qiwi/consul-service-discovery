@@ -10,8 +10,8 @@
   "scripts": {
     "lint": "eslint src/**/*.{ts,js}",
     "lint:fix": "yarn lint -- --fix",
-    "jest": "yarn lint && yarn jest && yarn test:depcheck && yarn test:depaudit",
-    "test": "yarn jest",
+    "jest": "jest -w 2 --config=jest.config.json",
+    "test": "yarn lint && yarn jest && yarn test:depcheck && yarn test:depaudit",
     "pretest": "yarn lint",
     "test:deps": "npm-run-all -p -l test:depcheck test:depauditfix",
     "test:depcheck": "npm_config_yes=true npx depcheck --ignores tsc-esm-fix,tslib,@types/jest,typedoc,@qiwi/esm,tsm",
@@ -58,6 +58,7 @@
   "devDependencies": {
     "@qiwi/esm": "^1.1.8",
     "@qiwi/libdefkit": "^4.0.8",
+    "@qiwi/npm-run-all": "^4.1.7",
     "@types/bluebird": "^3.5.37",
     "@types/jest": "^29.2.0",
     "bluebird": "^3.7.2",
