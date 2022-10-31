@@ -1,11 +1,9 @@
 # Consul service discovery
-[![buildStatus](https://api.travis-ci.com/qiwi/consul-service-discovery.svg?branch=master)](https://travis-ci.com/qiwi/consul-service-discovery)
+[![CI](https://github.com/qiwi/consul-service-discovery/actions/workflows/ci.yaml/badge.svg?branch=master)](https://github.com/qiwi/consul-service-discovery/actions/workflows/ci.yaml)
 [![npm (tag)](https://img.shields.io/npm/v/@qiwi/consul-service-discovery/latest.svg)](https://www.npmjs.com/package/@qiwi/consul-service-discovery)
-[![dependencyStatus](https://img.shields.io/david/qiwi/consul-service-discovery.svg?maxAge=3600)](https://david-dm.org/qiwi/consul-service-discovery)
-[![devDependencyStatus](https://img.shields.io/david/dev/qiwi/consul-service-discovery.svg?maxAge=3600)](https://david-dm.org/qiwi/consul-service-discovery)
 [![Maintainability](https://api.codeclimate.com/v1/badges/585c9532e7570ecb9c95/maintainability)](https://codeclimate.com/github/qiwi/consul-service-discovery/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/585c9532e7570ecb9c95/test_coverage)](https://codeclimate.com/github/qiwi/consul-service-discovery/test_coverage)
-[![CodeStyle](https://img.shields.io/badge/code%20style-tslint--config--qiwi-brightgreen.svg)](https://github.com/qiwi/tslint-config-qiwi)
+[![CodeStyle](https://img.shields.io/badge/code%20style-lint--config--qiwi-brightgreen.svg)](https://github.com/qiwi/lint-config-qiwi)
 
 Consul service discovery helper.
 
