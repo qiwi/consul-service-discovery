@@ -52,7 +52,7 @@
     "inside-out-promise": "^2.1.4",
     "lodash": "^4.17.21",
     "push-it-to-the-limit": "^1.17.3",
-    "tslib": "^2.4.0",
+    "tslib": "^2.4.1",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
