@@ -1,3 +1,9 @@
+## [1.10.2](https://github.com/qiwi/consul-service-discovery/compare/v1.10.1...v1.10.2) (2022-10-31)
+
+### Fixes & improvements
+* docs: mention license ([b12c752](https://github.com/qiwi/consul-service-discovery/commit/b12c7527673fbad41e197da5985f7c3d68334e18))
+* perf: update tslib ([74dfbbb](https://github.com/qiwi/consul-service-discovery/commit/74dfbbb955e53d524f585c59bdff8a50e878d229))
+
 ## [1.10.1](https://github.com/qiwi/consul-service-discovery/compare/v1.10.0...v1.10.1) (2022-10-31)
 
 ### Fixes & improvements
