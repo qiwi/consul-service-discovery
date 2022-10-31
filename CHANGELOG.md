@@ -1,3 +1,9 @@
+## [1.10.1](https://github.com/qiwi/consul-service-discovery/compare/v1.10.0...v1.10.1) (2022-10-31)
+
+### Fixes & improvements
+* perf: tech release ([5ca6f83](https://github.com/qiwi/consul-service-discovery/commit/5ca6f839ecf9853f7749aebc510f379d4070148f))
+* fix(deps): update dependency @types/consul to ^0.40.0 ([cd1e19f](https://github.com/qiwi/consul-service-discovery/commit/cd1e19f61426033446e133997059d67907f9745a))
+
 # [1.10.0](https://github.com/qiwi/consul-service-discovery/compare/v1.9.6...v1.10.0) (2021-10-01)
 
 
