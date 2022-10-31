@@ -1,19 +1,12 @@
 {
   "name": "@qiwi/consul-service-discovery",
   "out": "./docs",
-  "entryPoints": [
-    "./src/main/ts/"
-  ],
-  "exclude": [
-    "src/test",
-    "**/node_modules/**"
-  ],
-  "externalPattern": [
-    "**/node_modules/**"
-  ],
+  "entryPoints": ["src/main/ts"],
+  "exclude": ["src/test", "**/node_modules/**", "paralleljs"],
+  "externalPattern": ["**/node_modules/**"],
   "excludePrivate": false,
   "hideGenerator": true,
   "readme": "README.md",
   "theme": "default",
-  "tsconfig": "./tsconfig.es5.json"
+  "tsconfig": "./tsconfig.es6.json"
 }
