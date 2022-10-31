@@ -36,3 +36,6 @@ ConsulServiceDiscovery.configure({
   Consul    // consul client factory
 })
 ```
+
+## License
+[MIT](./LICENSE)
