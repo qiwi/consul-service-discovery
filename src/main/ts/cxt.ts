@@ -1,9 +1,10 @@
 /** @module @qiwi/consul-service-discovery */
 
-import { ICxt, ILibConfig } from './interface'
 import * as Consul from 'consul'
-import { createLogger } from './logger'
+
 import { DEFAULT_TIMEOUT } from './defaults'
+import { ICxt, ILibConfig } from './interface'
+import { createLogger } from './logger'
 
 export const createContext = (cxt: ILibConfig = {}): ICxt => {
   return {

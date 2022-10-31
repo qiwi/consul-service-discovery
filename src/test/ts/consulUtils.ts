@@ -1,5 +1,5 @@
-import { promiseFactory } from '../../main/ts/util'
 import { ConsulUtils } from '../../main/ts/consulUtils'
+import { promiseFactory } from '../../main/ts/util'
 
 describe('ConsulUtils', () => {
   describe('static', () => {
