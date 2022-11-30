@@ -1,3 +1,8 @@
+## [1.10.3](https://github.com/qiwi/consul-service-discovery/compare/v1.10.2...v1.10.3) (2022-11-30)
+
+### Fixes & improvements
+* fix(deps): update dependency @types/uuid to v9 (#95) ([7c8ce39](https://github.com/qiwi/consul-service-discovery/commit/7c8ce3967defb334e53479e6de5440da2531eff4))
+
 ## [1.10.2](https://github.com/qiwi/consul-service-discovery/compare/v1.10.1...v1.10.2) (2022-10-31)
 
 ### Fixes & improvements
