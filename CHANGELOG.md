@@ -1,3 +1,8 @@
+## [1.10.4](https://github.com/qiwi/consul-service-discovery/compare/v1.10.3...v1.10.4) (2022-12-08)
+
+### Fixes & improvements
+* fix: invoce Consul with new (#97) ([52b8750](https://github.com/qiwi/consul-service-discovery/commit/52b875007bb08cd8019c612898e899a9cf001574))
+
 ## [1.10.3](https://github.com/qiwi/consul-service-discovery/compare/v1.10.2...v1.10.3) (2022-11-30)
 
 ### Fixes & improvements
