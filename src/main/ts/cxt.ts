@@ -8,7 +8,9 @@ import { createLogger } from './logger'
 
 export const createContext = (cxt: ILibConfig = {}): ICxt => {
   return {
-    Consul: cxt.Consul || Consul,
+    Consul: (opts) => {
+      return cxt.Consul ? cxt.Consul(opts) : new Consul(opts)
+    },
     Promise: cxt.Promise || Promise,
     logger: createLogger(cxt.logger || console),
     timeout: cxt.timeout || DEFAULT_TIMEOUT
