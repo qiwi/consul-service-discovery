@@ -57,7 +57,7 @@
   },
   "devDependencies": {
     "@qiwi/esm": "^1.1.8",
-    "@qiwi/libdefkit": "^4.0.8",
+    "@qiwi/libdefkit": "^5.0.0",
     "@qiwi/npm-run-all": "^4.1.7",
     "@types/bluebird": "^3.5.37",
     "@types/jest": "^29.2.0",
