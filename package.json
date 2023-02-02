@@ -48,7 +48,7 @@
     "@types/consul": "^0.40.0",
     "@types/lodash": "^4.14.186",
     "@types/uuid": "^9.0.0",
-    "consul": "^1.1.0",
+    "consul": "0.40.0",
     "inside-out-promise": "^2.1.4",
     "lodash": "^4.17.21",
     "push-it-to-the-limit": "^1.17.3",
