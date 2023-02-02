@@ -9,7 +9,9 @@ import { createLogger } from './logger'
 export const createContext = (cxt: ILibConfig = {}): ICxt => {
   return {
     Consul: (opts) => {
-      return cxt.Consul ? cxt.Consul(opts) : new Consul(opts)
+      return cxt.Consul
+        ? cxt.Consul(opts)
+        : Consul(opts) // should be new Consul(opts) for consul@1.x.x
     },
     Promise: cxt.Promise || Promise,
     logger: createLogger(cxt.logger || console),
