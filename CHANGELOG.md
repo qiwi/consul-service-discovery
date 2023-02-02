@@ -1,3 +1,8 @@
+## [1.10.5](https://github.com/qiwi/consul-service-discovery/compare/v1.10.4...v1.10.5) (2023-02-02)
+
+### Fixes & improvements
+* fix: pin consul to 0.40.0 (#101) ([d176cb9](https://github.com/qiwi/consul-service-discovery/commit/d176cb9b4c956e4d6c2a26717fcc666c50a0b0af))
+
 ## [1.10.4](https://github.com/qiwi/consul-service-discovery/compare/v1.10.3...v1.10.4) (2022-12-08)
 
 ### Fixes & improvements
