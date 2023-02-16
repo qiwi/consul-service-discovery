@@ -44,7 +44,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@qiwi/substrate": "^1.20.15",
+    "@qiwi/substrate": "^2.0.0",
     "@types/consul": "^0.40.0",
     "@types/lodash": "^4.14.186",
     "@types/uuid": "^9.0.0",
