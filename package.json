@@ -44,7 +44,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@qiwi/substrate": "^2.0.4",
     "@types/consul": "^0.40.0",
     "@types/lodash": "^4.14.195",
     "@types/uuid": "^9.0.1",
@@ -59,6 +58,7 @@
     "@qiwi/esm": "^1.1.8",
     "@qiwi/libdefkit": "^5.0.0",
     "@qiwi/npm-run-all": "^4.1.7",
+    "@qiwi/substrate": "^2.0.4",
     "@types/bluebird": "^3.5.38",
     "@types/jest": "^29.2.0",
     "bluebird": "^3.7.2",

@@ -1,8 +1,8 @@
 /** @module @qiwi/consul-service-discovery */
 
-import { IPromise } from '@qiwi/substrate'
+import type { IPromise } from '@qiwi/substrate'
 import Consul, { ConsulOptions } from 'consul'
-import { IControlled } from 'push-it-to-the-limit'
+import type { IControlled } from 'push-it-to-the-limit'
 
 import { ConsulUtils } from './consulUtils'
 import { createContext } from './cxt'

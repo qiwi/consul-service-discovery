@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 /** @module @qiwi/consul-service-discovery */
 
-import { ILogger } from '@qiwi/substrate'
+import type { ILogger } from '@qiwi/substrate'
 import * as Consul from 'consul'
 import { TInsideOutPromise } from 'inside-out-promise'
 
