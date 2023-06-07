@@ -11,8 +11,8 @@ import {
 } from './interface'
 import { promiseFactory } from './util'
 
-export class ConsulUtils {
-  static promisify (method, opts): Promise<any> {
+export const ConsulUtils = {
+  promisify (method, opts): Promise<any> {
     const { resolve, reject, promise } = promiseFactory()
 
     method(opts, (err, data) => {
@@ -26,24 +26,24 @@ export class ConsulUtils {
     })
 
     return promise
-  }
+  },
 
-  static generateId ({ serviceName, localAddress = '0.0.0.0', port = '', remoteAddress = '0.0.0.0' }: IGenerateIdOpts) {
+  generateId ({ serviceName, localAddress = '0.0.0.0', port = '', remoteAddress = '0.0.0.0' }: IGenerateIdOpts) {
     return `${serviceName}-${remoteAddress}-${localAddress}-${port}-${uuid()}`.replace(
       /\./g,
       '-'
     )
-  }
+  },
 
-  static normalizeKvValue (data: IConsulKvValue): INormalizedConsulKvValue {
+  normalizeKvValue (data: IConsulKvValue): INormalizedConsulKvValue {
     return Object.keys(data).reduce((acc, el) => {
       const key = el[0].toLowerCase() + el.slice(1)
       acc[key] = data[el]
       return acc
     }, {} as INormalizedConsulKvValue)
-  }
+  },
 
-  static normalizeEntryPoint (data: IEntryPoint[]): IConnectionParams[] {
+  normalizeEntryPoint (data: IEntryPoint[]): IConnectionParams[] {
     return data.reduce((memo: IConnectionParams[], entryPoint: IEntryPoint) => {
       const address = entryPoint.Service.Address || entryPoint.Node.Address
       const port = entryPoint.Service.Port
@@ -57,9 +57,9 @@ export class ConsulUtils {
 
       return memo
     }, [])
-  }
+  },
 
-  static handleKvValue (
+  handleKvValue (
     data: INormalizedConsulKvValue,
     services,
     service: IServiceEntry,
@@ -85,9 +85,9 @@ export class ConsulUtils {
         logger
       )
     }
-  }
+  },
 
-  static handleConnectionParams (
+  handleConnectionParams (
     data: IConnectionParams[],
     services,
     service: IServiceDiscoveryEntry,
@@ -116,9 +116,9 @@ export class ConsulUtils {
         logger
       )
     }
-  }
+  },
 
-  static watchOnChange (
+  watchOnChange (
     service: IServiceEntry,
     services: Record<string, IServiceEntry>,
     logger: ILogger
@@ -145,9 +145,9 @@ export class ConsulUtils {
         ConsulUtils.handleKvValue(normalizedData, services, service, logger)
       }
     })
-  }
+  },
 
-  static watchOnError (
+  watchOnError (
     service: IServiceEntry,
     services: Record<string, IServiceEntry>,
     logger: ILogger
@@ -159,9 +159,9 @@ export class ConsulUtils {
     service.watcher.on('error', (err: Error) =>
       ConsulUtils.handleError(service, err, services, logger)
     )
-  }
+  },
 
-  static handleError (
+  handleError (
     service: IServiceEntry,
     err: any,
     services: Record<string, IServiceEntry>,
@@ -196,9 +196,9 @@ export class ConsulUtils {
       ConsulUtils.clearService(services, service)
       logger.error(`watcher error limit is reached, service=${service.name}`)
     }
-  }
+  },
 
-  static clearService (
+  clearService (
     services: Record<string, IServiceEntry>,
     service: IServiceEntry
   ) {
@@ -206,5 +206,5 @@ export class ConsulUtils {
       service.watcher.end()
       delete services[service.name]
     }
-  }
-}
+  },
+};
