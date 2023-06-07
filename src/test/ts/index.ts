@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events'
+import { EventEmitter } from 'node:events'
 
 import def, { ConsulDiscoveryService, WATCH_ERROR_LIMIT } from '../../main/ts/index'
 import {
@@ -16,10 +16,11 @@ describe('ConsulServiceDiscovery', () => {
   })
 
   describe('constructor', () => {
-    it('returns proper instance', () => {
+    it('returns proper instance', async () => {
       const service = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
 
       expect(service).toBeInstanceOf(ConsulDiscoveryService)
+      await service.close()
     })
   })
 
@@ -28,6 +29,7 @@ describe('ConsulServiceDiscovery', () => {
       it('', async () => {
         const service = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
         expect(await service.setKv({ key: 'key', value: 'value' })).toEqual(true)
+        await service.close()
       })
     })
 
@@ -43,9 +45,10 @@ describe('ConsulServiceDiscovery', () => {
         const res = await service.register(opts)
 
         expect(res).toBeUndefined()
+        await service.close()
       })
 
-      it('provides continuous (repeatable) registration', done => {
+      it('provides continuous (repeatable) registration',  (done) => {
         const service = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
         const name = 'self'
         const address = '127.0.0.1'
@@ -75,6 +78,7 @@ describe('ConsulServiceDiscovery', () => {
           expect(_registerServiceSpy).toHaveBeenCalledTimes(2)
           expect(_registerSpy.mock.calls.length).toBeGreaterThanOrEqual(5)
           expect(_registerSpy.mock.calls.length).toBe(_listSpy.mock.calls.length)
+          service.close()
           done()
         }, 60)
       })
@@ -129,22 +133,28 @@ describe('ConsulServiceDiscovery', () => {
         const res = await service.list()
 
         expect(res).toEqual(list)
+        await service.close()
       })
     })
 
     describe('#getWatcher', () => {
-      it('returns a new one Consul.Watcher instance', () => {
+      it('returns a new one Consul.Watcher instance', async () => {
         const discoveryService = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
         const watcher = discoveryService.getWatcher('foo', 'discovery')
 
         expect(watcher).toBeInstanceOf(EventEmitter)
+        await discoveryService.close()
       })
     })
 
-    describe('#getService', () => {
+    describe('#getService',  () => {
       const discoveryService = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
 
-      it('creates new discovery service entry', () => {
+      afterAll(async () => {
+        await discoveryService.close()
+      })
+
+      it('creates new discovery service entry', async () => {
         const service = discoveryService.getService('foobar', 'discovery')
 
         discoveryService.services.discovery['foobar'].watcher.emit('change', onChangeResponse)
@@ -182,11 +192,12 @@ describe('ConsulServiceDiscovery', () => {
     })
 
     describe('#ready', () => {
-      it('reuses service entry\'s promise', () => {
+      it('reuses service entry\'s promise', async () => {
         const discoveryService = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
 
         // tslint:disable-next-line:no-floating-promises
         expect(discoveryService.ready('foo', 'discovery')).toBe(discoveryService.ready('foo', 'discovery'))
+        await discoveryService.close()
       })
     })
 
@@ -197,10 +208,11 @@ describe('ConsulServiceDiscovery', () => {
         const watcher = discoveryService.services.kv['kvservice'].watcher
         expect(watcher).not.toBeUndefined()
         expect(promise).not.toBeUndefined()
+        await discoveryService.close()
       })
     })
 
-    describe('#getServiceConnections', () => {
+    describe('#getServiceConnections',() => {
       it('resolves available service connections', async () => {
         const discoveryService = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
         const promise = discoveryService.getConnections('service')
@@ -226,6 +238,7 @@ describe('ConsulServiceDiscovery', () => {
           { host: '10.10.0.1', port: '8888' },
           { host: '10.10.0.2', port: '8888' }
         ])
+        await discoveryService.close()
       })
     })
 
@@ -240,9 +253,9 @@ describe('ConsulServiceDiscovery', () => {
         watcher.emit('change', onChangeResponse)
 
         // tslint:disable-next-line:no-floating-promises
-        return expect(serviceConnectionParams).resolves.toEqual(testParams)
-
-      }, 1000)
+        await expect(serviceConnectionParams).resolves.toEqual(testParams)
+        await discoveryService.close()
+      })
 
       it('is compatible with `await` operator', async () => {
         const discoveryService = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
@@ -253,6 +266,7 @@ describe('ConsulServiceDiscovery', () => {
         const serviceConnectionParams = await promise
 
         expect(serviceConnectionParams).toEqual(testParams)
+        await discoveryService.close()
       })
 
       it('rejects the result promise once attempt limit is reached (onError)', async () => {
@@ -266,8 +280,9 @@ describe('ConsulServiceDiscovery', () => {
         }
 
         // tslint:disable-next-line:no-floating-promises
-        return expect(serviceConnectionParams).rejects.toEqual(expectedError)
-      }, 1000)
+        await expect(serviceConnectionParams).rejects.toEqual(expectedError)
+        await discoveryService.close()
+      })
 
       it('rejects the result promise once attempt limit is reached (onChange)', async () => {
         const discoveryService = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
@@ -279,8 +294,9 @@ describe('ConsulServiceDiscovery', () => {
         }
 
         // tslint:disable-next-line:no-floating-promises
-        return expect(serviceConnectionParams).rejects.toEqual(new Error('got empty or invalid connection params'))
-      }, 1000)
+        await expect(serviceConnectionParams).rejects.toEqual(new Error('got empty or invalid connection params'))
+        await discoveryService.close()
+      })
 
       it('resolves promise with the previous valid response', async () => {
         const discoveryService = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
@@ -300,8 +316,9 @@ describe('ConsulServiceDiscovery', () => {
         watcher.emit('change', [])
 
         // tslint:disable-next-line:no-floating-promises
-        return expect(serviceConnectionParams).resolves.toEqual(testParams)
-      }, 1000)
+        await expect(serviceConnectionParams).resolves.toEqual(testParams)
+        await discoveryService.close()
+      })
     })
   })
 })

@@ -1,8 +1,8 @@
 import * as Consul from 'consul'
-import { EventEmitter } from 'events'
+import { EventEmitter } from 'node:events'
 import { noop } from 'lodash'
 
-import {
+import type {
   IConnectionParams,
   IConsulAgent,
   IConsulAgentService,
@@ -42,6 +42,10 @@ export class ConsulClient implements IConsulClient {
 
   watch() {
     return new FakeWatcher()
+  }
+
+  async close() {
+    noop()
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

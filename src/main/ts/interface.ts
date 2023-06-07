@@ -1,11 +1,9 @@
 /* eslint-disable no-use-before-define */
 /** @module @qiwi/consul-service-discovery */
 
-import { ILogger, IPromise, IPromiseConstructor } from '@qiwi/substrate'
+import { ILogger } from '@qiwi/substrate'
 import * as Consul from 'consul'
 import { TInsideOutPromise } from 'inside-out-promise'
-
-export { ILogger, IPromise, IPromiseConstructor }
 
 export interface IConsulClientWatch extends NodeJS.EventEmitter {
   end(): void
@@ -160,3 +158,5 @@ export type IGenerateIdOpts = {
   localAddress?: string,
   remoteAddress?: string
 }
+
+export type { ILogger, IPromise, IPromiseConstructor } from '@qiwi/substrate'

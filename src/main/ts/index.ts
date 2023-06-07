@@ -7,7 +7,7 @@ import { IControlled } from 'push-it-to-the-limit'
 import { ConsulUtils } from './consulUtils'
 import { createContext } from './cxt'
 import { BACKOFF_MAX } from './defaults'
-import {
+import type {
   IConnectionParams,
   IConsulClient,
   IConsulClientWatch,
@@ -216,7 +216,7 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
     }
 
     if (await this.find(id)) {
-      return Promise.resolve(void 0)
+      return void 0;
     }
 
     const agentService = this._consul.agent.service
@@ -248,6 +248,14 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
       .catch((e) => {
         throw new Error(`fail find service: ${e}`)
       })
+  }
+
+  public async close () {
+    await this._repeatableRegister?.cancel()
+    Object.entries(this.services.discovery)
+      .forEach(([, value]) => value.watcher.end())
+    Object.entries(this.services.kv)
+      .forEach(([, value]) => value.watcher.end())
   }
 }
 
