@@ -5,7 +5,7 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/585c9532e7570ecb9c95/test_coverage)](https://codeclimate.com/github/qiwi/consul-service-discovery/test_coverage)
 [![CodeStyle](https://img.shields.io/badge/code%20style-lint--config--qiwi-brightgreen.svg)](https://github.com/qiwi/lint-config-qiwi)
 
-Consul service discovery helper.
+Consul service discovery helper. 
 
 ## Install
 ```bash
