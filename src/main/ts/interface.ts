@@ -63,7 +63,6 @@ export interface ICxt {
   timeout: number
 }
 
-// eslint-disable-next-line import/export
 export interface IConnectionParams {
   port: string
   host: string
@@ -93,7 +92,6 @@ export interface IConsulDiscoveryService {
   getKv(key: string): Promise<INormalizedConsulKvValue>
 }
 
-// eslint-disable-next-line import/export
 export interface IConnectionParams {
   host: string
   port: string
