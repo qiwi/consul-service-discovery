@@ -1,3 +1,8 @@
+## [1.10.6](https://github.com/qiwi/consul-service-discovery/compare/v1.10.5...v1.10.6) (2023-06-08)
+
+### Fixes & improvements
+* fix: add clear method, up deps ([13d375f](https://github.com/qiwi/consul-service-discovery/commit/13d375f1fd77f98202d544d1baccc4a24bd11eae))
+
 ## [1.10.5](https://github.com/qiwi/consul-service-discovery/compare/v1.10.4...v1.10.5) (2023-02-02)
 
 ### Fixes & improvements
