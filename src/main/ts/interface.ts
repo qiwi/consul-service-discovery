@@ -90,6 +90,7 @@ export interface IConsulDiscoveryService {
   id?: string
   getConnectionParams(serviceName: string): Promise<IConnectionParams | undefined>
   getKv(key: string): Promise<INormalizedConsulKvValue>
+  clear(): Promise<void>
 }
 
 export interface IConnectionParams {

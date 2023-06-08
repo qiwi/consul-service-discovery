@@ -250,7 +250,7 @@ export class ConsulDiscoveryService implements IConsulDiscoveryService {
       })
   }
 
-  public async close () {
+  public async clear () {
     await this._repeatableRegister?.cancel()
     Object.entries(this.services.discovery)
       .forEach(([, value]) => value.watcher.end())

@@ -20,7 +20,7 @@ describe('ConsulServiceDiscovery', () => {
       const service = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
 
       expect(service).toBeInstanceOf(ConsulDiscoveryService)
-      await service.close()
+      await service.clear()
     })
   })
 
@@ -29,7 +29,7 @@ describe('ConsulServiceDiscovery', () => {
       it('', async () => {
         const service = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
         expect(await service.setKv({ key: 'key', value: 'value' })).toEqual(true)
-        await service.close()
+        await service.clear()
       })
     })
 
@@ -45,7 +45,7 @@ describe('ConsulServiceDiscovery', () => {
         const res = await service.register(opts)
 
         expect(res).toBeUndefined()
-        await service.close()
+        await service.clear()
       })
 
       it('provides continuous (repeatable) registration',  (done) => {
@@ -78,7 +78,7 @@ describe('ConsulServiceDiscovery', () => {
           expect(_registerServiceSpy).toHaveBeenCalledTimes(2)
           expect(_registerSpy.mock.calls.length).toBeGreaterThanOrEqual(5)
           expect(_registerSpy.mock.calls.length).toBe(_listSpy.mock.calls.length)
-          service.close()
+          service.clear()
           done()
         }, 60)
       })
@@ -133,7 +133,7 @@ describe('ConsulServiceDiscovery', () => {
         const res = await service.list()
 
         expect(res).toEqual(list)
-        await service.close()
+        await service.clear()
       })
     })
 
@@ -143,7 +143,7 @@ describe('ConsulServiceDiscovery', () => {
         const watcher = discoveryService.getWatcher('foo', 'discovery')
 
         expect(watcher).toBeInstanceOf(EventEmitter)
-        await discoveryService.close()
+        await discoveryService.clear()
       })
     })
 
@@ -151,7 +151,7 @@ describe('ConsulServiceDiscovery', () => {
       const discoveryService = new ConsulDiscoveryService(testParams, { Consul: ConsulClientFactory })
 
       afterAll(async () => {
-        await discoveryService.close()
+        await discoveryService.clear()
       })
 
       it('creates new discovery service entry', async () => {
@@ -197,7 +197,7 @@ describe('ConsulServiceDiscovery', () => {
 
         // tslint:disable-next-line:no-floating-promises
         expect(discoveryService.ready('foo', 'discovery')).toBe(discoveryService.ready('foo', 'discovery'))
-        await discoveryService.close()
+        await discoveryService.clear()
       })
     })
 
@@ -208,7 +208,7 @@ describe('ConsulServiceDiscovery', () => {
         const watcher = discoveryService.services.kv['kvservice'].watcher
         expect(watcher).not.toBeUndefined()
         expect(promise).not.toBeUndefined()
-        await discoveryService.close()
+        await discoveryService.clear()
       })
     })
 
@@ -238,7 +238,7 @@ describe('ConsulServiceDiscovery', () => {
           { host: '10.10.0.1', port: '8888' },
           { host: '10.10.0.2', port: '8888' }
         ])
-        await discoveryService.close()
+        await discoveryService.clear()
       })
     })
 
@@ -254,7 +254,7 @@ describe('ConsulServiceDiscovery', () => {
 
         // tslint:disable-next-line:no-floating-promises
         await expect(serviceConnectionParams).resolves.toEqual(testParams)
-        await discoveryService.close()
+        await discoveryService.clear()
       })
 
       it('is compatible with `await` operator', async () => {
@@ -266,7 +266,7 @@ describe('ConsulServiceDiscovery', () => {
         const serviceConnectionParams = await promise
 
         expect(serviceConnectionParams).toEqual(testParams)
-        await discoveryService.close()
+        await discoveryService.clear()
       })
 
       it('rejects the result promise once attempt limit is reached (onError)', async () => {
@@ -281,7 +281,7 @@ describe('ConsulServiceDiscovery', () => {
 
         // tslint:disable-next-line:no-floating-promises
         await expect(serviceConnectionParams).rejects.toEqual(expectedError)
-        await discoveryService.close()
+        await discoveryService.clear()
       })
 
       it('rejects the result promise once attempt limit is reached (onChange)', async () => {
@@ -295,7 +295,7 @@ describe('ConsulServiceDiscovery', () => {
 
         // tslint:disable-next-line:no-floating-promises
         await expect(serviceConnectionParams).rejects.toEqual(new Error('got empty or invalid connection params'))
-        await discoveryService.close()
+        await discoveryService.clear()
       })
 
       it('resolves promise with the previous valid response', async () => {
@@ -317,7 +317,7 @@ describe('ConsulServiceDiscovery', () => {
 
         // tslint:disable-next-line:no-floating-promises
         await expect(serviceConnectionParams).resolves.toEqual(testParams)
-        await discoveryService.close()
+        await discoveryService.clear()
       })
     })
   })
