@@ -1,6 +1,6 @@
 /** @module @qiwi/consul-service-discovery */
 
-import { ILogger } from './interface'
+import type { ILogger } from './interface'
 
 export const LOG_PREFIX = '[consul discovery]'
 

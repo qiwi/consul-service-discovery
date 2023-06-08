@@ -23,9 +23,8 @@
     "json",
     "node"
   ],
-  "globals": {
-    "ts-jest": {
-      "tsconfig": "tsconfig.test.json"
-    }
-  }
+  "transform": {
+    "^.+\\.tsx?$": ["ts-jest", {"useESM": true, "tsconfig": "tsconfig.test.json"}]
+  },
+  "preset": "ts-jest"
 }

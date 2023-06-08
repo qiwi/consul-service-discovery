@@ -1,11 +1,9 @@
 /* eslint-disable no-use-before-define */
 /** @module @qiwi/consul-service-discovery */
 
-import { ILogger, IPromise, IPromiseConstructor } from '@qiwi/substrate'
+import type { ILogger } from '@qiwi/substrate'
 import * as Consul from 'consul'
 import { TInsideOutPromise } from 'inside-out-promise'
-
-export { ILogger, IPromise, IPromiseConstructor }
 
 export interface IConsulClientWatch extends NodeJS.EventEmitter {
   end(): void
@@ -65,7 +63,6 @@ export interface ICxt {
   timeout: number
 }
 
-// eslint-disable-next-line import/export
 export interface IConnectionParams {
   port: string
   host: string
@@ -93,9 +90,9 @@ export interface IConsulDiscoveryService {
   id?: string
   getConnectionParams(serviceName: string): Promise<IConnectionParams | undefined>
   getKv(key: string): Promise<INormalizedConsulKvValue>
+  clear(): Promise<void>
 }
 
-// eslint-disable-next-line import/export
 export interface IConnectionParams {
   host: string
   port: string
@@ -160,3 +157,5 @@ export type IGenerateIdOpts = {
   localAddress?: string,
   remoteAddress?: string
 }
+
+export type { ILogger, IPromise, IPromiseConstructor } from '@qiwi/substrate'
