@@ -13,7 +13,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 24
 
       - name: Fetch deps
         run: yarn
@@ -49,7 +49,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 24
 
       - name: Yarn install
         run: |
@@ -119,7 +119,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 24
 
       - name: Codeclimate
         uses: paambaati/codeclimate-action@v3.2.0
