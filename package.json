@@ -60,7 +60,7 @@
     "@types/consul": "^0.40.0",
     "@types/lodash": "^4.14.195",
     "@types/jest": "^29.5.2",
-    "@types/uuid": "^9.0.1",
+    "@types/uuid": "^11.0.0",
     "bluebird": "^3.7.2",
     "coveralls": "^3.1.1",
     "eslint": "^8.42.0",
